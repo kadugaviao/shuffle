@@ -1,0 +1,55 @@
+{# Componentes do design system "Midnight Stage". Importar com: {% from "_macros.html" import campo, aria, ... %} #}
+{% from "_icones.html" import icone %}
+
+{# Atributos do controle de um campo: id para o <label for>, e aria-invalid/aria-describedby se houver erro. #}
+{% macro aria(nome, erros) -%}
+id="campo-{{ nome }}"{% if erros and erros.get(nome) %} aria-invalid="true" aria-describedby="erro-{{ nome }}"{% endif %}
+{%- endmacro %}
+
+{% macro erro(nome, erros) -%}
+{% if erros and erros.get(nome) %}<p class="erro-campo" id="erro-{{ nome }}">{{ icone("alerta") }}{{ erros[nome] }}</p>{% endif %}
+{%- endmacro %}
+
+{# Campo com rótulo e erro logo abaixo; o controle vem no corpo do {% call %} e usa aria(nome, erros). #}
+{% macro campo(nome, rotulo, erros) -%}
+<div class="campo">
+  <label for="campo-{{ nome }}">{{ rotulo }}</label>
+  {{ caller() }}
+  {{ erro(nome, erros) }}
+</div>
+{%- endmacro %}
+
+{# Grupo de chips (radios) com legenda; `todos` cria a opção vazia ("Todos", "Qualquer"...). #}
+{% macro chips(nome, rotulo, opcoes, atual, todos=none, erros=none, classe="chips") -%}
+<fieldset class="campo"{% if erros and erros.get(nome) %} aria-describedby="erro-{{ nome }}"{% endif %}>
+  <legend>{{ rotulo }}</legend>
+  <div class="{{ classe }}">
+    {% if todos %}
+    <label class="chip"><input type="radio" name="{{ nome }}" value="" {% if atual is none or atual == "" %}checked{% endif %}><span>{{ todos }}</span></label>
+    {% endif %}
+    {% for valor, texto in opcoes %}
+    <label class="chip"><input type="radio" name="{{ nome }}" value="{{ valor }}" {% if atual is not none and atual|string|lower == valor|string|lower %}checked{% endif %}><span>{{ texto }}</span></label>
+    {% endfor %}
+  </div>
+  {{ erro(nome, erros) }}
+</fieldset>
+{%- endmacro %}
+
+{# Capa gerada a partir do nome do artista (decorativa: o nome aparece em texto ao lado). #}
+{% macro capa(nome, grande=false) -%}
+<span class="capa{% if grande %} capa-grande{% endif %}" style="--h: {{ nome|matiz }}" aria-hidden="true">{{ nome|iniciais }}</span>
+{%- endmacro %}
+
+{% macro dificuldade(nivel) -%}
+<span class="dificuldade" role="img" aria-label="Dificuldade {{ nivel }} de 5">{% for i in range(1, 6) %}<span{% if i <= nivel %} class="cheia"{% endif %}></span>{% endfor %}</span>
+{%- endmacro %}
+
+{# Estado vazio ilustrado: ícone grande, título, frase e, opcionalmente, um CTA no gradiente. #}
+{% macro vazio(nome_icone, titulo, texto, cta_url=none, cta_texto=none) -%}
+<div class="estado-vazio">
+  {{ icone(nome_icone) }}
+  <h2>{{ titulo }}</h2>
+  {% if texto %}<p>{{ texto }}</p>{% endif %}
+  {% if cta_url %}<a class="botao primario" href="{{ cta_url }}">{{ icone("mais") }}{{ cta_texto }}</a>{% endif %}
+</div>
+{%- endmacro %}

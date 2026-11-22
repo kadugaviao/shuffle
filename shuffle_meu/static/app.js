@@ -75,5 +75,37 @@ function iniciarRoleta() {
   passo();
 }
 
+// Atalhos do Repertório (D2): POST via fetch e troca o estado no lugar; se falhar, envia o formulário normal.
+document.addEventListener("submit", async (evento) => {
+  const form = evento.target;
+  if (!form.matches("[data-atalho]") || evento.defaultPrevented) return;
+  evento.preventDefault();
+  const botao = form.querySelector("button");
+  const valor = form.elements.valor;
+  try {
+    const resposta = await fetch(form.action, { method: "POST", body: new FormData(form), redirect: "manual" });
+    if (!resposta.ok && resposta.type !== "opaqueredirect") throw new Error(String(resposta.status));
+  } catch {
+    form.submit();
+    return;
+  }
+  const ligado = valor.value === "1";
+  const interruptor = botao.getAttribute("role") === "switch";
+  botao.setAttribute(interruptor ? "aria-checked" : "aria-pressed", String(ligado));
+  valor.value = ligado ? "0" : "1";
+  if (interruptor) form.closest(".musica-cartao")?.classList.toggle("inativa", !ligado);
+  if (!movimentoReduzido()) {
+    botao.classList.remove("pop");
+    void botao.offsetWidth;
+    botao.classList.add("pop");
+  }
+});
+
+// Filtros do Repertório: chips e "Só favoritas" aplicam na hora (o botão Filtrar fica para quem não tem JS).
+document.addEventListener("change", (evento) => {
+  const form = evento.target.closest("form[data-auto-enviar]");
+  if (form && evento.target.matches("input[type=radio], input[type=checkbox]")) form.requestSubmit();
+});
+
 iniciarToasts();
 iniciarRoleta();

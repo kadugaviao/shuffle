@@ -30,9 +30,9 @@ Referências: comportamento em `specs/*/spec.md`, decisões em `design.md` (D1�
 
 ## 5. Repertório
 
-- [ ] 5.1 Rotas `POST /musicas/<id>/favorita` e `POST /musicas/<id>/ativa` com `valor` 0/1 explícito, 404 para id inexistente, 400 para valor inválido e redirect para a lista com `request.args` + `#musica-<id>` (D2); verificar com testes "Marcar favorita", "Desativar", "Clique repetido" e "Música inexistente"
-- [ ] 5.2 Redesenhar `musicas/lista.html` em grade de cartões (capa gerada, título, artista, chips de gênero/humor, barrinhas de dificuldade com `aria-label`, coração `aria-pressed`, interruptor `role="switch"`, editar/excluir), busca e filtros em chips; atualizar os testes de listagem; verificar com os testes do MVP de busca e filtros verdes
-- [ ] 5.3 `app.js`: atalhos via `fetch` trocando o estado no lugar, com micro-animação e envio normal como fallback; verificar no navegador que favoritar não recarrega a página e, com JS desativado, que volta com os mesmos filtros e na mesma posição
+- [x] 5.1 Rotas `POST /musicas/<id>/favorita` e `POST /musicas/<id>/ativa` com `valor` 0/1 explícito, 404 para id inexistente, 400 para valor inválido e redirect para a lista com `request.args` + `#musica-<id>` (D2); verificar com testes "Marcar favorita", "Desativar", "Clique repetido" e "Música inexistente"
+- [x] 5.2 Redesenhar `musicas/lista.html` em grade de cartões (capa gerada, título, artista, chips de gênero/humor, barrinhas de dificuldade com `aria-label`, coração `aria-pressed`, interruptor `role="switch"`, editar/excluir), busca e filtros em chips; atualizar os testes de listagem; verificar com os testes do MVP de busca e filtros verdes
+- [x] 5.3 `app.js`: atalhos via `fetch` trocando o estado no lugar, com micro-animação e envio normal como fallback; verificar no navegador que favoritar não recarrega a página e, com JS desativado, que volta com os mesmos filtros e na mesma posição
 
 ## 6. Formulários
 

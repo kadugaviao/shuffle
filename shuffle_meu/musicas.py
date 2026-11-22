@@ -10,6 +10,12 @@ bp = Blueprint("musicas", __name__, url_prefix="/musicas")
 HUMORES = {"animada": "Animada", "calma": "Calma", "triste": "Triste", "romantica": "Romântica"}
 MSG_DUPLICADA = "Essa música já está cadastrada para esse artista."
 MSG_ARTISTA = "Escolha o artista da música."
+FILTROS_LISTA = ("q", "genero", "humor", "favorita")
+
+
+def _filtros_lista(args):
+    """Só as chaves de busca/filtro do Repertório (um ?id= solto quebraria o url_for das rotas com id)."""
+    return {k: args[k] for k in FILTROS_LISTA if args.get(k)}
 
 
 def validar_musica(form):
@@ -104,7 +110,7 @@ def lista():
         q = q.casefold()
         musicas = [m for m in musicas if q in m["titulo"].casefold() or q in m["artista"].casefold()]
     return render_template("musicas/lista.html", musicas=musicas, q=request.args.get("q", ""), f=f,
-                           generos=generos(db))
+                           generos=[(g, g) for g in generos(db)], qs=_filtros_lista(request.args))
 
 
 @bp.route("/nova", methods=["GET", "POST"])
@@ -149,6 +155,29 @@ def editar(id):
             flash(erro, "erro")
         musica = request.form
     return _form(musica, id)
+
+
+def _atalho(id, coluna):
+    """Grava o estado pedido (0/1), sem inverter: clique repetido não desfaz (D2)."""
+    _buscar(id)
+    valor = request.form.get("valor")
+    if valor not in ("0", "1"):
+        abort(400)
+    db = get_db()
+    db.execute(f"UPDATE musica SET {coluna} = ? WHERE id = ?", (int(valor), id))  # coluna vem só das rotas abaixo
+    db.commit()
+    # volta com a mesma busca/filtros (request.args, sem "next" livre) e à mesma posição
+    return redirect(url_for(".lista", **_filtros_lista(request.args)) + f"#musica-{id}")
+
+
+@bp.post("/<int:id>/favorita")
+def favorita(id):
+    return _atalho(id, "favorita")
+
+
+@bp.post("/<int:id>/ativa")
+def ativa(id):
+    return _atalho(id, "ativa")
 
 
 @bp.post("/<int:id>/excluir")

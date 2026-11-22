@@ -1,3 +1,4 @@
+import json
 import random
 import time
 import unittest
@@ -73,7 +74,9 @@ class TestSorteio(BaseTest):
         html = self.texto(self.client.get(url))
         self.assertIn("data-roleta='[", html)
         sorteada = self.ultimo()
-        self.assertTrue(html.split("data-roleta='", 1)[1].split("'", 1)[0].endswith(f'"{sorteada}"]'))
+        roleta = json.loads(html.split("data-roleta='", 1)[1].split("'", 1)[0])
+        self.assertEqual(roleta[-1], sorteada)  # o rolo para na música sorteada
+        self.assertLessEqual(len(roleta), 13)
         self.assertNotIn("data-roleta", self.texto(self.client.get(url)))  # recarregar não repete
         s = self.um("SELECT MAX(id) FROM sorteio")
         self.assertNotIn("data-roleta", self.texto(self.client.get(f"/sorteios/{s}")))  # nem pelo histórico

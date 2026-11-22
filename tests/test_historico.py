@@ -60,6 +60,12 @@ class TestHistorico(BaseTest):
             self.assertIn("A nota deve ser de 1 a 5.", self.texto(r))
         self.assertIsNone(self.um("SELECT nota FROM sorteio"))
 
+    def test_toquei_com_query_estranha_nao_quebra(self):
+        s = self.sorteio(self.musica("Tempo Perdido"))
+        r = self.client.post(f"/sorteios/{s}/toquei?id=9&humor=calma")
+        self.assertEqual(r.status_code, 302)
+        self.assertIn("humor=calma", r.headers["Location"])
+
     def test_toquei_inexistente_404(self):
         self.assertEqual(self.client.post("/sorteios/999/toquei").status_code, 404)
 

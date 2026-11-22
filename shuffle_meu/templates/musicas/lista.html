@@ -1,54 +1,58 @@
 {% extends "base.html" %}
+{% from "_icones.html" import icone %}
+{% from "_macros.html" import campo, aria, chips, capa, dificuldade, vazio %}
 {% block titulo %}Repertório{% endblock %}
 {% block conteudo %}
 <h1>Repertório</h1>
-<form class="cartao campos" method="get">
-  <label>Buscar por título ou artista
-    <input name="q" value="{{ q }}" type="search">
-  </label>
-  <div class="grade">
-    <label>Gênero
-      <select name="genero">
-        <option value="">Todos</option>
-        {% for g in generos %}<option {% if f.genero|lower == g|lower %}selected{% endif %}>{{ g }}</option>{% endfor %}
-      </select>
-    </label>
-    <label>Humor
-      <select name="humor">
-        <option value="">Todos</option>
-        {% for valor, rotulo in HUMORES.items() %}
-        <option value="{{ valor }}" {% if f.humor == valor %}selected{% endif %}>{{ rotulo }}</option>
-        {% endfor %}
-      </select>
-    </label>
-    <label class="check"><input type="checkbox" name="favorita" value="1" {% if f.favorita %}checked{% endif %}> Só favoritas</label>
-  </div>
+<form class="cartao campos filtros" method="get" data-auto-enviar>
+  {% call campo("q", "Buscar por título ou artista", none) %}
+  <input name="q" type="search" value="{{ q }}" placeholder="Título ou nome do artista" {{ aria("q", none) }}>
+  {% endcall %}
+  {{ chips("humor", "Humor", HUMORES.items(), f.humor or none, "Todos") }}
+  {% if generos %}{{ chips("genero", "Gênero", generos, f.genero or none, "Todos") }}{% endif %}
   <div class="botoes">
-    <button>Filtrar</button>
-    <a class="botao primario" href="{{ url_for('musicas.nova') }}">+ Nova música</a>
+    <label class="chip"><input type="checkbox" name="favorita" value="1" {% if f.favorita %}checked{% endif %}><span>Só favoritas</span></label>
+    <button>{{ icone("busca") }}Filtrar</button>
+    <a class="botao primario empurra" href="{{ url_for('musicas.nova') }}">{{ icone("mais") }}Nova música</a>
   </div>
 </form>
+
 {% if musicas %}
-<ul class="itens">
+<p class="meta contagem"><span class="numero">{{ musicas|length }}</span> música(s)</p>
+<ul class="grade-musicas">
   {% for m in musicas %}
-  <li class="item">
-    <div>
-      <strong>{{ m.titulo }}</strong>{% if m.favorita %} ⭐{% endif %}{% if not m.ativa %} <span class="meta">(inativa)</span>{% endif %}
-      <div class="meta">
-        {{ m.artista }}{% if m.genero %} · {{ m.genero }}{% endif %}{% if m.humor %} · {{ HUMORES[m.humor] }}{% endif %} · dificuldade {{ m.dificuldade }}
+  <li class="musica-cartao{% if not m.ativa %} inativa{% endif %}" id="musica-{{ m.id }}">
+    {{ capa(m.artista) }}
+    <div class="musica-info">
+      <a class="musica-titulo" href="{{ url_for('musicas.editar', id=m.id) }}">{{ m.titulo }}</a>
+      <p class="meta">{{ m.artista }}</p>
+      <div class="etiquetas">
+        {% if m.genero %}<span class="etiqueta">{{ m.genero }}</span>{% endif %}
+        {% if m.humor %}<span class="etiqueta">{{ HUMORES[m.humor] }}</span>{% endif %}
+        <span class="etiqueta etiqueta-inativa">Inativa</span>
+        {{ dificuldade(m.dificuldade) }}
       </div>
     </div>
-    <div class="acoes">
-      <a class="botao" href="{{ url_for('musicas.editar', id=m.id) }}">Editar</a>
-      <form class="inline" method="post" action="{{ url_for('musicas.excluir', id=m.id) }}"
+    <div class="musica-acoes">
+      <form method="post" action="{{ url_for('musicas.favorita', id=m.id, **qs) }}" data-atalho>
+        <input type="hidden" name="valor" value="{{ 0 if m.favorita else 1 }}">
+        <button class="coracao" aria-pressed="{{ 'true' if m.favorita else 'false' }}" aria-label="Favorita: {{ m.titulo }}">{{ icone("coracao") }}</button>
+      </form>
+      <form class="atalho-ativa" method="post" action="{{ url_for('musicas.ativa', id=m.id, **qs) }}" data-atalho>
+        <input type="hidden" name="valor" value="{{ 0 if m.ativa else 1 }}">
+        <button class="interruptor" role="switch" aria-checked="{{ 'true' if m.ativa else 'false' }}" aria-label="Ativa: {{ m.titulo }}"></button>
+        <span class="meta" aria-hidden="true">Ativa</span>
+      </form>
+      <a class="botao botao-icone empurra" href="{{ url_for('musicas.editar', id=m.id) }}" aria-label="Editar {{ m.titulo }}">{{ icone("lapis") }}</a>
+      <form method="post" action="{{ url_for('musicas.excluir', id=m.id) }}"
             data-confirmar="Excluir {{ m.titulo }}? O histórico dela e os vínculos com playlists também serão apagados.">
-        <button class="perigo">Excluir</button>
+        <button class="perigo botao-icone" aria-label="Excluir {{ m.titulo }}">{{ icone("lixeira") }}</button>
       </form>
     </div>
   </li>
   {% endfor %}
 </ul>
 {% else %}
-<p class="vazio">Nenhuma música encontrada.</p>
+<section class="cartao">{{ vazio("busca", "Nenhuma música encontrada.", "Tente outra busca ou limpe os filtros.") }}</section>
 {% endif %}
 {% endblock %}

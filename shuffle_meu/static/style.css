@@ -419,6 +419,35 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .ultima { display: flex; align-items: center; gap: var(--espaco-4); }
 .ultima p + p { margin-top: var(--espaco-1); }
 
+/* Repertório: cartões com capa gerada */
+.empurra { margin-left: auto; }
+.contagem { margin-bottom: var(--espaco-3); }
+.grade-musicas { display: grid; gap: var(--espaco-3); margin: 0 0 var(--espaco-4); padding: 0; list-style: none; }
+@media (min-width: 720px) { .grade-musicas { grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); } }
+.musica-cartao {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  align-content: start;
+  gap: var(--espaco-3) 14px;
+  padding: var(--espaco-4);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
+  box-shadow: var(--sombra-cartao);
+  scroll-margin-top: 96px;
+  transition: border-color 200ms ease-out;
+}
+.musica-cartao:hover { border-color: var(--borda-hover); }
+.musica-titulo { display: block; font-weight: 600; text-decoration: none; overflow-wrap: anywhere; }
+.musica-titulo:hover { text-decoration: underline; }
+.etiquetas { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: var(--espaco-2); }
+.etiqueta { padding: 1px 10px; font-size: 0.875rem; color: var(--texto-2); border: 1px solid var(--borda); border-radius: var(--raio-pilula); }
+.etiqueta-inativa { display: none; color: var(--aviso); border-color: rgba(245, 158, 11, 0.4); }
+.inativa .etiqueta-inativa { display: inline; }
+.musica-acoes { grid-column: 1 / -1; display: flex; align-items: center; gap: var(--espaco-1); padding-top: var(--espaco-3); border-top: 1px solid var(--borda); }
+.musica-acoes form { margin: 0; }
+.atalho-ativa { display: inline-flex; align-items: center; gap: var(--espaco-2); padding: 0 var(--espaco-2); }
+
 /* Resultado do sorteio: a única tela centralizada */
 .resultado {
   position: relative;

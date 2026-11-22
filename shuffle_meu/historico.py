@@ -1,6 +1,7 @@
 from flask import Blueprint, abort, flash, redirect, render_template, request, session, url_for
 
 from .db import get_db
+from .sorteio import ler_filtros
 
 bp = Blueprint("historico", __name__)
 
@@ -13,8 +14,10 @@ def _buscar(id):
 
 
 def _voltar(id):
-    # a query string guarda os filtros do sorteio, para o "Pular" continuar funcionando
-    return redirect(url_for("sorteio.resultado", id=id, **request.args.to_dict()))
+    # a query string guarda os filtros do sorteio, para o "Pular" continuar funcionando;
+    # só as chaves conhecidas (um ?id= solto quebraria o url_for)
+    filtros, n = ler_filtros(request.args)
+    return redirect(url_for("sorteio.resultado", id=id, **filtros, n=n))
 
 
 @bp.post("/sorteios/<int:id>/toquei")

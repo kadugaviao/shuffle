@@ -102,8 +102,8 @@ class TestMusicas(BaseTest):
         self.musica("Oceano", self.legiao, genero="MPB", favorita=1)
         html = self.texto(self.client.get("/musicas?genero=Rock&favorita=1"))
         self.assertIn("Tempo Perdido", html)
-        self.assertNotIn("<strong>Índios", html)
-        self.assertNotIn("<strong>Oceano", html)
+        self.assertNotIn(">Índios</a>", html)
+        self.assertNotIn(">Oceano</a>", html)
 
     def test_nada_encontrado(self):
         self.musica("Tempo Perdido", self.legiao)
@@ -114,7 +114,7 @@ class TestMusicas(BaseTest):
         self.client.post(f"/musicas/{m}/editar", data=form(artista_id=str(self.legiao), favorita="1"))
         linha = self.sql("SELECT favorita, ativa FROM musica")[0]
         self.assertEqual(tuple(linha), (1, 0))
-        self.assertIn("(inativa)", self.texto(self.client.get("/musicas")))
+        self.assertIn('class="musica-cartao inativa"', self.texto(self.client.get("/musicas")))
 
     def test_edicao_invalida(self):
         m = self.musica("Tempo Perdido", self.legiao, dificuldade=2)
@@ -141,3 +141,45 @@ class TestMusicas(BaseTest):
         self.client.post("/musicas/nova", data=form(artista_id=str(self.legiao)))
         reiniciado = create_app({"TESTING": True, "DATABASE": self.caminho}).test_client()
         self.assertIn("Tempo Perdido", self.texto(reiniciado.get("/musicas")))
+
+
+class TestAtalhos(BaseTest):
+    def setUp(self):
+        super().setUp()
+        self.tempo = self.musica("Tempo Perdido", genero="rock")
+
+    def valor(self, coluna):
+        return self.um(f"SELECT {coluna} FROM musica WHERE id = ?", (self.tempo,))
+
+    def test_marcar_favorita_mantem_filtros_e_posicao(self):
+        r = self.client.post(f"/musicas/{self.tempo}/favorita?genero=rock", data={"valor": "1"})
+        self.assertEqual(self.valor("favorita"), 1)
+        self.assertEqual(r.status_code, 302)
+        self.assertEqual(r.headers["Location"], f"/musicas?genero=rock#musica-{self.tempo}")
+
+    def test_desativar(self):
+        self.client.post(f"/musicas/{self.tempo}/ativa", data={"valor": "0"})
+        self.assertEqual(self.valor("ativa"), 0)
+        self.assertIn("Nenhuma música encontrada", self.texto(self.client.post("/sortear", follow_redirects=True)))
+
+    def test_clique_repetido_nao_desfaz(self):
+        for _ in range(2):
+            self.client.post(f"/musicas/{self.tempo}/favorita", data={"valor": "1"})
+        self.assertEqual(self.valor("favorita"), 1)
+
+    def test_musica_inexistente_e_valor_invalido(self):
+        self.assertEqual(self.client.post("/musicas/999/favorita", data={"valor": "1"}).status_code, 404)
+        self.assertEqual(self.client.post(f"/musicas/{self.tempo}/ativa", data={"valor": "2"}).status_code, 400)
+        self.assertEqual(self.client.post(f"/musicas/{self.tempo}/ativa").status_code, 400)
+        self.assertEqual(self.valor("ativa"), 1)
+
+    def test_query_estranha_nao_quebra(self):
+        r = self.client.post(f"/musicas/{self.tempo}/favorita?id=7&x=1", data={"valor": "1"})
+        self.assertEqual(r.headers["Location"], f"/musicas#musica-{self.tempo}")
+        self.assertEqual(self.client.get("/musicas?id=7").status_code, 200)
+
+    def test_cartao_tem_atalhos_acessiveis(self):
+        html = self.texto(self.client.get("/musicas?genero=rock"))
+        self.assertIn('aria-pressed="false" aria-label="Favorita: Tempo Perdido"', html)
+        self.assertIn('role="switch" aria-checked="true" aria-label="Ativa: Tempo Perdido"', html)
+        self.assertIn(f'action="/musicas/{self.tempo}/favorita?genero=rock"', html)

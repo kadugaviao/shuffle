@@ -19,34 +19,42 @@ def _dados(form):
     return nome, (form.get("descricao") or "").strip() or None
 
 
+MSG_NOME = "Informe o nome da playlist."
+
+
 @bp.route("", methods=["GET", "POST"])
 def lista():
     db = get_db()
+    erros, form = {}, {}
     if request.method == "POST":
         nome, descricao = _dados(request.form)
-        if not nome:
-            flash("Informe o nome da playlist.", "erro")
-        else:
+        if nome:
             db.execute("INSERT INTO playlist (nome, descricao) VALUES (?, ?)", (nome, descricao))
             db.commit()
             flash("Playlist criada.")
-        return redirect(url_for(".lista"))
+            return redirect(url_for(".lista"))
+        erros, form = {"nome": MSG_NOME}, request.form  # erro junto ao campo, na própria tela (D5)
     playlists = db.execute(
         "SELECT p.*, COUNT(pm.musica_id) AS total FROM playlist p"
         " LEFT JOIN playlist_musica pm ON pm.playlist_id = p.id GROUP BY p.id ORDER BY p.nome COLLATE PT"
     ).fetchall()
-    return render_template("playlists/lista.html", playlists=playlists)
+    return render_template("playlists/lista.html", playlists=playlists, erros=erros, form=form)
 
 
-@bp.get("/<int:id>")
-def detalhe(id):
+def _detalhe(id, erros=None, form=None):
     playlist = _buscar(id)
     db = get_db()
     base = "SELECT m.id, m.titulo, a.nome AS artista FROM musica m JOIN artista a ON a.id = m.artista_id WHERE m.id"
     filtro = " IN (SELECT musica_id FROM playlist_musica WHERE playlist_id = ?) ORDER BY m.titulo COLLATE PT"
     musicas = db.execute(base + filtro, (id,)).fetchall()
     disponiveis = db.execute(base + " NOT" + filtro, (id,)).fetchall()
-    return render_template("playlists/detalhe.html", playlist=playlist, musicas=musicas, disponiveis=disponiveis)
+    return render_template("playlists/detalhe.html", playlist=playlist, musicas=musicas, disponiveis=disponiveis,
+                           erros=erros or {}, form=form or playlist)
+
+
+@bp.get("/<int:id>")
+def detalhe(id):
+    return _detalhe(id)
 
 
 @bp.post("/<int:id>/editar")
@@ -54,12 +62,11 @@ def editar(id):
     _buscar(id)
     nome, descricao = _dados(request.form)
     if not nome:
-        flash("Informe o nome da playlist.", "erro")
-    else:
-        db = get_db()
-        db.execute("UPDATE playlist SET nome = ?, descricao = ? WHERE id = ?", (nome, descricao, id))
-        db.commit()
-        flash("Playlist atualizada.")
+        return _detalhe(id, {"nome": MSG_NOME}, request.form)
+    db = get_db()
+    db.execute("UPDATE playlist SET nome = ?, descricao = ? WHERE id = ?", (nome, descricao, id))
+    db.commit()
+    flash("Playlist atualizada.")
     return redirect(url_for(".detalhe", id=id))
 
 

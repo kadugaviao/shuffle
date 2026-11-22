@@ -1,27 +1,32 @@
 {% extends "base.html" %}
+{% from "_icones.html" import icone %}
+{% from "_macros.html" import capa, vazio %}
 {% block titulo %}Artistas{% endblock %}
 {% block conteudo %}
-<h1>Artistas</h1>
-<p><a class="botao primario" href="{{ url_for('artistas.novo') }}">+ Novo artista</a></p>
+<div class="cabecalho">
+  <h1>Artistas</h1>
+  <a class="botao primario" href="{{ url_for('artistas.novo') }}">{{ icone("mais") }}Novo artista</a>
+</div>
 {% if artistas %}
-<ul class="itens">
+<ul class="lista-cartoes">
   {% for a in artistas %}
-  <li class="item">
-    <div>
+  <li class="linha-cartao">
+    {{ capa(a.nome) }}
+    <div class="linha-info">
       <strong>{{ a.nome }}</strong>
-      <div class="meta">{{ a.pais or "País não informado" }} · {{ a.total }} música(s)</div>
+      <p class="meta">{{ a.pais or "País não informado" }}</p>
+      <p class="meta"><span class="numero">{{ a.total }}</span> música(s)</p>
     </div>
     <div class="acoes">
-      <a class="botao" href="{{ url_for('artistas.editar', id=a.id) }}">Editar</a>
-      <form class="inline" method="post" action="{{ url_for('artistas.excluir', id=a.id) }}"
-            data-confirmar="Excluir o artista {{ a.nome }}?">
-        <button class="perigo">Excluir</button>
+      <a class="botao botao-icone" href="{{ url_for('artistas.editar', id=a.id) }}" aria-label="Editar {{ a.nome }}">{{ icone("lapis") }}</a>
+      <form class="inline" method="post" action="{{ url_for('artistas.excluir', id=a.id) }}" data-confirmar="Excluir o artista {{ a.nome }}?">
+        <button class="perigo botao-icone" aria-label="Excluir {{ a.nome }}">{{ icone("lixeira") }}</button>
       </form>
     </div>
   </li>
   {% endfor %}
 </ul>
 {% else %}
-<p class="vazio">Nenhum artista cadastrado ainda.</p>
+<section class="cartao">{{ vazio("microfone", "Nenhum artista cadastrado ainda.", "Cadastre os artistas antes das músicas deles.", url_for("artistas.novo"), "Novo artista") }}</section>
 {% endif %}
 {% endblock %}

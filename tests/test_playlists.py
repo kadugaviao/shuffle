@@ -12,22 +12,35 @@ class TestPlaylists(BaseTest):
         self.client.post("/playlists", data={"nome": "Roda de violão", "descricao": "Fáceis de tocar"})
         html = self.texto(self.client.get("/playlists"))
         self.assertIn("Roda de violão", html)
-        self.assertIn("0 música(s)", html)
+        self.assertIn('<span class="numero">0</span> música(s)', html)
 
     def test_nome_vazio(self):
-        r = self.client.post("/playlists", data={"nome": "  "}, follow_redirects=True)
-        self.assertIn("Informe o nome da playlist.", self.texto(r))
+        r = self.client.post("/playlists", data={"nome": "  ", "descricao": "Fáceis"})
+        html = self.texto(r)
+        self.assertEqual(r.status_code, 200)  # mesma tela, sem redirecionar
+        self.assertIn('id="campo-nome" aria-invalid="true" aria-describedby="erro-nome"', html)
+        self.assertIn("Informe o nome da playlist.", html)
+        self.assertIn('value="Fáceis"', html)  # mantém o que foi digitado
         self.assertEqual(self.um("SELECT COUNT(*) FROM playlist"), 0)
+
+    def test_editar_com_nome_vazio(self):
+        p = self.playlist("Churrasco")
+        r = self.client.post(f"/playlists/{p}/editar", data={"nome": ""})
+        html = self.texto(r)
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('id="erro-nome"', html)
+        self.assertIn('<details class="cartao editar-playlist" open>', html)
+        self.assertEqual(self.um("SELECT nome FROM playlist"), "Churrasco")
 
     def test_lista_com_contagem(self):
         musicas = [self.musica(f"M{i}") for i in range(4)]
         self.playlist("Roda de violão", *musicas[:2])
         self.playlist("Churrasco", *musicas)
         html = self.texto(self.client.get("/playlists"))
-        html = html[html.index('<ul class="itens">'):]  # o placeholder do formulário também cita "Roda de violão"
+        html = html[html.index('<ul class="lista-cartoes">'):]  # o placeholder do formulário também cita "Roda de violão"
         self.assertLess(html.index("Churrasco"), html.index("Roda de violão"))
-        self.assertIn("4 música(s)", html)
-        self.assertIn("2 música(s)", html)
+        self.assertIn('<span class="numero">4</span> música(s)', html)
+        self.assertIn('<span class="numero">2</span> música(s)', html)
 
     def test_renomear(self):
         m = self.musica("Oceano")

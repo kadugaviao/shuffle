@@ -10,8 +10,8 @@ class TestArtistas(BaseTest):
         self.musica("Oceano", djavan)
         html = self.texto(self.client.get("/artistas"))
         self.assertLess(html.index("Djavan"), html.index("Legião Urbana"))
-        self.assertIn("1 música(s)", html)
-        self.assertIn("2 música(s)", html)
+        self.assertIn('<span class="numero">1</span> música(s)', html)
+        self.assertIn('<span class="numero">2</span> música(s)', html)
 
     def test_lista_vazia(self):
         self.assertIn("Nenhum artista cadastrado ainda.", self.texto(self.client.get("/artistas")))

@@ -41,8 +41,8 @@ Referências: comportamento em `specs/*/spec.md`, decisões em `design.md` (D1�
 
 ## 7. Artistas e playlists
 
-- [ ] 7.1 Redesenhar `artistas/lista.html` (cartões com capa gerada, contagem em Geist Mono, excluir como botão de perigo, estado vazio ilustrado); verificar com os testes de artistas verdes
-- [ ] 7.2 Redesenhar `playlists/lista.html` e `playlists/detalhe.html`; criar e editar inválidos renderizam a própria tela com erro no campo em vez de redirecionar (D5); verificar com testes de nome vazio na criação e na edição (erro junto ao campo, nada gravado) e os demais testes de playlists verdes
+- [x] 7.1 Redesenhar `artistas/lista.html` (cartões com capa gerada, contagem em Geist Mono, excluir como botão de perigo, estado vazio ilustrado); verificar com os testes de artistas verdes
+- [x] 7.2 Redesenhar `playlists/lista.html` e `playlists/detalhe.html`; criar e editar inválidos renderizam a própria tela com erro no campo em vez de redirecionar (D5); verificar com testes de nome vazio na criação e na edição (erro junto ao campo, nada gravado) e os demais testes de playlists verdes
 
 ## 8. Histórico e estatísticas
 

@@ -63,7 +63,7 @@ class TestSorteio(BaseTest):
         r = self.sortear()
         html = self.texto(self.client.get(r.headers["Location"]))
         for trecho in ("Tempo Perdido", "Legião Urbana", 'href="https://exemplo.com/cifra"', 'target="_blank"',
-                       "Toquei ✅", "Pular ⏭️"):
+                       "Toquei</button>", "Pular</button>"):
             self.assertIn(trecho, html)
         self.assertNotIn('name="nota"', html)  # estrelas só depois de "Toquei"
 
@@ -87,6 +87,18 @@ class TestSorteio(BaseTest):
         # o HTML entregue já traz título, artista e botões; o JS só anima
         self.assertIn('<h1 class="titulo-sorteado">Tempo Perdido</h1>', html)
         self.assertIn("Legião Urbana", html)
+
+    def test_carimbo_conforme_o_estado(self):
+        s = self.sorteio(self.musica("Tempo Perdido"))
+        self.assertIn('<p class="carimbo" aria-hidden="true">Toca essa!</p>', self.texto(self.client.get(f"/sorteios/{s}")))
+        self.client.post(f"/sorteios/{s}/toquei")
+        html = self.texto(self.client.get(f"/sorteios/{s}"))
+        self.assertIn('<p class="carimbo carimbo-tocada" aria-hidden="true">Tocada</p>', html)
+        self.assertNotIn("Toca essa!", html)
+
+    def test_titulo_longo_desce_um_degrau(self):
+        s = self.sorteio(self.musica("Eu Sei Que Vou Te Amar (ao vivo)"))
+        self.assertIn('<h1 class="titulo-sorteado titulo-longo">', self.texto(self.client.get(f"/sorteios/{s}")))
 
     def test_resultado_inexistente_404(self):
         self.assertEqual(self.client.get("/sorteios/999").status_code, 404)

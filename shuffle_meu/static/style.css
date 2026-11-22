@@ -473,20 +473,56 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .musica-acoes form { margin: 0; }
 .atalho-ativa { display: inline-flex; align-items: center; gap: var(--espaco-2); padding: 0 var(--espaco-2); }
 
-/* Resultado do sorteio */
-.resultado { position: relative; max-width: 48rem; margin-bottom: var(--espaco-5); }
-.resultado .revelavel { display: grid; justify-items: start; gap: var(--espaco-3); }
+/* Resultado do sorteio: a folha de setlist, alinhada à esquerda */
+.resultado { max-width: 52rem; margin-top: var(--espaco-3); margin-bottom: var(--espaco-5); }
+.resultado .revelavel { display: grid; justify-items: start; gap: var(--espaco-4); }
+.resultado-topo { display: flex; align-items: end; gap: var(--espaco-4); }
+.resultado-titulo { display: flex; flex-wrap: wrap; align-items: center; gap: var(--espaco-3) var(--espaco-5); }
 .titulo-sorteado { margin: 0; font-size: var(--t-72); line-height: 0.9; }
-@media (min-width: 720px) { .titulo-sorteado { font-size: var(--t-120); } }
+.titulo-longo { font-size: var(--t-44); }
+@media (min-width: 720px) {
+  .titulo-sorteado { font-size: var(--t-120); }
+  .titulo-longo { font-size: var(--t-72); }
+}
 .resultado .artista { font-size: var(--t-20); color: var(--tinta-2); }
-.acoes-resultado { margin-top: var(--espaco-3); }
-.status-tocada { display: inline-flex; align-items: center; gap: var(--espaco-2); min-height: 44px; font-weight: 700; }
-.avaliacao { display: grid; gap: var(--espaco-1); margin-top: var(--espaco-2); }
+.acoes-resultado { margin-top: var(--espaco-2); }
+.avaliacao { display: grid; gap: var(--espaco-1); }
+.avaliacao .rotulo { display: block; }
 
-/* Revelação (D7): o CSS só esconde se o JS existir; rede de segurança mostra em 2 s */
+/* Carimbo: vermelho "Toca essa!" ou verde "Tocada"; sempre texto grande (D4) */
+.carimbo {
+  padding: var(--espaco-1) var(--espaco-3);
+  font: 900 var(--t-44)/1 var(--fonte-display);
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--vermelho);
+  border: 4px solid currentColor;
+  transform: rotate(-6deg);
+}
+.carimbo-tocada { color: var(--sucesso); }
+.revelado .carimbo { animation: carimbar var(--medio) ease-out; }
+@keyframes carimbar { from { opacity: 0; transform: rotate(-6deg) scale(1.2); } }
+
+/* Revelação (D7): roleta vertical. O CSS só esconde se o JS existir; rede de segurança mostra em 2 s */
 .rolo { display: none; }
 .js [data-roleta] .revelavel { visibility: hidden; animation: aparecer 0s 2s forwards; }
-.js [data-roleta].rodando .rolo { display: block; font: 900 var(--t-72)/0.9 var(--fonte-display); text-transform: uppercase; }
+.js [data-roleta].rodando .rolo {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: start;
+  padding: calc(var(--espaco-5) + 96px + var(--espaco-4)) var(--espaco-5) 0; /* onde o título vai aparecer */
+}
+.rolo-lista { /* janela de uma linha; a faixa de títulos sobe por dentro dela */
+  --linha: var(--t-72);
+  height: var(--linha);
+  overflow: hidden;
+  font: 900 var(--t-72)/1 var(--fonte-display);
+  text-transform: uppercase;
+}
+.rolo-faixa { margin: 0; padding: 0; list-style: none; transition: transform var(--rolar); }
+.rolo-faixa li { height: var(--linha); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+@media (min-width: 720px) { .rolo-lista { --linha: var(--t-120); font-size: var(--t-120); } }
 .js [data-roleta].revelado .revelavel { visibility: visible; animation: none; }
 @keyframes aparecer { to { visibility: visible; } }
 

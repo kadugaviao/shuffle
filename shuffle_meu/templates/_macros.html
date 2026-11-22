@@ -36,9 +36,9 @@ id="campo-{{ nome }}"{% if erros and erros.get(nome) %} aria-invalid="true" aria
 </fieldset>
 {%- endmacro %}
 
-{# Capa gerada a partir do nome do artista (decorativa: o nome aparece em texto ao lado). #}
+{# Capa chapada: amarelo, vermelho ou tinta pelo nome do artista (design D8); decorativa, o nome aparece ao lado. #}
 {% macro capa(nome, grande=false) -%}
-<span class="capa{% if grande %} capa-grande{% endif %}" style="--h: {{ nome|matiz }}" aria-hidden="true">{{ nome|iniciais }}</span>
+<span class="capa capa-{{ (nome|matiz) % 3 }}{% if grande %} capa-grande{% endif %}" aria-hidden="true">{{ nome|iniciais }}</span>
 {%- endmacro %}
 
 {% macro dificuldade(nivel) -%}

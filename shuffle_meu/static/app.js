@@ -37,33 +37,27 @@ function iniciarToasts() {
   }
 }
 
-// Roleta (D4): títulos passam e desaceleram até a música sorteada, ~1,2 s. Só existe logo após sortear.
+// Roleta (D7): faixa vertical de títulos sobe e desacelera até a sorteada (1,2 s), depois o carimbo entra.
+// Só existe logo após sortear; com movimento reduzido o CSS já mostra o resultado parado.
 function iniciarRoleta() {
-  const cartao = document.querySelector("[data-roleta]");
-  if (!cartao || movimentoReduzido()) return; // com movimento reduzido o CSS já mostra o resultado
-  const titulos = JSON.parse(cartao.dataset.roleta);
-  const rolo = cartao.querySelector(".rolo");
-  const passos = 14;
-  const atrasos = Array.from({ length: passos }, (_, k) => 30 + 150 * (k / (passos - 1)) ** 2); // ~1,15 s no total
-  let i = 0;
-  cartao.classList.add("rodando");
-  const passo = () => {
-    const ultimo = i === passos - 1;
-    rolo.textContent = ultimo ? titulos.at(-1) : titulos[i % Math.max(titulos.length - 1, 1)];
-    rolo.classList.remove("tique");
-    void rolo.offsetWidth;
-    rolo.classList.add("tique");
-    if (!ultimo) {
-      setTimeout(passo, atrasos[++i]);
-      return;
-    }
-    setTimeout(() => {
-      cartao.classList.replace("rodando", "revelado");
-      cartao.querySelector("[data-anuncio]").textContent =
-        `Sorteada: ${cartao.querySelector(".titulo-sorteado").textContent}, ${cartao.querySelector(".artista").textContent}`;
-    }, 140);
-  };
-  passo();
+  const folha = document.querySelector("[data-roleta]");
+  if (!folha || movimentoReduzido()) return;
+  const titulos = JSON.parse(folha.dataset.roleta);
+  const sorteada = titulos.at(-1);
+  const outros = titulos.slice(0, -1);
+  const itens = Array.from({ length: 20 }, (_, i) => (outros.length ? outros[i % outros.length] : sorteada));
+  itens.push(sorteada);
+  const faixa = folha.querySelector(".rolo-faixa");
+  faixa.replaceChildren(...itens.map((t) => Object.assign(document.createElement("li"), { textContent: t })));
+  folha.classList.add("rodando");
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    faixa.style.transform = `translateY(${-100 * (itens.length - 1) / itens.length}%)`;
+  }));
+  setTimeout(() => {
+    folha.classList.replace("rodando", "revelado");
+    folha.querySelector("[data-anuncio]").textContent =
+      `Sorteada: ${folha.querySelector(".titulo-sorteado").textContent}, ${folha.querySelector(".artista").textContent}`;
+  }, 1200); // = duração de --rolar
 }
 
 // Atalhos do Repertório (D2): POST via fetch e troca o estado no lugar; se falhar, envia o formulário normal.

@@ -72,7 +72,7 @@ class TestMacros(BaseTest):
 
     def test_capa_e_dificuldade(self):
         html = self.render('{% from "_macros.html" import capa, dificuldade %}{{ capa("Djavan") }}{{ dificuldade(3) }}')
-        self.assertIn('style="--h: 312"', html)
+        self.assertIn('class="capa capa-0"', html)  # Djavan: matiz 312, 312 % 3 = 0 (amarelo)
         self.assertIn('aria-label="Dificuldade 3 de 5"', html)
         self.assertEqual(html.count('class="cheia"'), 3)
 
@@ -111,6 +111,12 @@ class TestAntiSlop(unittest.TestCase):
         self.assertEqual(set(re.findall(r'font-family:\s*"([^"]+)"', self.css)), FAMILIAS)
         for antiga in ("Inter", "Geist", "Instrument"):
             self.assertNotIn(antiga, self.css)
+
+    def test_templates_sem_emoji(self):
+        emoji = re.compile("[\U0001F300-\U0001FAFF\u2600-\u27BF\u2B00-\u2BFF\u23E9-\u23FA\uFE0F]")
+        for template in (PACOTE / "templates").rglob("*.html"):
+            with self.subTest(template=template.name):
+                self.assertIsNone(emoji.search(template.read_text(encoding="utf-8")))
 
     def test_pasta_de_fontes(self):
         arquivos = {f.name for f in (PACOTE / "static" / "fonts").iterdir()}

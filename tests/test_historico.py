@@ -23,7 +23,7 @@ class TestHistorico(BaseTest):
         self.assertEqual(self.um("SELECT tocada FROM sorteio"), 1)
         html = self.texto(r)
         self.assertIn("Tocada</p>", html)
-        self.assertNotIn("Toquei ✅", html)
+        self.assertNotIn("Toquei</button>", html)
         self.assertEqual(html.count('name="nota" value='), 5)  # as estrelas aparecem
         self.assertIn('class="estrelas entrando"', html)  # com o pop de entrada, só logo após o Toquei
         self.assertNotIn("entrando", self.texto(self.client.get(f"/sorteios/{s}")))
@@ -32,7 +32,7 @@ class TestHistorico(BaseTest):
         s = self.sorteio(self.musica("Tempo Perdido"))
         html = self.texto(self.client.get(f"/sorteios/{s}"))
         self.assertNotIn('name="nota"', html)
-        self.assertIn("Toquei ✅", html)
+        self.assertIn("Toquei</button>", html)
 
     def test_estrelas_mostram_a_nota_atual(self):
         s = self.sorteio(self.musica("Tempo Perdido"), tocada=1, nota=3)

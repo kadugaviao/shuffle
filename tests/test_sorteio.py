@@ -100,7 +100,7 @@ class TestSorteio(BaseTest):
         self.assertIn("humor=triste", r.headers["Location"])  # volta com os filtros
         html = self.texto(self.client.get(r.headers["Location"]))
         self.assertIn(MSG_NENHUMA, html)
-        self.assertIn('<option value="triste" selected>', html)
+        self.assertIn('value="triste" checked', html)  # chip de humor volta marcado
         self.assertEqual(self.um("SELECT COUNT(*) FROM sorteio"), 0)
 
     def test_repertorio_vazio_rn05(self):
@@ -133,6 +133,25 @@ class TestSorteio(BaseTest):
         r = self.sortear()
         self.assertIn(AVISO_TODAS_RECENTES, self.texto(self.client.get(r.headers["Location"])))
         self.assertEqual(self.um("SELECT COUNT(*) FROM sorteio"), 4)
+
+    def test_primeiro_acesso_sem_musicas(self):
+        html = self.texto(self.client.get("/"))
+        self.assertIn("Cadastre sua primeira música", html)
+        self.assertIn('href="/musicas/nova"', html)
+        self.assertNotIn("primario sortear", html)
+
+    def test_so_musicas_inativas(self):
+        self.musica("Índios", ativa=0)
+        self.assertIn("primario sortear", self.texto(self.client.get("/")))
+        self.assertIn(MSG_NENHUMA, self.texto(self.client.post("/sortear", follow_redirects=True)))
+
+    def test_filtros_em_chips_e_selects(self):
+        self.musica("Tempo Perdido", genero="rock")
+        html = self.texto(self.client.get("/?humor=calma&dificuldade_max=3&genero=ROCK&n=7"))
+        self.assertIn('name="humor" value="calma" checked', html)
+        self.assertIn('name="dificuldade_max" value="3" checked', html)
+        self.assertIn('name="genero" value="rock" checked', html)
+        self.assertIn('value="7"', html)
 
     def test_desempenho_com_1000_musicas(self):
         a = self.artista_padrao()

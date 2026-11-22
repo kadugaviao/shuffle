@@ -63,7 +63,8 @@ def inicio():
         " JOIN musica m ON m.id = s.musica_id JOIN artista a ON a.id = m.artista_id ORDER BY s.id DESC LIMIT 1"
     ).fetchone()
     return render_template(
-        "inicio.html", f=filtros, n=n, ultimo=ultimo, generos=generos(db),
+        "inicio.html", f=filtros, n=n, ultimo=ultimo, generos=[(g, g) for g in generos(db)],
+        tem_musicas=db.execute("SELECT EXISTS (SELECT 1 FROM musica)").fetchone()[0],
         artistas=db.execute("SELECT id, nome FROM artista ORDER BY nome COLLATE PT").fetchall(),
         playlists=db.execute("SELECT id, nome FROM playlist ORDER BY nome COLLATE PT").fetchall(),
     )

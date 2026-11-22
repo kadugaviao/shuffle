@@ -37,4 +37,13 @@ function iniciarToasts() {
   }
 }
 
+// Pop (0,96 → 1,04 → 1) ao clicar em botões marcados com data-pop, como o "Sortear".
+document.addEventListener("click", (evento) => {
+  const botao = evento.target.closest("[data-pop]");
+  if (!botao || movimentoReduzido()) return;
+  botao.classList.remove("pop");
+  void botao.offsetWidth; // reinicia a animação em cliques seguidos
+  botao.classList.add("pop");
+});
+
 iniciarToasts();

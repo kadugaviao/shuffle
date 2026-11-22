@@ -207,6 +207,7 @@ button svg, .botao svg { width: 18px; height: 18px; flex: none; }
   animation: pulsar 3s ease-in-out infinite;
 }
 .sortear svg { width: 26px; height: 26px; }
+.sortear.pop { animation: pop 300ms var(--mola), deslizar 8s ease-in-out infinite alternate; }
 @keyframes deslizar { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
 @keyframes pulsar { 50% { opacity: 1; } }
 
@@ -410,6 +411,13 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .estado-vazio > svg { width: 64px; height: 64px; color: var(--texto-2); }
 .estado-vazio p { max-width: 32ch; color: var(--texto-2); }
 .estado-vazio h2 { font: italic 400 1.75rem/1.2 var(--fonte-serif); }
+
+/* ---------- Telas ---------- */
+.inicio { max-width: 44rem; }
+.inicio .sortear { margin-bottom: var(--espaco-4); }
+.filtros { gap: var(--espaco-5); }
+.ultima { display: flex; align-items: center; gap: var(--espaco-4); }
+.ultima p + p { margin-top: var(--espaco-1); }
 
 /* ---------- Fundo de palco: luz difusa em movimento lento + ruído ---------- */
 body::before {

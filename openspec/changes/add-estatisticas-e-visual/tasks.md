@@ -19,8 +19,8 @@ Referências: comportamento em `specs/*/spec.md`, decisões em `design.md` (D1�
 
 ## 3. Início e sorteio
 
-- [ ] 3.1 Redesenhar `inicio.html`: botão "Sortear" (gradiente animado, glow, pop), filtros de humor, dificuldade máxima e gênero em chips, artista e playlist em `select` de vidro, N como campo numérico, "Última sorteada" em cartão; atualizar os testes do MVP que conferiam `<option ... selected>` para os radios marcados (`checked`); verificar `python -m unittest` verde e que os filtros voltam marcados depois da mensagem da RN05
-- [ ] 3.2 Estado vazio na tela inicial (ícone grande, "Cadastre sua primeira música", CTA no gradiente para `/musicas/nova`) quando não há nenhuma música; verificar com testes dos cenários "Primeiro acesso" e "Só músicas inativas"
+- [x] 3.1 Redesenhar `inicio.html`: botão "Sortear" (gradiente animado, glow, pop), filtros de humor, dificuldade máxima e gênero em chips, artista e playlist em `select` de vidro, N como campo numérico, "Última sorteada" em cartão; atualizar os testes do MVP que conferiam `<option ... selected>` para os radios marcados (`checked`); verificar `python -m unittest` verde e que os filtros voltam marcados depois da mensagem da RN05
+- [x] 3.2 Estado vazio na tela inicial (ícone grande, "Cadastre sua primeira música", CTA no gradiente para `/musicas/nova`) quando não há nenhuma música; verificar com testes dos cenários "Primeiro acesso" e "Só músicas inativas"
 
 ## 4. Resultado do sorteio
 

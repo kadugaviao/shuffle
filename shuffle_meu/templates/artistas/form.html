@@ -1,17 +1,21 @@
 {% extends "base.html" %}
+{% from "_icones.html" import icone %}
+{% from "_macros.html" import campo, aria %}
 {% block titulo %}{{ "Editar artista" if id else "Novo artista" }}{% endblock %}
 {% block conteudo %}
+<div class="formulario">
 <h1>{{ "Editar artista" if id else "Novo artista" }}</h1>
-<form class="cartao campos" method="post">
-  <label>Nome
-    <input name="nome" value="{{ artista.nome or '' }}" required maxlength="120">
-  </label>
-  <label>País (opcional)
-    <input name="pais" value="{{ artista.pais or '' }}" maxlength="80">
-  </label>
+<form class="cartao campos" method="post" novalidate>
+  {% call campo("nome", "Nome", erros) %}
+  <input name="nome" value="{{ artista.nome or '' }}" maxlength="120" autocomplete="off" {{ aria("nome", erros) }}>
+  {% endcall %}
+  {% call campo("pais", "País (opcional)", erros) %}
+  <input name="pais" value="{{ artista.pais or '' }}" maxlength="80" {{ aria("pais", erros) }}>
+  {% endcall %}
   <div class="botoes">
-    <button class="primario">Salvar</button>
+    <button class="primario">{{ icone("check") }}Salvar</button>
     <a class="botao" href="{{ url_for('artistas.lista') }}">Cancelar</a>
   </div>
 </form>
+</div>
 {% endblock %}

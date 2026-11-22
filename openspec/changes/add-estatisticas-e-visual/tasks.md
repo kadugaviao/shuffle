@@ -36,8 +36,8 @@ Referências: comportamento em `specs/*/spec.md`, decisões em `design.md` (D1�
 
 ## 6. Formulários
 
-- [ ] 6.1 `validar_musica()` e `_validar()` de artistas devolvendo erros por campo (`dict`), incluindo RN02 em `titulo`, artista inexistente em `artista_id` e nome repetido em `nome`; atualizar `tests/test_musicas.py` e `tests/test_artistas.py`; verificar a suíte verde
-- [ ] 6.2 Redesenhar `musicas/form.html` e `artistas/form.html` com o macro `campo()` (humor em chips, dificuldade segmentada 1–5, erros abaixo do campo com `aria-invalid`); verificar com teste do cenário "Título vazio" (mensagem logo após o campo Título, `aria-invalid="true"`, dificuldade preservada)
+- [x] 6.1 `validar_musica()` e `_validar()` de artistas devolvendo erros por campo (`dict`), incluindo RN02 em `titulo`, artista inexistente em `artista_id` e nome repetido em `nome`; atualizar `tests/test_musicas.py` e `tests/test_artistas.py`; verificar a suíte verde
+- [x] 6.2 Redesenhar `musicas/form.html` e `artistas/form.html` com o macro `campo()` (humor em chips, dificuldade segmentada 1–5, erros abaixo do campo com `aria-invalid`); verificar com teste do cenário "Título vazio" (mensagem logo após o campo Título, `aria-invalid="true"`, dificuldade preservada)
 
 ## 7. Artistas e playlists
 

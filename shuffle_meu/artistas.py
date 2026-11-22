@@ -17,16 +17,16 @@ def _buscar(id):
 
 
 def _validar(form, artista_id=None):
-    """Retorna (dados, erro). Nome obrigatório e único sem diferenciar maiúsculas, inclusive com acento."""
+    """Retorna (dados, erros {campo: mensagem}). Nome obrigatório e único sem diferenciar maiúsculas nem acentos."""
     nome = (form.get("nome") or "").strip()
     pais = (form.get("pais") or "").strip() or None
     if not nome:
-        return None, "Informe o nome do artista."
+        return None, {"nome": "Informe o nome do artista."}
     # shortcut: compara em Python porque o NOCASE do SQLite só trata ASCII; ok até alguns milhares de artistas.
     for outro in get_db().execute("SELECT id, nome FROM artista"):
         if outro["id"] != artista_id and outro["nome"].casefold() == nome.casefold():
-            return None, MSG_DUPLICADO
-    return {"nome": nome, "pais": pais, "id": artista_id}, None
+            return None, {"nome": MSG_DUPLICADO}
+    return {"nome": nome, "pais": pais, "id": artista_id}, {}
 
 
 def _gravar(sql, dados):
@@ -36,8 +36,8 @@ def _gravar(sql, dados):
         db.commit()
     except sqlite3.IntegrityError:  # outro cadastro igual entrou entre a checagem e o INSERT
         db.rollback()
-        return MSG_DUPLICADO
-    return None
+        return {"nome": MSG_DUPLICADO}
+    return {}
 
 
 @bp.get("")
@@ -52,27 +52,26 @@ def lista():
 @bp.route("/novo", methods=["GET", "POST"])
 def novo():
     if request.method == "POST":
-        dados, erro = _validar(request.form)
-        erro = erro or _gravar("INSERT INTO artista (nome, pais) VALUES (:nome, :pais)", dados)
-        if not erro:
+        dados, erros = _validar(request.form)
+        erros = erros or _gravar("INSERT INTO artista (nome, pais) VALUES (:nome, :pais)", dados)
+        if not erros:
             flash("Artista cadastrado.")
             return redirect(url_for(".lista"))
-        flash(erro, "erro")
-    return render_template("artistas/form.html", artista=request.form, id=None)
+        return render_template("artistas/form.html", artista=request.form, id=None, erros=erros)
+    return render_template("artistas/form.html", artista={}, id=None, erros={})
 
 
 @bp.route("/<int:id>/editar", methods=["GET", "POST"])
 def editar(id):
     artista = _buscar(id)
     if request.method == "POST":
-        dados, erro = _validar(request.form, id)
-        erro = erro or _gravar("UPDATE artista SET nome = :nome, pais = :pais WHERE id = :id", dados)
-        if not erro:
+        dados, erros = _validar(request.form, id)
+        erros = erros or _gravar("UPDATE artista SET nome = :nome, pais = :pais WHERE id = :id", dados)
+        if not erros:
             flash("Artista atualizado.")
             return redirect(url_for(".lista"))
-        flash(erro, "erro")
-        artista = request.form
-    return render_template("artistas/form.html", artista=artista, id=id)
+        return render_template("artistas/form.html", artista=request.form, id=id, erros=erros)
+    return render_template("artistas/form.html", artista=artista, id=id, erros={})
 
 
 @bp.post("/<int:id>/excluir")

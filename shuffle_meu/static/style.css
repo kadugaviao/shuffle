@@ -258,8 +258,8 @@ input[type="checkbox"] { width: 18px; min-height: 18px; height: 18px; accent-col
 label.check { display: flex; align-items: center; gap: var(--espaco-2); color: var(--texto); }
 
 [aria-invalid="true"] { border-color: var(--perigo); }
-.erro-campo { display: flex; align-items: center; gap: var(--espaco-1); margin-top: var(--espaco-1); font-size: 0.875rem; font-weight: 500; color: var(--perigo); }
-.erro-campo svg { width: 16px; height: 16px; flex: none; }
+.erro-campo { display: flex; align-items: flex-start; gap: var(--espaco-1); margin-top: var(--espaco-1); font-size: 0.875rem; font-weight: 500; color: var(--perigo); }
+.erro-campo svg { width: 16px; height: 16px; flex: none; margin-top: 3px; }
 
 /* Chips: radios/checkbox nativos escondidos com a pílula no <span> */
 .chips { display: flex; flex-wrap: wrap; gap: var(--espaco-2); }
@@ -418,6 +418,13 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .filtros { gap: var(--espaco-5); }
 .ultima { display: flex; align-items: center; gap: var(--espaco-4); }
 .ultima p + p { margin-top: var(--espaco-1); }
+
+/* Formulários */
+.formulario { max-width: 40rem; }
+.campo { display: grid; gap: var(--espaco-2); min-width: 0; }
+.campo > label { display: block; }
+.aviso-inline { display: flex; flex-wrap: wrap; align-items: center; gap: var(--espaco-2); color: var(--texto-2); }
+.aviso-inline svg { width: 18px; height: 18px; color: var(--aviso); }
 
 /* Repertório: cartões com capa gerada */
 .empurra { margin-left: auto; }

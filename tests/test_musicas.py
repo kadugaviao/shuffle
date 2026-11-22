@@ -12,14 +12,18 @@ def form(**campos):
 
 class TestValidarMusica(unittest.TestCase):
     def erros(self, **campos):
-        return validar_musica(form(**campos))[1]
+        return list(validar_musica(form(**campos))[1].values())
 
     def test_valido(self):
         dados, erros = validar_musica(form(titulo="  Tempo Perdido ", genero="", link=""))
-        self.assertEqual(erros, [])
+        self.assertEqual(erros, {})
         self.assertEqual(dados["titulo"], "Tempo Perdido")
         self.assertIsNone(dados["genero"])  # vazio vira NULL para o CHECK do banco
         self.assertIsNone(dados["link"])
+
+    def test_erros_por_campo(self):
+        erros = validar_musica(form(titulo="", artista_id="", dificuldade="9", humor="x", link="ftp://a"))[1]
+        self.assertEqual(set(erros), {"titulo", "artista_id", "dificuldade", "humor", "link"})
 
     def test_titulo_obrigatorio_rn01(self):
         self.assertIn("Informe o título da música.", self.erros(titulo="   "))
@@ -55,7 +59,7 @@ class TestMusicas(BaseTest):
         self.assertEqual((m["titulo"], m["ativa"], m["favorita"], m["dificuldade"]), ("Tempo Perdido", 1, 0, 2))
 
     def test_nova_vem_com_dificuldade_3(self):
-        self.assertIn('<option value="3" selected>', self.texto(self.client.get("/musicas/nova")))
+        self.assertIn('name="dificuldade" value="3" checked', self.texto(self.client.get("/musicas/nova")))
 
     def test_erro_mantem_dados_digitados(self):
         r = self.client.post("/musicas/nova", data=form(artista_id=str(self.legiao), dificuldade="9",
@@ -63,6 +67,23 @@ class TestMusicas(BaseTest):
         self.assertIn('value="Tempo Perdido"', self.texto(r))
         self.assertIn('value="rock progressivo"', self.texto(r))
         self.assertEqual(self.um("SELECT COUNT(*) FROM musica"), 0)
+
+    def test_titulo_vazio_erro_junto_ao_campo(self):
+        r = self.client.post("/musicas/nova", data=form(titulo=" ", artista_id=str(self.legiao), dificuldade="3"))
+        html = self.texto(r)
+        self.assertEqual(r.status_code, 200)
+        self.assertIn('id="campo-titulo" aria-invalid="true" aria-describedby="erro-titulo"', html)
+        inicio = html.index('id="campo-titulo"')
+        self.assertLess(inicio, html.index('id="erro-titulo"'))
+        self.assertLess(html.index('id="erro-titulo"'), html.index('id="campo-artista_id"'))  # logo abaixo do Título
+        self.assertIn("Informe o título da música.", html[inicio:html.index('id="campo-artista_id"')])
+        self.assertIn('name="dificuldade" value="3" checked', html)
+        self.assertNotIn('class="toasts"', html)  # erro de campo não vira toast
+
+    def test_duplicata_vai_para_o_campo_titulo(self):
+        self.musica("Tempo Perdido", self.legiao)
+        html = self.texto(self.client.post("/musicas/nova", data=form(artista_id=str(self.legiao))))
+        self.assertIn('id="erro-titulo"', html)
 
     def test_artista_inexistente(self):
         r = self.client.post("/musicas/nova", data=form(artista_id="999"))

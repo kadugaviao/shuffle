@@ -26,6 +26,7 @@ class TestArtistas(BaseTest):
         r = self.client.post("/artistas/novo", data={"nome": "   ", "pais": "Brasil"})
         self.assertIn("Informe o nome do artista.", self.texto(r))
         self.assertIn('value="Brasil"', self.texto(r))  # mantém os dados digitados
+        self.assertIn('id="campo-nome" aria-invalid="true" aria-describedby="erro-nome"', self.texto(r))
         self.assertEqual(self.um("SELECT COUNT(*) FROM artista"), 0)
 
     def test_nome_repetido_sem_diferenciar_maiusculas_e_acentos(self):

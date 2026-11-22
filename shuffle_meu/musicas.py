@@ -19,7 +19,7 @@ def _filtros_lista(args):
 
 
 def validar_musica(form):
-    """Valida o formulário de música (RN01, RN03, humor, link). Retorna (dados, erros)."""
+    """Valida o formulário de música (RN01, RN03, humor, link). Retorna (dados, erros {campo: mensagem})."""
 
     def campo(nome):
         return (form.get(nome) or "").strip() or None
@@ -32,24 +32,24 @@ def validar_musica(form):
         "favorita": 1 if form.get("favorita") else 0,
         "ativa": 1 if form.get("ativa") else 0,
     }
-    erros = []
+    erros = {}
     if not dados["titulo"]:
-        erros.append("Informe o título da música.")
+        erros["titulo"] = "Informe o título da música."
     try:
         dados["artista_id"] = int(form.get("artista_id") or "")
     except ValueError:
         dados["artista_id"] = None
-        erros.append(MSG_ARTISTA)
+        erros["artista_id"] = MSG_ARTISTA
     try:
         dados["dificuldade"] = int(form.get("dificuldade") or "")
     except ValueError:
         dados["dificuldade"] = None
     if dados["dificuldade"] is None or not 1 <= dados["dificuldade"] <= 5:
-        erros.append("A dificuldade deve ser um número de 1 a 5.")
+        erros["dificuldade"] = "A dificuldade deve ser um número de 1 a 5."
     if dados["humor"] and dados["humor"] not in HUMORES:
-        erros.append("Escolha um humor da lista.")
+        erros["humor"] = "Escolha um humor da lista."
     if dados["link"] and not dados["link"].lower().startswith(("http://", "https://")):
-        erros.append("O link deve começar com http:// ou https://.")
+        erros["link"] = "O link deve começar com http:// ou https://."
     return dados, erros
 
 
@@ -69,25 +69,27 @@ def _buscar(id):
 
 
 def _gravar(sql, dados, musica_id=None):
-    """Grava se não for duplicata (RN02). Retorna a mensagem de erro ou None."""
+    """Grava se não for duplicata (RN02). Retorna {campo: mensagem} (vazio se gravou)."""
     db = get_db()
     # shortcut: compara em Python porque o NOCASE do SQLite só trata ASCII; ok para repertórios pessoais.
     for outra in db.execute("SELECT id, titulo FROM musica WHERE artista_id = ?", (dados["artista_id"],)):
         if outra["id"] != musica_id and outra["titulo"].casefold() == dados["titulo"].casefold():
-            return MSG_DUPLICADA
+            return {"titulo": MSG_DUPLICADA}
     try:
         db.execute(sql, dados)
         db.commit()
     except sqlite3.IntegrityError as e:
         db.rollback()
-        return MSG_DUPLICADA if "UNIQUE" in str(e) else MSG_ARTISTA  # FK: artista inexistente
-    return None
+        # UNIQUE: duplicata que passou pela checagem (RN02); FK: artista inexistente
+        return {"titulo": MSG_DUPLICADA} if "UNIQUE" in str(e) else {"artista_id": MSG_ARTISTA}
+    return {}
 
 
-def _form(musica, id=None):
+def _form(musica, id=None, erros=None):
     db = get_db()
     artistas = db.execute("SELECT id, nome FROM artista ORDER BY nome COLLATE PT").fetchall()
-    return render_template("musicas/form.html", musica=musica, id=id, artistas=artistas, generos=generos(db))
+    return render_template("musicas/form.html", musica=musica, id=id, artistas=artistas, generos=generos(db),
+                           erros=erros or {})
 
 
 @bp.get("")
@@ -118,19 +120,15 @@ def nova():
     if request.method == "POST":
         dados, erros = validar_musica(request.form)
         dados.update(favorita=0, ativa=1)  # toda música nova começa ativa e não favorita
+        erros = erros or _gravar(
+            "INSERT INTO musica (titulo, artista_id, genero, humor, dificuldade, link, favorita, ativa)"
+            " VALUES (:titulo, :artista_id, :genero, :humor, :dificuldade, :link, :favorita, :ativa)",
+            dados,
+        )
         if not erros:
-            erro = _gravar(
-                "INSERT INTO musica (titulo, artista_id, genero, humor, dificuldade, link, favorita, ativa)"
-                " VALUES (:titulo, :artista_id, :genero, :humor, :dificuldade, :link, :favorita, :ativa)",
-                dados,
-            )
-            if not erro:
-                flash("Música cadastrada.")
-                return redirect(url_for(".lista"))
-            erros = [erro]
-        for erro in erros:
-            flash(erro, "erro")
-        return _form(request.form)
+            flash("Música cadastrada.")
+            return redirect(url_for(".lista"))
+        return _form(request.form, erros=erros)
     return _form({"dificuldade": 3})
 
 
@@ -140,20 +138,16 @@ def editar(id):
     if request.method == "POST":
         dados, erros = validar_musica(request.form)
         dados["id"] = id
+        erros = erros or _gravar(
+            "UPDATE musica SET titulo = :titulo, artista_id = :artista_id, genero = :genero, humor = :humor,"
+            " dificuldade = :dificuldade, link = :link, favorita = :favorita, ativa = :ativa WHERE id = :id",
+            dados,
+            id,
+        )
         if not erros:
-            erro = _gravar(
-                "UPDATE musica SET titulo = :titulo, artista_id = :artista_id, genero = :genero, humor = :humor,"
-                " dificuldade = :dificuldade, link = :link, favorita = :favorita, ativa = :ativa WHERE id = :id",
-                dados,
-                id,
-            )
-            if not erro:
-                flash("Música atualizada.")
-                return redirect(url_for(".lista"))
-            erros = [erro]
-        for erro in erros:
-            flash(erro, "erro")
-        musica = request.form
+            flash("Música atualizada.")
+            return redirect(url_for(".lista"))
+        return _form(request.form, id, erros)
     return _form(musica, id)
 
 

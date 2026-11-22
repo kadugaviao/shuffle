@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block titulo %}Artistas{% endblock %}
+{% block conteudo %}
+<h1>Artistas</h1>
+<p><a class="botao primario" href="{{ url_for('artistas.novo') }}">+ Novo artista</a></p>
+{% if artistas %}
+<ul class="itens">
+  {% for a in artistas %}
+  <li class="item">
+    <div>
+      <strong>{{ a.nome }}</strong>
+      <div class="meta">{{ a.pais or "País não informado" }} · {{ a.total }} música(s)</div>
+    </div>
+    <div class="acoes">
+      <a class="botao" href="{{ url_for('artistas.editar', id=a.id) }}">Editar</a>
+      <form class="inline" method="post" action="{{ url_for('artistas.excluir', id=a.id) }}"
+            data-confirmar="Excluir o artista {{ a.nome }}?">
+        <button class="perigo">Excluir</button>
+      </form>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="vazio">Nenhum artista cadastrado ainda.</p>
+{% endif %}
+{% endblock %}

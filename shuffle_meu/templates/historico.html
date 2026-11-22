@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block titulo %}Histórico{% endblock %}
+{% block conteudo %}
+<h1>Histórico</h1>
+{% if sorteios %}
+<ul class="itens">
+  {% for s in sorteios %}
+  <li class="item">
+    <div>
+      <a href="{{ url_for('sorteio.resultado', id=s.id) }}"><strong>{{ s.titulo }}</strong></a> <span class="meta">{{ s.artista }}</span>
+      <div class="meta">{{ s.sorteado_em|data_local }} · {{ "Tocada" if s.tocada else "Não tocada" }}{% if s.nota %} · nota {{ s.nota }} ⭐{% endif %}</div>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="vazio">Nenhum sorteio ainda. <a href="{{ url_for('sorteio.inicio') }}">Que tal sortear agora?</a></p>
+{% endif %}
+{% endblock %}

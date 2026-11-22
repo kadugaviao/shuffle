@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block titulo %}{{ "Editar música" if id else "Nova música" }}{% endblock %}
+{% block conteudo %}
+<h1>{{ "Editar música" if id else "Nova música" }}</h1>
+{% if not artistas %}
+<p class="flash flash-aviso">Cadastre um artista antes: <a href="{{ url_for('artistas.novo') }}">novo artista</a>.</p>
+{% endif %}
+<form class="cartao campos" method="post">
+  <label>Título
+    <input name="titulo" value="{{ musica.titulo or '' }}" required maxlength="200">
+  </label>
+  <label>Artista
+    <select name="artista_id" required>
+      <option value="">Escolha…</option>
+      {% for a in artistas %}
+      <option value="{{ a.id }}" {% if musica.artista_id|string == a.id|string %}selected{% endif %}>{{ a.nome }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <div class="grade">
+    <label>Gênero
+      <input name="genero" value="{{ musica.genero or '' }}" list="generos" maxlength="60" placeholder="ex.: rock, MPB">
+      <datalist id="generos">{% for g in generos %}<option value="{{ g }}">{% endfor %}</datalist>
+    </label>
+    <label>Humor
+      <select name="humor">
+        <option value="">Sem humor</option>
+        {% for valor, rotulo in HUMORES.items() %}
+        <option value="{{ valor }}" {% if musica.humor == valor %}selected{% endif %}>{{ rotulo }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Dificuldade
+      <select name="dificuldade">
+        {% for i in range(1, 6) %}
+        <option value="{{ i }}" {% if (musica.dificuldade or 3)|string == i|string %}selected{% endif %}>{{ i }}{{ " (fácil)" if i == 1 else " (difícil)" if i == 5 else "" }}</option>
+        {% endfor %}
+      </select>
+    </label>
+  </div>
+  <label>Link (opcional: YouTube, Spotify, cifra)
+    <input name="link" type="url" value="{{ musica.link or '' }}" placeholder="https://…">
+  </label>
+  {% if id %}
+  <label class="check"><input type="checkbox" name="favorita" value="1" {% if musica.favorita and musica.favorita != "0" %}checked{% endif %}> Favorita ⭐</label>
+  <label class="check"><input type="checkbox" name="ativa" value="1" {% if musica.ativa and musica.ativa != "0" %}checked{% endif %}> Ativa (participa do sorteio)</label>
+  {% endif %}
+  <div class="botoes">
+    <button class="primario">Salvar</button>
+    <a class="botao" href="{{ url_for('musicas.lista') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

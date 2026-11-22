@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block titulo %}Playlists{% endblock %}
+{% block conteudo %}
+<h1>Playlists</h1>
+<form class="cartao campos" method="post">
+  <div class="grade">
+    <label>Nome <input name="nome" required maxlength="120" placeholder="ex.: Roda de violão"></label>
+    <label>Descrição (opcional) <input name="descricao" maxlength="200"></label>
+  </div>
+  <div class="botoes"><button class="primario">+ Criar playlist</button></div>
+</form>
+{% if playlists %}
+<ul class="itens">
+  {% for p in playlists %}
+  <li class="item">
+    <div>
+      <a href="{{ url_for('playlists.detalhe', id=p.id) }}"><strong>{{ p.nome }}</strong></a>
+      <div class="meta">{% if p.descricao %}{{ p.descricao }} · {% endif %}{{ p.total }} música(s)</div>
+    </div>
+    <div class="acoes">
+      <a class="botao" href="{{ url_for('playlists.detalhe', id=p.id) }}">Abrir</a>
+      <form class="inline" method="post" action="{{ url_for('playlists.excluir', id=p.id) }}"
+            data-confirmar="Excluir a playlist {{ p.nome }}? As músicas continuam no repertório.">
+        <button class="perigo">Excluir</button>
+      </form>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="vazio">Nenhuma playlist criada ainda.</p>
+{% endif %}
+{% endblock %}

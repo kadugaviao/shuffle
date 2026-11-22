@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block titulo %}{{ "Editar artista" if id else "Novo artista" }}{% endblock %}
+{% block conteudo %}
+<h1>{{ "Editar artista" if id else "Novo artista" }}</h1>
+<form class="cartao campos" method="post">
+  <label>Nome
+    <input name="nome" value="{{ artista.nome or '' }}" required maxlength="120">
+  </label>
+  <label>País (opcional)
+    <input name="pais" value="{{ artista.pais or '' }}" maxlength="80">
+  </label>
+  <div class="botoes">
+    <button class="primario">Salvar</button>
+    <a class="botao" href="{{ url_for('artistas.lista') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

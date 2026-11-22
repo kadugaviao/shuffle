@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block titulo %}{{ s.titulo }}{% endblock %}
+{% block conteudo %}
+<section class="cartao resultado">
+  <p class="meta">Sorteada em {{ s.sorteado_em|data_local }}</p>
+  <h2>{{ s.titulo }}</h2>
+  <p>{{ s.artista }}</p>
+  {% if s.link %}<p><a href="{{ s.link }}" target="_blank" rel="noopener noreferrer">Abrir link ↗</a></p>{% endif %}
+  <p>{% if s.tocada %}Tocada ✅{% else %}Não tocada{% endif %}{% if s.nota %} · nota {{ s.nota }} ⭐{% endif %}</p>
+  <div class="botoes">
+    {% if not s.tocada %}
+    <form class="inline" method="post" action="{{ url_for('historico.toquei', id=s.id, **qs) }}">
+      <button class="primario">Toquei ✅</button>
+    </form>
+    {% endif %}
+    <form class="inline" method="post" action="{{ url_for('sorteio.sortear') }}">
+      {% for chave, valor in f.items() %}<input type="hidden" name="{{ chave }}" value="{{ valor }}">{% endfor %}
+      <input type="hidden" name="n" value="{{ n }}">
+      <button>Pular ⏭️</button>
+    </form>
+    <form class="inline" method="post" action="{{ url_for('historico.avaliar', id=s.id, **qs) }}">
+      <select name="nota" aria-label="Nota de 1 a 5" {% if not s.tocada %}disabled{% endif %}>
+        {% for i in range(1, 6) %}<option {% if (s.nota or 5) == i %}selected{% endif %}>{{ i }}</option>{% endfor %}
+      </select>
+      <button {% if not s.tocada %}disabled title="Marque como tocada antes de avaliar"{% endif %}>Avaliar ⭐</button>
+    </form>
+  </div>
+</section>
+<p><a href="{{ url_for('sorteio.inicio', **qs) }}">← Voltar aos filtros</a> · <a href="{{ url_for('historico.lista') }}">Histórico</a></p>
+{% endblock %}

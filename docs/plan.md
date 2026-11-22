@@ -2,7 +2,7 @@
 ### Sistema de sorteio de músicas conhecidas
 
 > Projeto da disciplina de Engenharia de Software: **Trabalho de G2 (avaliação final, em trios)**
-> Equipe: _Integrante 1_, _Integrante 2_, _Integrante 3_
+> Equipe: Kadu Brum Gavião, Miguel Mombach Foza e Josiel Paz
 > Escopo exigido: sistema de tema livre com **banco de dados (mínimo de 2 tabelas)** e **CRUD completo**
 > Metodologia: uso **obrigatório** do **OpenSpec** (especificar e documentar antes de programar)
 > Entrega: código **e** artefatos Markdown no GitHub

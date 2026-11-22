@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block titulo %}{{ playlist.nome }}{% endblock %}
+{% block conteudo %}
+<h1>{{ playlist.nome }}</h1>
+<form class="cartao campos" method="post" action="{{ url_for('playlists.editar', id=playlist.id) }}">
+  <div class="grade">
+    <label>Nome <input name="nome" value="{{ playlist.nome }}" required maxlength="120"></label>
+    <label>Descrição <input name="descricao" value="{{ playlist.descricao or '' }}" maxlength="200"></label>
+  </div>
+  <div class="botoes"><button>Salvar nome e descrição</button></div>
+</form>
+
+<form class="cartao campos" method="post" action="{{ url_for('playlists.adicionar', id=playlist.id) }}">
+  <label>Adicionar música
+    <select name="musica_id" required>
+      <option value="">Escolha…</option>
+      {% for m in disponiveis %}<option value="{{ m.id }}">{{ m.titulo }} — {{ m.artista }}</option>{% endfor %}
+    </select>
+  </label>
+  <div class="botoes"><button class="primario">Adicionar</button></div>
+</form>
+
+{% if musicas %}
+<ul class="itens">
+  {% for m in musicas %}
+  <li class="item">
+    <div><strong>{{ m.titulo }}</strong> <span class="meta">{{ m.artista }}</span></div>
+    <form class="inline" method="post" action="{{ url_for('playlists.remover', id=playlist.id, musica_id=m.id) }}">
+      <button>Remover</button>
+    </form>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="vazio">Nenhuma música nesta playlist.</p>
+{% endif %}
+<p><a href="{{ url_for('playlists.lista') }}">← Todas as playlists</a></p>
+{% endblock %}

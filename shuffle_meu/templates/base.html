@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}{% endblock %} · Shuffle Meu</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+  <header class="topo">
+    <a class="marca" href="{{ url_for('sorteio.inicio') }}">🎲 Shuffle Meu</a>
+    <nav>
+      <a href="{{ url_for('sorteio.inicio') }}">Início</a>
+      <a href="{{ url_for('musicas.lista') }}">Repertório</a>
+      <a href="{{ url_for('artistas.lista') }}">Artistas</a>
+      <a href="{{ url_for('playlists.lista') }}">Playlists</a>
+      <a href="{{ url_for('historico.lista') }}">Histórico</a>
+    </nav>
+  </header>
+  <main>
+    {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
+      <p class="flash flash-{{ categoria }}" role="status">{{ mensagem }}</p>
+    {% endfor %}
+    {% block conteudo %}{% endblock %}
+  </main>
+</body>
+</html>

@@ -1,0 +1,99 @@
+import random
+
+from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
+
+from .db import get_db
+from .musicas import generos
+
+bp = Blueprint("sorteio", __name__)
+
+N_PADRAO = 5
+AVISO_TODAS_RECENTES = "Você já tocou todas recentemente!"
+MSG_NENHUMA = "Nenhuma música encontrada com esses filtros. Tente afrouxar os filtros."
+
+# filtro -> condição SQL (design.md D6, passo 1); os numéricos chegam como int
+CONDICOES = {
+    "genero": "genero = ? COLLATE NOCASE",
+    "humor": "humor = ?",
+    "dificuldade_max": "dificuldade <= ?",
+    "artista_id": "artista_id = ?",
+    "playlist_id": "id IN (SELECT musica_id FROM playlist_musica WHERE playlist_id = ?)",
+}
+NUMERICOS = ("dificuldade_max", "artista_id", "playlist_id")
+
+
+def ler_filtros(args):
+    """Filtros preenchidos (os numéricos inválidos são ignorados) e N normalizado: 0 a 50, senão 5."""
+    filtros = {}
+    for chave in CONDICOES:
+        valor = (args.get(chave) or "").strip()
+        if chave in NUMERICOS:
+            valor = int(valor) if valor.isdigit() else None
+        if valor:
+            filtros[chave] = valor
+    n = args.get("n", "")
+    n = int(n) if n.isdigit() else N_PADRAO
+    return filtros, n if n <= 50 else N_PADRAO
+
+
+def candidatas(db, filtros):
+    """Músicas ativas (RN04) que atendem a todos os filtros."""
+    sql = "SELECT id, favorita FROM musica WHERE ativa = 1"
+    for chave in filtros:
+        sql += f" AND {CONDICOES[chave]}"  # só chaves fixas de CONDICOES; os valores vão como parâmetro
+    return db.execute(sql, list(filtros.values())).fetchall()
+
+
+def escolher(candidatas, recentes, rng=random):
+    """Anti-repetição com fallback da RN06 e peso 2x para favoritas. `candidatas` não pode ser vazia."""
+    livres = [c for c in candidatas if c["id"] not in recentes]
+    aviso = None
+    if not livres:
+        livres, aviso = candidatas, AVISO_TODAS_RECENTES
+    pesos = [2 if c["favorita"] else 1 for c in livres]
+    return rng.choices(livres, weights=pesos)[0], aviso
+
+
+@bp.get("/")
+def inicio():
+    db = get_db()
+    filtros, n = ler_filtros(request.args)
+    ultimo = db.execute(
+        "SELECT s.sorteado_em, m.titulo, a.nome AS artista FROM sorteio s"
+        " JOIN musica m ON m.id = s.musica_id JOIN artista a ON a.id = m.artista_id ORDER BY s.id DESC LIMIT 1"
+    ).fetchone()
+    return render_template(
+        "inicio.html", f=filtros, n=n, ultimo=ultimo, generos=generos(db),
+        artistas=db.execute("SELECT id, nome FROM artista ORDER BY nome COLLATE PT").fetchall(),
+        playlists=db.execute("SELECT id, nome FROM playlist ORDER BY nome COLLATE PT").fetchall(),
+    )
+
+
+@bp.post("/sortear")
+def sortear():
+    db = get_db()
+    filtros, n = ler_filtros(request.form)
+    musicas = candidatas(db, filtros)
+    if not musicas:  # RN05: mensagem amigável, nada é gravado
+        flash(MSG_NENHUMA, "erro")
+        return redirect(url_for(".inicio", **filtros, n=n))
+    recentes = {r[0] for r in db.execute("SELECT musica_id FROM sorteio ORDER BY id DESC LIMIT ?", (n,))}
+    musica, aviso = escolher(musicas, recentes)
+    cur = db.execute("INSERT INTO sorteio (musica_id) VALUES (?)", (musica["id"],))
+    db.commit()
+    if aviso:
+        flash(aviso, "aviso")
+    return redirect(url_for(".resultado", id=cur.lastrowid, **filtros, n=n))
+
+
+@bp.get("/sorteios/<int:id>")
+def resultado(id):
+    s = get_db().execute(
+        "SELECT s.*, m.titulo, m.link, a.nome AS artista FROM sorteio s"
+        " JOIN musica m ON m.id = s.musica_id JOIN artista a ON a.id = m.artista_id WHERE s.id = ?",
+        (id,),
+    ).fetchone()
+    if s is None:
+        abort(404)
+    filtros, n = ler_filtros(request.args)  # só para o "Pular" repetir os filtros
+    return render_template("sorteio/resultado.html", s=s, f=filtros, n=n, qs=dict(filtros, n=n))

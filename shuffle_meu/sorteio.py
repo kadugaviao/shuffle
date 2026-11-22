@@ -9,7 +9,7 @@ bp = Blueprint("sorteio", __name__)
 
 N_PADRAO = 5
 AVISO_TODAS_RECENTES = "Você já tocou todas recentemente!"
-MSG_NENHUMA = "Nenhuma música encontrada com esses filtros. Tente afrouxar os filtros."
+MSG_NENHUMA = "Nada com esse filtro. Tira algum?"
 
 # filtro -> condição SQL (design.md D6, passo 1); os numéricos chegam como int
 CONDICOES = {

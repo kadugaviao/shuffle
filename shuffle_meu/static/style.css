@@ -428,13 +428,19 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .com-unidade { display: flex; align-items: center; gap: var(--espaco-2); }
 .com-unidade input { width: 6rem; flex: none; font-family: var(--fonte-mono); font-variant-numeric: tabular-nums; }
 .unidade { color: var(--tinta-2); }
-.ultima { display: flex; align-items: center; gap: var(--espaco-4); }
-.ultima p + p { margin-top: var(--espaco-1); }
+/* Início: composição de cartaz, alinhada à esquerda */
+.hero { font-size: var(--t-72); line-height: 0.9; text-wrap: initial; }
+@media (min-width: 720px) { .hero { font-size: var(--t-120); } }
+.inicio-principal .sortear { margin-bottom: var(--espaco-6); }
+.inicio-lado { margin-top: var(--espaco-7); }
+.ultima { display: grid; justify-items: start; gap: var(--espaco-3); }
+.ultima p + p { margin-top: 0; }
+.ultima-titulo { font-size: var(--t-20); font-weight: 700; overflow-wrap: anywhere; }
 .ultima-vazia { display: none; } /* só equilibra as duas colunas; no celular seria rolagem à toa */
 @media (min-width: 960px) {
   .inicio { display: grid; grid-template-columns: minmax(0, 1fr) 20rem; gap: var(--espaco-7); align-items: start; }
-  .ultima { flex-direction: column; align-items: flex-start; }
-  .ultima-vazia { display: flex; }
+  .inicio-lado { position: sticky; top: 88px; margin-top: var(--espaco-3); }
+  .ultima-vazia { display: grid; }
 }
 
 .formulario { max-width: 40rem; }

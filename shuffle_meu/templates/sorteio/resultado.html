@@ -20,13 +20,13 @@
       <p class="status-tocada">{{ icone("check") }}Tocada</p>
       {% else %}
       <form class="inline" method="post" action="{{ url_for('historico.toquei', id=s.id, **qs) }}">
-        <button class="botao-sucesso" data-pop>Toquei ✅</button>
+        <button class="botao-sucesso">Toquei ✅</button>
       </form>
       {% endif %}
       <form class="inline" method="post" action="{{ url_for('sorteio.sortear') }}">
         {% for chave, valor in f.items() %}<input type="hidden" name="{{ chave }}" value="{{ valor }}">{% endfor %}
         <input type="hidden" name="n" value="{{ n }}">
-        <button data-pop>Pular ⏭️</button>
+        <button>Pular ⏭️</button>
       </form>
     </div>
 

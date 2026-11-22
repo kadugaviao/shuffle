@@ -37,15 +37,6 @@ function iniciarToasts() {
   }
 }
 
-// Pop (0,96 → 1,04 → 1) ao clicar em botões marcados com data-pop, como o "Sortear".
-document.addEventListener("click", (evento) => {
-  const botao = evento.target.closest("[data-pop]");
-  if (!botao || movimentoReduzido()) return;
-  botao.classList.remove("pop");
-  void botao.offsetWidth; // reinicia a animação em cliques seguidos
-  botao.classList.add("pop");
-});
-
 // Roleta (D4): títulos passam e desaceleram até a música sorteada, ~1,2 s. Só existe logo após sortear.
 function iniciarRoleta() {
   const cartao = document.querySelector("[data-roleta]");
@@ -94,11 +85,6 @@ document.addEventListener("submit", async (evento) => {
   botao.setAttribute(interruptor ? "aria-checked" : "aria-pressed", String(ligado));
   valor.value = ligado ? "0" : "1";
   if (interruptor) form.closest(".musica-cartao")?.classList.toggle("inativa", !ligado);
-  if (!movimentoReduzido()) {
-    botao.classList.remove("pop");
-    void botao.offsetWidth;
-    botao.classList.add("pop");
-  }
 });
 
 // Filtros do Repertório: chips e "Só favoritas" aplicam na hora (o botão Filtrar fica para quem não tem JS).

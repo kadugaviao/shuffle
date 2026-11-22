@@ -181,7 +181,7 @@ class TestAtalhos(BaseTest):
     def test_desativar(self):
         self.client.post(f"/musicas/{self.tempo}/ativa", data={"valor": "0"})
         self.assertEqual(self.valor("ativa"), 0)
-        self.assertIn("Nenhuma música encontrada", self.texto(self.client.post("/sortear", follow_redirects=True)))
+        self.assertIn("Nada com esse filtro. Tira algum?", self.texto(self.client.post("/sortear", follow_redirects=True)))
 
     def test_clique_repetido_nao_desfaz(self):
         for _ in range(2):

@@ -5,14 +5,14 @@
 {% block conteudo %}
 {% if not tem_musicas %}
 <section class="cartao">
-  {{ vazio("musica", "Cadastre sua primeira música", "O sorteio começa quando o repertório tem pelo menos uma música.",
+  {{ vazio("Cadastre sua primeira música", "Sem música no caderno, não tem sorteio.",
            url_for("musicas.nova"), "Nova música") }}
 </section>
 {% else %}
-<h1>O que tocar agora?</h1>
 <div class="inicio">
-  <form method="post" action="{{ url_for('sorteio.sortear') }}">
-    <button class="primario sortear" data-pop>{{ icone("shuffle") }}Sortear</button>
+  <form class="inicio-principal" method="post" action="{{ url_for('sorteio.sortear') }}">
+    <h1 class="hero">Bora<br> tocar o<br> quê?</h1>
+    <button class="primario sortear">Sortear</button>
     <div class="cartao campos filtros">
       {{ chips("humor", "Humor", HUMORES.items(), f.humor, "Todos") }}
       {{ chips("dificuldade_max", "Dificuldade máxima", [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], f.dificuldade_max, "Qualquer") }}
@@ -43,20 +43,15 @@
 
   <aside class="inicio-lado" aria-label="Última música sorteada">
     {% if ultimo %}
-    <section class="cartao ultima">
-      {{ capa(ultimo.artista) }}
-      <div>
-        <p>Última sorteada: {{ ultimo.titulo }} — {{ ultimo.artista }}</p>
-        <p class="meta">{{ ultimo.sorteado_em|data_local }}</p>
-      </div>
+    <section class="folha ultima">
+      {{ capa(ultimo.artista, grande=true) }}
+      <p class="ultima-titulo">Última sorteada: {{ ultimo.titulo }} — {{ ultimo.artista }}</p>
+      <p class="meta numero">{{ ultimo.sorteado_em|data_local }}</p>
     </section>
     {% else %}
-    <section class="cartao ultima ultima-vazia">
-      <span class="icone-playlist" aria-hidden="true">{{ icone("historico") }}</span>
-      <div>
-        <p>Sua última música aparece aqui</p>
-        <p class="meta">Depois do primeiro sorteio, ela fica guardada neste cartão.</p>
-      </div>
+    <section class="folha ultima ultima-vazia">
+      <p class="ultima-titulo">Sua última música aparece aqui</p>
+      <p class="meta">Sorteia a primeira e ela fica anotada aqui.</p>
     </section>
     {% endif %}
   </aside>

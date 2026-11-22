@@ -27,6 +27,6 @@
   {% endfor %}
 </ul>
 {% else %}
-<section class="cartao">{{ vazio("microfone", "Nenhum artista cadastrado ainda.", "Cadastre os artistas antes das músicas deles.", url_for("artistas.novo"), "Novo artista") }}</section>
+<section class="cartao">{{ vazio("Nenhum artista cadastrado ainda.", "Cadastre os artistas antes das músicas deles.", url_for("artistas.novo"), "Novo artista") }}</section>
 {% endif %}
 {% endblock %}

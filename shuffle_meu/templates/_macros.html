@@ -1,4 +1,4 @@
-{# Componentes do design system "Midnight Stage". Importar com: {% from "_macros.html" import campo, aria, ... %} #}
+{# Componentes do design system "Lambe-lambe". Importar com: {% from "_macros.html" import campo, aria, ... %} #}
 {% from "_icones.html" import icone %}
 
 {# Atributos do controle de um campo: id para o <label for>, e aria-invalid/aria-describedby se houver erro. #}
@@ -45,10 +45,9 @@ id="campo-{{ nome }}"{% if erros and erros.get(nome) %} aria-invalid="true" aria
 <span class="dificuldade" role="img" aria-label="Dificuldade {{ nivel }} de 5">{% for i in range(1, 6) %}<span{% if i <= nivel %} class="cheia"{% endif %}></span>{% endfor %}</span>
 {%- endmacro %}
 
-{# Estado vazio ilustrado: ícone grande, título, frase e, opcionalmente, um CTA no gradiente. #}
-{% macro vazio(nome_icone, titulo, texto, cta_url=none, cta_texto=none) -%}
+{# Estado vazio: a tipografia faz o trabalho; título, frase e, opcionalmente, o botão primário. #}
+{% macro vazio(titulo, texto, cta_url=none, cta_texto=none) -%}
 <div class="estado-vazio">
-  {{ icone(nome_icone) }}
   <h2>{{ titulo }}</h2>
   {% if texto %}<p>{{ texto }}</p>{% endif %}
   {% if cta_url %}<a class="botao primario" href="{{ cta_url }}">{{ icone("mais") }}{{ cta_texto }}</a>{% endif %}

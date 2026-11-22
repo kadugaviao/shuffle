@@ -122,7 +122,7 @@ class TestSorteio(BaseTest):
         r = self.sortear(humor="triste")
         self.assertIn("humor=triste", r.headers["Location"])  # volta com os filtros
         html = self.texto(self.client.get(r.headers["Location"]))
-        self.assertIn(MSG_NENHUMA, html)
+        self.assertIn("Nada com esse filtro. Tira algum?", html)  # texto literal da spec, não só a constante
         self.assertIn('value="triste" checked', html)  # chip de humor volta marcado
         self.assertEqual(self.um("SELECT COUNT(*) FROM sorteio"), 0)
 

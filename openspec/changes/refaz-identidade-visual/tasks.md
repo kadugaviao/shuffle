@@ -26,11 +26,11 @@ Referências: comportamento em `specs/*/spec.md`, decisões em `design.md` (D1�
 
 ## 4. Tela inicial
 
-- [ ] 4.1 Reescrever `inicio.html` como composição de cartaz: título "Bora tocar o quê?" (72/120 px, quebrando em 2–3 linhas à esquerda), botão "Sortear" vermelho largo, régua de 2 px, filtros em chips retangulares (selecionado amarelo), selects e o campo de rodadas; bloco "Última sorteada" como folha com fita na coluna de 20rem a partir de 960 px, com o mesmo texto de hoje e o bloco de espera com a frase nova de D12; verificar com os testes de `test_sorteio.py` e `test_historico.py` da tela inicial (ajustando só a frase que mudou) e, a 1440 px, que as duas colunas ficam alinhadas no topo sem vazio de um lado só
-- [ ] 4.2 "Sortear" com sombra `--impressao` e estado pressionado (desloca 2 px, sem sombra, 120 ms); remover `data-pop` de todos os templates e a função de pop de `app.js`; verificar com `git grep -n data-pop` vazio, teclado (Enter e Espaço sorteiam) e movimento reduzido sem deslocamento
-- [ ] 4.3 Macro `vazio()` sem ícone ilustrativo (título em Big Shoulders 28 px, frase, botão primário), atualizando todas as chamadas; início sem músicas com "Cadastre sua primeira música" e a frase nova; verificar com o teste "Primeiro acesso" e com `git grep -n "vazio("` mostrando só chamadas na assinatura nova
-- [ ] 4.4 Trocar `MSG_NENHUMA` em `sorteio.py` para "Nada com esse filtro. Tira algum?" e acrescentar em `test_sorteio.py` uma asserção do texto literal (não só da constante); verificar que os cenários "Filtro sem resultado (RN05)" e "Repertório vazio (RN05)" passam e que `git grep -n afrouxar -- shuffle_meu tests` fica vazio
-- [ ] 4.5 Suíte verde; commitar o grupo
+- [x] 4.1 Reescrever `inicio.html` como composição de cartaz: título "Bora tocar o quê?" (72/120 px, quebrando em 2–3 linhas à esquerda), botão "Sortear" vermelho largo, régua de 2 px, filtros em chips retangulares (selecionado amarelo), selects e o campo de rodadas; bloco "Última sorteada" como folha com fita na coluna de 20rem a partir de 960 px, com o mesmo texto de hoje e o bloco de espera com a frase nova de D12; verificar com os testes de `test_sorteio.py` e `test_historico.py` da tela inicial (ajustando só a frase que mudou) e, a 1440 px, que as duas colunas ficam alinhadas no topo sem vazio de um lado só
+- [x] 4.2 "Sortear" com sombra `--impressao` e estado pressionado (desloca 2 px, sem sombra, 120 ms); remover `data-pop` de todos os templates e a função de pop de `app.js`; verificar com `git grep -n data-pop` vazio, teclado (Enter e Espaço sorteiam) e movimento reduzido sem deslocamento
+- [x] 4.3 Macro `vazio()` sem ícone ilustrativo (título em Big Shoulders 28 px, frase, botão primário), atualizando todas as chamadas; início sem músicas com "Cadastre sua primeira música" e a frase nova; verificar com o teste "Primeiro acesso" e com `git grep -n "vazio("` mostrando só chamadas na assinatura nova
+- [x] 4.4 Trocar `MSG_NENHUMA` em `sorteio.py` para "Nada com esse filtro. Tira algum?" e acrescentar em `test_sorteio.py` uma asserção do texto literal (não só da constante); verificar que os cenários "Filtro sem resultado (RN05)" e "Repertório vazio (RN05)" passam e que `git grep -n afrouxar -- shuffle_meu tests` fica vazio
+- [x] 4.5 Suíte verde; commitar o grupo
 
 ## 5. Resultado do sorteio
 

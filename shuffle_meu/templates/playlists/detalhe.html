@@ -29,7 +29,7 @@
     {% endfor %}
   </ul>
   {% else %}
-  <section class="cartao">{{ vazio("musica", "Nenhuma música nesta playlist.", "Escolha uma música acima para adicionar.") }}</section>
+  <section class="cartao">{{ vazio("Nenhuma música nesta playlist.", "Escolha uma música acima para adicionar.") }}</section>
   {% endif %}
 
   <details class="cartao editar-playlist"{% if erros %} open{% endif %}>

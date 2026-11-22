@@ -1,10 +1,17 @@
-"""Contraste WCAG AA das cores de texto do design system, lidas direto do :root do style.css."""
+"""Contraste WCAG AA das cores do design system "Lambe-lambe", lidas direto do :root do style.css (design D4)."""
 
 import re
 import unittest
 from pathlib import Path
 
 CSS = Path(__file__).resolve().parent.parent / "shuffle_meu" / "static" / "style.css"
+
+# (texto, fundo): pares usados em texto de qualquer tamanho
+NORMAL = [("tinta", "papel"), ("tinta", "papel-2"), ("tinta-2", "papel"), ("tinta-2", "papel-2"),
+          ("tinta", "amarelo"), ("tinta-2", "amarelo"), ("papel", "tinta"), ("amarelo", "tinta"),
+          ("vermelho-texto", "papel"), ("vermelho-texto", "papel-2")]
+# pares que o design só permite em texto grande (24 px, ou 18,66 px em negrito)
+GRANDE = [("papel", "vermelho"), ("vermelho", "papel"), ("sucesso", "papel"), ("tinta", "vermelho")]
 
 
 def tokens(css):
@@ -23,30 +30,24 @@ def contraste(a, b):
     return (claro + 0.05) / (escuro + 0.05)
 
 
-def sobre(fundo, alfa=0.04, cor="#FFFFFF"):
-    """Cor efetiva de rgba(cor, alfa) sobre o fundo (a superfície translúcida dos cartões)."""
-    return "#" + "".join(
-        f"{round(int(cor[i:i + 2], 16) * alfa + int(fundo[i:i + 2], 16) * (1 - alfa)):02X}" for i in (1, 3, 5)
-    )
-
-
 class TestContraste(unittest.TestCase):
     def setUp(self):
         self.t = tokens(CSS.read_text(encoding="utf-8"))
 
-    def test_texto_sobre_fundo_e_superficie(self):
-        fundos = {"fundo": self.t["fundo"], "superficie": sobre(self.t["fundo"])}
-        for texto in ("texto", "texto-2", "perigo", "sucesso", "aviso"):
-            for nome, fundo in fundos.items():
-                with self.subTest(texto=texto, fundo=nome):
-                    self.assertGreaterEqual(contraste(self.t[texto], fundo), 4.5)
+    def test_texto_normal(self):
+        for texto, fundo in NORMAL:
+            with self.subTest(texto=texto, fundo=fundo):
+                self.assertGreaterEqual(contraste(self.t[texto], self.t[fundo]), 4.5)
 
-    def test_texto_sobre_o_gradiente(self):
-        for parada in ("violeta", "rosa", "ambar"):
-            with self.subTest(parada=parada):
-                self.assertGreaterEqual(contraste(self.t["texto-sobre-gradiente"], self.t[parada]), 4.5)
+    def test_texto_grande(self):
+        for texto, fundo in GRANDE:
+            with self.subTest(texto=texto, fundo=fundo):
+                self.assertGreaterEqual(contraste(self.t[texto], self.t[fundo]), 3)
 
-    def test_apagado_nao_passa_e_por_isso_e_restrito(self):
-        # Documenta a regra do design system: --texto-apagado só em desabilitados e decoração.
-        self.assertLess(contraste(self.t["texto-apagado"], self.t["fundo"]), 4.5)
+    def test_vermelho_e_sucesso_nao_passam_pequenos_e_por_isso_sao_restritos(self):
+        # Documenta D4: vermelho e sucesso como texto pequeno reprovam; daí o --vermelho-texto.
+        self.assertLess(contraste(self.t["vermelho"], self.t["papel"]), 4.5)
+        self.assertLess(contraste(self.t["sucesso"], self.t["papel"]), 4.5)
 
+    def test_amarelo_nunca_e_texto_sobre_papel(self):
+        self.assertLess(contraste(self.t["amarelo"], self.t["papel"]), 3)

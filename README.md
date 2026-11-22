@@ -97,5 +97,5 @@ openspec validate --specs --strict
 
 ## Créditos
 
-- Fontes [Geist e Geist Mono](https://github.com/vercel/geist-font) e [Instrument Serif](https://github.com/Instrument/instrument-serif), sob a SIL Open Font License 1.1, distribuídas pelos pacotes do [Fontsource](https://fontsource.org) (licenças em `shuffle_meu/static/fonts/`).
+- Fontes [Big Shoulders Display](https://github.com/xotypeco/big_shoulders), [Archivo](https://github.com/Omnibus-Type/Archivo) e [IBM Plex Mono](https://github.com/IBM/plex), sob a SIL Open Font License 1.1, distribuídas pelos pacotes do [Fontsource](https://fontsource.org) (licenças em `shuffle_meu/static/fonts/`).
 - Ícones do [Lucide](https://lucide.dev), licença ISC.

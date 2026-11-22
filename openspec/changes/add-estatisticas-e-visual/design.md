@@ -157,6 +157,7 @@ Palco de show à noite: interface escura, cartões de vidro fosco flutuando sobr
 | Título de seção (h2) | Geist 600 | 1.25rem |
 | Texto | Geist 400 | 1rem (16 px), altura de linha 1,5; linhas de até ~70 caracteres |
 | Secundário / chips | Geist 500 | 0.875rem (mínimo para leitura) |
+| Rótulo da barra inferior (celular) | Geist 500 | 0.75rem: única exceção ao mínimo, sempre acompanhado de ícone |
 | Números de métrica | Geist Mono 500, `tabular-nums` | 2.5rem |
 | Números em lista | Geist Mono 400, `tabular-nums` | 0.875–1rem |
 

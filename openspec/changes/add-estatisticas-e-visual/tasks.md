@@ -13,9 +13,9 @@ Referências: comportamento em `specs/*/spec.md`, decisões em `design.md` (D1�
 
 ## 2. Base e navegação
 
-- [ ] 2.1 Reescrever `base.html`: classe `js` inline no `<head>`, preload da Geist, navegação de vidro fixa com ícones e pílulas, `aria-current="page"` pela seção (`request.blueprint`), barra inferior abaixo de 720 px com `padding-bottom` de segurança; verificar com testes de `aria-current` em `/`, `/musicas/nova`, `/playlists/1` e `/sorteios/<id>` (cenário "Seção atual") e a 360 px que a barra fica embaixo e não cobre o fim da página (cenário "Menu no celular")
-- [ ] 2.2 Fundo de palco (`body::before` com manchas radiais animadas por `transform`, `body::after` com ruído SVG a 3%), parado com `prefers-reduced-motion`; verificar a 360 px que não há rolagem horizontal e, emulando movimento reduzido no DevTools, que o fundo fica parado
-- [ ] 2.3 Toasts em `base.html` + `app.js` (sucesso some em 5 s, pausa com hover/foco; erro e aviso ficam até fechar; botão de fechar revelado pelo JS; `role="status"`/`role="alert"`); verificar com teste de que a mensagem e o `role` saem no HTML e, no navegador, os cenários "Confirmação some sozinha" e "Alerta fica até fechar"
+- [x] 2.1 Reescrever `base.html`: classe `js` inline no `<head>`, preload da Geist, navegação de vidro fixa com ícones e pílulas, `aria-current="page"` pela seção (`request.blueprint`), barra inferior abaixo de 720 px com `padding-bottom` de segurança; verificar com testes de `aria-current` em `/`, `/musicas/nova`, `/playlists/1` e `/sorteios/<id>` (cenário "Seção atual") e a 360 px que a barra fica embaixo e não cobre o fim da página (cenário "Menu no celular")
+- [x] 2.2 Fundo de palco (`body::before` com manchas radiais animadas por `transform`, `body::after` com ruído SVG a 3%), parado com `prefers-reduced-motion`; verificar a 360 px que não há rolagem horizontal e, emulando movimento reduzido no DevTools, que o fundo fica parado
+- [x] 2.3 Toasts em `base.html` + `app.js` (sucesso some em 5 s, pausa com hover/foco; erro e aviso ficam até fechar; botão de fechar revelado pelo JS; `role="status"`/`role="alert"`); verificar com teste de que a mensagem e o `role` saem no HTML e, no navegador, os cenários "Confirmação some sozinha" e "Alerta fica até fechar"
 
 ## 3. Início e sorteio
 

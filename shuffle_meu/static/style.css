@@ -411,10 +411,150 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .estado-vazio p { max-width: 32ch; color: var(--texto-2); }
 .estado-vazio h2 { font: italic 400 1.75rem/1.2 var(--fonte-serif); }
 
-/* Mensagem do MVP (substituída pelos toasts no grupo 2) */
-.flash { padding: var(--espaco-3) var(--espaco-4); margin-bottom: var(--espaco-4); border: 1px solid var(--borda); border-left: 3px solid var(--sucesso); border-radius: var(--raio-controle); background: var(--superficie); }
-.flash-erro { border-left-color: var(--perigo); }
-.flash-aviso { border-left-color: var(--aviso); }
+/* ---------- Fundo de palco: luz difusa em movimento lento + ruído ---------- */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -20vmax;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(40vmax 40vmax at 22% 18%, rgba(139, 92, 246, 0.20), transparent 62%),
+    radial-gradient(34vmax 34vmax at 82% 30%, rgba(236, 72, 153, 0.13), transparent 62%),
+    radial-gradient(46vmax 46vmax at 50% 96%, rgba(139, 92, 246, 0.10), transparent 66%);
+  animation: palco 48s ease-in-out infinite alternate;
+}
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)'/%3E%3C/svg%3E");
+}
+@keyframes palco {
+  to { transform: translate3d(4vmax, -3vmax, 0) rotate(8deg) scale(1.05); }
+}
+
+/* ---------- Navegação: barra inferior no celular, barra de vidro no topo a partir de 720 px ---------- */
+.topo { display: flex; align-items: center; gap: var(--espaco-5); padding: var(--espaco-4) var(--espaco-4) 0; }
+.marca { display: inline-flex; align-items: center; gap: var(--espaco-2); font-size: 1.0625rem; font-weight: 600; text-decoration: none; }
+.marca svg { width: 22px; height: 22px; }
+
+.navegacao {
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+  background: rgba(10, 10, 15, 0.72);
+  border-top: 1px solid var(--borda);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+}
+.aba {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  min-height: 52px;
+  padding: 8px 2px 6px;
+  font-size: 0.75rem; /* exceção à escala: rótulo de barra inferior, sempre acompanhado de ícone */
+  font-weight: 500;
+  color: var(--texto-2);
+  text-decoration: none;
+  border-radius: var(--raio-controle);
+  transition: color 150ms ease-out, background-color 150ms ease-out;
+}
+.aba svg { width: 22px; height: 22px; }
+.aba:hover { color: var(--texto); }
+.aba[aria-current="page"] { color: var(--texto); background: var(--superficie-alta); }
+.aba[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: calc(50% + 12px);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gradiente);
+}
+main { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+
+@media (min-width: 720px) {
+  .topo {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: var(--espaco-3) max(var(--espaco-4), calc((100% - 64rem) / 2 + var(--espaco-4)));
+    background: rgba(10, 10, 15, 0.6);
+    border-bottom: 1px solid var(--borda);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    backdrop-filter: blur(20px) saturate(140%);
+  }
+  .navegacao {
+    position: static;
+    display: flex;
+    gap: var(--espaco-1);
+    margin-left: auto;
+    padding: 0;
+    background: none;
+    border: 0;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .aba { display: inline-flex; align-items: center; gap: var(--espaco-2); min-height: 40px; padding: 0 14px; font-size: 0.9375rem; border-radius: var(--raio-pilula); }
+  .aba svg { display: none; }
+  .aba[aria-current="page"]::after { position: static; order: -1; }
+  main { padding-top: var(--espaco-6); padding-bottom: var(--espaco-7); }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .navegacao, .toast { background: rgba(10, 10, 15, 0.92); }
+  @media (min-width: 720px) { .topo { background: rgba(10, 10, 15, 0.92); } }
+}
+
+/* ---------- Toasts (sem JS ficam no fluxo da página, visíveis e estáticos) ---------- */
+.toasts { display: grid; gap: var(--espaco-2); width: 100%; max-width: 64rem; margin: var(--espaco-4) auto 0; padding: 0 var(--espaco-4); }
+.js .toasts {
+  position: fixed;
+  z-index: 20;
+  inset: auto var(--espaco-4) calc(84px + env(safe-area-inset-bottom));
+  width: auto;
+  margin: 0;
+  padding: 0;
+}
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espaco-3);
+  padding: var(--espaco-3) var(--espaco-2) var(--espaco-3) var(--espaco-4);
+  background: rgba(20, 20, 25, 0.78);
+  border: 1px solid var(--borda);
+  border-left: 3px solid var(--sucesso);
+  border-radius: var(--raio-controle);
+  box-shadow: var(--sombra-cartao);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  animation: entrar 260ms var(--entrada);
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+}
+.toast > svg { width: 20px; height: 20px; flex: none; margin-top: 2px; color: var(--sucesso); }
+.toast p { flex: 1; padding-top: 2px; }
+.toast-erro { border-left-color: var(--perigo); }
+.toast-erro > svg { color: var(--perigo); }
+.toast-aviso { border-left-color: var(--aviso); }
+.toast-aviso > svg { color: var(--aviso); }
+.toast-fechar { min-height: 32px; min-width: 32px; color: var(--texto-2); background: transparent; border-color: transparent; }
+.toast-fechar svg { width: 16px; height: 16px; }
+.toast.saindo { opacity: 0; transform: translateY(6px); }
+@keyframes entrar { from { opacity: 0; transform: translateY(8px); } }
+
+@media (min-width: 720px) {
+  .js .toasts { inset: 80px var(--espaco-5) auto auto; width: 22rem; }
+}
 
 /* ---------- Movimento reduzido ---------- */
 @media (prefers-reduced-motion: reduce) {

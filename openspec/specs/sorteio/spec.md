@@ -19,7 +19,8 @@ O sistema DEVE (MUST) sortear uma música entre as que têm ativa = verdadeiro (
 - **GIVEN** existe ao menos uma música ativa
 - **WHEN** o usuário clica em "Sortear"
 - **THEN** o sistema mostra o título, o artista e o link (se houver) da música sorteada
-- **AND** os botões "Toquei", "Pular" e "Avaliar"
+- **AND** os botões "Toquei" e "Pular"
+- **AND** as estrelas de avaliação só aparecem depois que o sorteio é marcado como tocada
 
 ### Requirement: Sorteio com filtros
 O sistema DEVE (MUST) permitir filtrar o sorteio por gênero, humor, dificuldade máxima, artista e playlist. Os filtros informados DEVEM (MUST) ser combinados entre si (todos precisam ser atendidos); filtro em branco NÃO DEVE (MUST NOT) restringir.
@@ -104,10 +105,35 @@ O sorteio DEVE (MUST) responder em menos de 1 segundo com até 1.000 músicas ca
 - **WHEN** o usuário clica em "Sortear" com filtros
 - **THEN** a tela de resultado é respondida pelo servidor em menos de 1 segundo
 
-### Requirement: Interface responsiva
-As telas do sistema DEVEM (MUST) funcionar no celular: com largura de 360 px, todo o conteúdo e os botões DEVEM (MUST) ficar visíveis e utilizáveis sem rolagem horizontal.
+### Requirement: Revelação animada do resultado
+Logo depois de um sorteio, a tela de resultado DEVE (MUST) exibir uma animação de no máximo 1,5 segundo em que títulos do repertório passam e desaceleram até parar na música sorteada. A animação NÃO DEVE (MUST NOT) se repetir ao recarregar a página ou ao abrir o sorteio pelo histórico, e o resultado DEVE (MUST) ficar disponível mesmo sem JavaScript.
 
-#### Scenario: Sorteio pelo celular
-- **GIVEN** um navegador com 360 px de largura
-- **WHEN** o usuário abre a tela inicial, sorteia e vê o resultado
-- **THEN** o botão "Sortear", os filtros e os botões do resultado cabem na tela sem rolagem horizontal
+#### Scenario: Revelação depois de sortear
+- **GIVEN** o repertório tem músicas ativas
+- **WHEN** o usuário clica em "Sortear"
+- **THEN** títulos passam rápido e desaceleram até parar na música sorteada em até 1,5 segundo
+- **AND** só então os botões do resultado ficam disponíveis
+
+#### Scenario: Recarregar não repete
+- **GIVEN** o usuário já viu a revelação de um sorteio
+- **WHEN** ele recarrega a página ou abre o mesmo sorteio pelo histórico
+- **THEN** o resultado aparece direto, sem a animação
+
+#### Scenario: Navegador sem JavaScript
+- **GIVEN** o JavaScript está desativado no navegador
+- **WHEN** o usuário sorteia
+- **THEN** o título, o artista e os botões do resultado aparecem normalmente
+
+### Requirement: Tela inicial com repertório vazio
+Quando não há nenhuma música cadastrada, a tela inicial DEVE (MUST) mostrar, no lugar do botão "Sortear" e dos filtros, o convite "Cadastre sua primeira música" com um botão que leva ao formulário de nova música.
+
+#### Scenario: Primeiro acesso
+- **GIVEN** não há nenhuma música cadastrada
+- **WHEN** o usuário abre a tela inicial
+- **THEN** a tela mostra "Cadastre sua primeira música" e o botão para o formulário de nova música
+- **AND** não mostra o botão "Sortear"
+
+#### Scenario: Só músicas inativas
+- **GIVEN** existem músicas, mas todas estão inativas
+- **WHEN** o usuário abre a tela inicial e clica em "Sortear"
+- **THEN** o sistema exibe a mensagem amigável da RN05, como antes

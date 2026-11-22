@@ -39,12 +39,19 @@ O botão "Pular" DEVE (MUST) manter o sorteio atual com tocada = falso e fazer u
 - **AND** um novo sorteio é feito com humor "calma" e N = 5, com resultado diferente de "Tempo Perdido"
 
 ### Requirement: Avaliar sorteio tocado (RN07)
-O sistema DEVE (MUST) permitir dar ao sorteio uma nota inteira de 1 a 5 pelo botão "Avaliar". A nota só DEVE (MUST) ser aceita em sorteios marcados como tocada (RN07). Avaliar de novo DEVE (MUST) substituir a nota anterior.
+O sistema DEVE (MUST) permitir dar ao sorteio uma nota inteira de 1 a 5 clicando numa de 5 estrelas, que só DEVEM (MUST) aparecer depois que o sorteio é marcado como tocada. A nota só DEVE (MUST) ser aceita em sorteios marcados como tocada (RN07). Avaliar de novo DEVE (MUST) substituir a nota anterior, e as estrelas DEVEM (MUST) mostrar a nota atual.
 
 #### Scenario: Avaliar música tocada (RN07)
 - **GIVEN** o sorteio de "Tempo Perdido" está marcado como tocada
-- **WHEN** o usuário avalia com nota 5
+- **WHEN** o usuário clica na quinta estrela
 - **THEN** o sorteio fica com nota 5
+- **AND** as cinco estrelas aparecem acesas
+
+#### Scenario: Estrelas escondidas antes de tocar
+- **GIVEN** o sorteio de "Tempo Perdido" não está marcado como tocada
+- **WHEN** o usuário abre a tela de resultado
+- **THEN** as estrelas de avaliação não aparecem
+- **AND** depois de clicar em "Toquei" elas aparecem
 
 #### Scenario: Avaliar sem ter tocado (RN07)
 - **GIVEN** o sorteio de "Tempo Perdido" não está marcado como tocada

@@ -83,7 +83,7 @@ openspec/          especificação (specs, proposta, design e tarefas)
 
 ## Especificação (OpenSpec)
 
-Os requisitos, as regras de negócio RN01 a RN08 e os cenários de cada funcionalidade estão em [`openspec/specs/`](openspec/specs/). A mudança que implementou o MVP está arquivada em [`openspec/changes/archive/2026-11-22-add-mvp/`](openspec/changes/archive/2026-11-22-add-mvp/).
+Os requisitos, as regras de negócio RN01 a RN08 e os cenários de cada funcionalidade estão em [`openspec/specs/`](openspec/specs/). As mudanças já entregues estão arquivadas em [`openspec/changes/archive/`](openspec/changes/archive/): `add-mvp` (banco, CRUD, sorteio e histórico) e `add-estatisticas-e-visual` (estatísticas, atalhos e o design system "Midnight Stage").
 
 ```bash
 openspec validate --specs --strict

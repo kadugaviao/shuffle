@@ -1,30 +1,50 @@
 {% extends "base.html" %}
+{% from "_icones.html" import icone %}
+{% from "_macros.html" import capa %}
 {% block titulo %}{{ s.titulo }}{% endblock %}
 {% block conteudo %}
-<section class="cartao resultado">
-  <p class="meta">Sorteada em {{ s.sorteado_em|data_local }}</p>
-  <h2>{{ s.titulo }}</h2>
-  <p>{{ s.artista }}</p>
-  {% if s.link %}<p><a href="{{ s.link }}" target="_blank" rel="noopener noreferrer">Abrir link ↗</a></p>{% endif %}
-  <p>{% if s.tocada %}Tocada ✅{% else %}Não tocada{% endif %}{% if s.nota %} · nota {{ s.nota }} ⭐{% endif %}</p>
-  <div class="botoes">
-    {% if not s.tocada %}
-    <form class="inline" method="post" action="{{ url_for('historico.toquei', id=s.id, **qs) }}">
-      <button class="primario">Toquei ✅</button>
+<section class="cartao resultado"{% if roleta %} data-roleta='{{ roleta|tojson }}'{% endif %}>
+  <p class="rolo" aria-hidden="true"></p>
+  <p class="visualmente-oculto" aria-live="polite" data-anuncio></p>
+  <div class="revelavel">
+    {{ capa(s.artista, grande=true) }}
+    <p class="meta">Sorteada em {{ s.sorteado_em|data_local }}</p>
+    <h1 class="titulo-sorteado">{{ s.titulo }}</h1>
+    <p class="artista">{{ s.artista }}</p>
+    {% if s.link %}
+    <a class="botao" href="{{ s.link }}" target="_blank" rel="noopener noreferrer">{{ icone("link") }}Abrir link</a>
+    {% endif %}
+
+    <div class="botoes acoes-resultado">
+      {% if s.tocada %}
+      <p class="status-tocada">{{ icone("check") }}Tocada</p>
+      {% else %}
+      <form class="inline" method="post" action="{{ url_for('historico.toquei', id=s.id, **qs) }}">
+        <button class="botao-sucesso" data-pop>Toquei ✅</button>
+      </form>
+      {% endif %}
+      <form class="inline" method="post" action="{{ url_for('sorteio.sortear') }}">
+        {% for chave, valor in f.items() %}<input type="hidden" name="{{ chave }}" value="{{ valor }}">{% endfor %}
+        <input type="hidden" name="n" value="{{ n }}">
+        <button data-pop>Pular ⏭️</button>
+      </form>
+    </div>
+
+    {% if s.tocada %}
+    <form class="avaliacao" method="post" action="{{ url_for('historico.avaliar', id=s.id, **qs) }}">
+      <p class="meta" id="rotulo-nota">{{ "Sua nota" if s.nota else "Que nota você dá?" }}</p>
+      <div class="estrelas{% if entrar_estrelas %} entrando{% endif %}" role="group" aria-labelledby="rotulo-nota">
+        {% for i in range(1, 6) %}
+        <button class="estrela{% if s.nota and i <= s.nota %} acesa{% endif %}" name="nota" value="{{ i }}"
+                aria-label="Dar nota {{ i }} de 5" aria-pressed="{{ 'true' if s.nota == i else 'false' }}">{{ icone("estrela") }}</button>
+        {% endfor %}
+      </div>
     </form>
     {% endif %}
-    <form class="inline" method="post" action="{{ url_for('sorteio.sortear') }}">
-      {% for chave, valor in f.items() %}<input type="hidden" name="{{ chave }}" value="{{ valor }}">{% endfor %}
-      <input type="hidden" name="n" value="{{ n }}">
-      <button>Pular ⏭️</button>
-    </form>
-    <form class="inline" method="post" action="{{ url_for('historico.avaliar', id=s.id, **qs) }}">
-      <select name="nota" aria-label="Nota de 1 a 5" {% if not s.tocada %}disabled{% endif %}>
-        {% for i in range(1, 6) %}<option {% if (s.nota or 5) == i %}selected{% endif %}>{{ i }}</option>{% endfor %}
-      </select>
-      <button {% if not s.tocada %}disabled title="Marque como tocada antes de avaliar"{% endif %}>Avaliar ⭐</button>
-    </form>
   </div>
 </section>
-<p><a href="{{ url_for('sorteio.inicio', **qs) }}">← Voltar aos filtros</a> · <a href="{{ url_for('historico.lista') }}">Histórico</a></p>
+<nav class="voltar" aria-label="Depois do sorteio">
+  <a href="{{ url_for('sorteio.inicio', **qs) }}">Voltar aos filtros</a>
+  <a href="{{ url_for('historico.lista') }}">Ver histórico</a>
+</nav>
 {% endblock %}

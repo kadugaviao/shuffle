@@ -22,13 +22,24 @@ class TestHistorico(BaseTest):
         r = self.client.post(f"/sorteios/{s}/toquei", follow_redirects=True)
         self.assertEqual(self.um("SELECT tocada FROM sorteio"), 1)
         html = self.texto(r)
-        self.assertIn("Tocada ✅", html)
-        self.assertNotIn('<select name="nota" aria-label="Nota de 1 a 5" disabled', html)
+        self.assertIn("Tocada</p>", html)
+        self.assertNotIn("Toquei ✅", html)
+        self.assertEqual(html.count('name="nota" value='), 5)  # as estrelas aparecem
+        self.assertIn('class="estrelas entrando"', html)  # com o pop de entrada, só logo após o Toquei
+        self.assertNotIn("entrando", self.texto(self.client.get(f"/sorteios/{s}")))
 
-    def test_avaliar_antes_de_tocar_fica_desabilitado(self):
+    def test_estrelas_escondidas_antes_de_tocar(self):
         s = self.sorteio(self.musica("Tempo Perdido"))
-        self.assertIn('<select name="nota" aria-label="Nota de 1 a 5" disabled',
-                      self.texto(self.client.get(f"/sorteios/{s}")))
+        html = self.texto(self.client.get(f"/sorteios/{s}"))
+        self.assertNotIn('name="nota"', html)
+        self.assertIn("Toquei ✅", html)
+
+    def test_estrelas_mostram_a_nota_atual(self):
+        s = self.sorteio(self.musica("Tempo Perdido"), tocada=1, nota=3)
+        html = self.texto(self.client.get(f"/sorteios/{s}"))
+        self.assertEqual(html.count('class="estrela acesa"'), 3)
+        self.assertIn('aria-label="Dar nota 3 de 5" aria-pressed="true"', html)
+        self.assertEqual(html.count('aria-pressed="true"'), 1)
 
     def test_avaliar_musica_tocada_rn07(self):
         s = self.sorteio(self.musica("Tempo Perdido"), tocada=1)

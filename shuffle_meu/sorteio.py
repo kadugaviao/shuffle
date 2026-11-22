@@ -1,6 +1,6 @@
 import random
 
-from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
+from flask import Blueprint, abort, flash, redirect, render_template, request, session, url_for
 
 from .db import get_db
 from .musicas import generos
@@ -82,6 +82,7 @@ def sortear():
     musica, aviso = escolher(musicas, recentes)
     cur = db.execute("INSERT INTO sorteio (musica_id) VALUES (?)", (musica["id"],))
     db.commit()
+    session["revelar"] = cur.lastrowid  # só a primeira visualização anima (D4)
     if aviso:
         flash(aviso, "aviso")
     return redirect(url_for(".resultado", id=cur.lastrowid, **filtros, n=n))
@@ -89,7 +90,8 @@ def sortear():
 
 @bp.get("/sorteios/<int:id>")
 def resultado(id):
-    s = get_db().execute(
+    db = get_db()
+    s = db.execute(
         "SELECT s.*, m.titulo, m.link, a.nome AS artista FROM sorteio s"
         " JOIN musica m ON m.id = s.musica_id JOIN artista a ON a.id = m.artista_id WHERE s.id = ?",
         (id,),
@@ -97,4 +99,10 @@ def resultado(id):
     if s is None:
         abort(404)
     filtros, n = ler_filtros(request.args)  # só para o "Pular" repetir os filtros
-    return render_template("sorteio/resultado.html", s=s, f=filtros, n=n, qs=dict(filtros, n=n))
+    roleta = None
+    if session.pop("revelar", None) == id:
+        roleta = [r[0] for r in db.execute(
+            "SELECT titulo FROM musica WHERE ativa = 1 AND id != ? ORDER BY RANDOM() LIMIT 12", (s["musica_id"],))]
+        roleta.append(s["titulo"])  # o rolo para sempre na música sorteada
+    return render_template("sorteio/resultado.html", s=s, f=filtros, n=n, qs=dict(filtros, n=n), roleta=roleta,
+                           entrar_estrelas=session.pop("tocou", None) == id)

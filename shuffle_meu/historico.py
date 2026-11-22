@@ -1,4 +1,4 @@
-from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
+from flask import Blueprint, abort, flash, redirect, render_template, request, session, url_for
 
 from .db import get_db
 
@@ -23,6 +23,7 @@ def toquei(id):
     db = get_db()
     db.execute("UPDATE sorteio SET tocada = 1 WHERE id = ?", (id,))
     db.commit()
+    session["tocou"] = id  # as estrelas entram com pop na próxima visualização
     flash("Marcada como tocada. Agora você pode avaliar.")
     return _voltar(id)
 

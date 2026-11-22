@@ -46,4 +46,34 @@ document.addEventListener("click", (evento) => {
   botao.classList.add("pop");
 });
 
+// Roleta (D4): títulos passam e desaceleram até a música sorteada, ~1,2 s. Só existe logo após sortear.
+function iniciarRoleta() {
+  const cartao = document.querySelector("[data-roleta]");
+  if (!cartao || movimentoReduzido()) return; // com movimento reduzido o CSS já mostra o resultado
+  const titulos = JSON.parse(cartao.dataset.roleta);
+  const rolo = cartao.querySelector(".rolo");
+  const passos = 14;
+  const atrasos = Array.from({ length: passos }, (_, k) => 30 + 150 * (k / (passos - 1)) ** 2); // ~1,15 s no total
+  let i = 0;
+  cartao.classList.add("rodando");
+  const passo = () => {
+    const ultimo = i === passos - 1;
+    rolo.textContent = ultimo ? titulos.at(-1) : titulos[i % Math.max(titulos.length - 1, 1)];
+    rolo.classList.remove("tique");
+    void rolo.offsetWidth;
+    rolo.classList.add("tique");
+    if (!ultimo) {
+      setTimeout(passo, atrasos[++i]);
+      return;
+    }
+    setTimeout(() => {
+      cartao.classList.replace("rodando", "revelado");
+      cartao.querySelector("[data-anuncio]").textContent =
+        `Sorteada: ${cartao.querySelector(".titulo-sorteado").textContent}, ${cartao.querySelector(".artista").textContent}`;
+    }, 140);
+  };
+  passo();
+}
+
 iniciarToasts();
+iniciarRoleta();

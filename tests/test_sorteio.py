@@ -62,8 +62,28 @@ class TestSorteio(BaseTest):
         r = self.sortear()
         html = self.texto(self.client.get(r.headers["Location"]))
         for trecho in ("Tempo Perdido", "Legião Urbana", 'href="https://exemplo.com/cifra"', 'target="_blank"',
-                       "Toquei", "Pular", "Avaliar"):
+                       "Toquei ✅", "Pular ⏭️"):
             self.assertIn(trecho, html)
+        self.assertNotIn('name="nota"', html)  # estrelas só depois de "Toquei"
+
+    def test_roleta_so_na_primeira_visualizacao(self):
+        for t in ("Tempo Perdido", "Índios", "Oceano"):
+            self.musica(t)
+        url = self.sortear().headers["Location"]
+        html = self.texto(self.client.get(url))
+        self.assertIn("data-roleta='[", html)
+        sorteada = self.ultimo()
+        self.assertTrue(html.split("data-roleta='", 1)[1].split("'", 1)[0].endswith(f'"{sorteada}"]'))
+        self.assertNotIn("data-roleta", self.texto(self.client.get(url)))  # recarregar não repete
+        s = self.um("SELECT MAX(id) FROM sorteio")
+        self.assertNotIn("data-roleta", self.texto(self.client.get(f"/sorteios/{s}")))  # nem pelo histórico
+
+    def test_resultado_sem_javascript_tem_conteudo(self):
+        self.musica("Tempo Perdido")
+        html = self.texto(self.client.get(self.sortear().headers["Location"]))
+        # o HTML entregue já traz título, artista e botões; o JS só anima
+        self.assertIn('<h1 class="titulo-sorteado">Tempo Perdido</h1>', html)
+        self.assertIn("Legião Urbana", html)
 
     def test_resultado_inexistente_404(self):
         self.assertEqual(self.client.get("/sorteios/999").status_code, 404)

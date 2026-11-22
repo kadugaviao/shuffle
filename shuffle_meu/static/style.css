@@ -419,6 +419,48 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .ultima { display: flex; align-items: center; gap: var(--espaco-4); }
 .ultima p + p { margin-top: var(--espaco-1); }
 
+/* Resultado do sorteio: a única tela centralizada */
+.resultado {
+  position: relative;
+  max-width: 36rem;
+  margin: 0 auto var(--espaco-4);
+  padding: var(--espaco-6) var(--espaco-5);
+  text-align: center;
+  overflow: hidden;
+}
+.resultado .revelavel { display: grid; justify-items: center; gap: var(--espaco-3); }
+.titulo-sorteado { margin: 0; font: italic 400 clamp(2.5rem, 9vw, 4.5rem)/1.05 var(--fonte-serif); letter-spacing: -0.01em; overflow-wrap: anywhere; }
+.resultado .artista { font-size: 1.125rem; color: var(--texto-2); }
+.resultado .capa-grande { margin-bottom: var(--espaco-2); }
+.acoes-resultado { justify-content: center; margin-top: var(--espaco-3); }
+.botao-sucesso { background: rgba(34, 197, 94, 0.14); border-color: rgba(34, 197, 94, 0.45); }
+.botao-sucesso:hover { background: rgba(34, 197, 94, 0.22); border-color: var(--sucesso); }
+.status-tocada { display: inline-flex; align-items: center; gap: var(--espaco-2); min-height: 44px; padding: 0 var(--espaco-3); font-weight: 600; color: var(--sucesso); }
+.status-tocada svg { width: 18px; height: 18px; }
+.avaliacao { display: grid; justify-items: center; gap: var(--espaco-1); margin-top: var(--espaco-2); }
+.voltar { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--espaco-5); }
+.voltar a { color: var(--texto-2); }
+
+/* Revelação estilo roleta (D4): o CSS só esconde se o JS existir; rede de segurança mostra em 2 s */
+.rolo { display: none; }
+.js [data-roleta] .revelavel { visibility: hidden; animation: aparecer 0s 2s forwards; }
+.js [data-roleta].rodando .rolo {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--espaco-5);
+  font: italic 400 clamp(2rem, 8vw, 3.5rem)/1.1 var(--fonte-serif);
+  color: var(--texto-2);
+}
+.rolo.tique { animation: tique 110ms ease-out; }
+.js [data-roleta].revelado .revelavel { visibility: visible; animation: revelar 480ms var(--mola); }
+.revelado .titulo-sorteado { text-shadow: 0 0 40px rgba(236, 72, 153, 0.45); }
+.revelado .capa-grande { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), var(--glow); }
+@keyframes aparecer { to { visibility: visible; } }
+@keyframes tique { from { opacity: 0.2; transform: translateY(-35%); } }
+@keyframes revelar { from { opacity: 0; transform: scale(0.94); } }
+
 /* ---------- Fundo de palco: luz difusa em movimento lento + ruído ---------- */
 body::before {
   content: "";
@@ -573,4 +615,6 @@ main { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  .js [data-roleta] .revelavel { visibility: visible; animation: none !important; }
+  .rolo { display: none !important; }
 }

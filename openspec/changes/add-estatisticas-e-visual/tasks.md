@@ -24,9 +24,9 @@ Referências: comportamento em `specs/*/spec.md`, decisões em `design.md` (D1�
 
 ## 4. Resultado do sorteio
 
-- [ ] 4.1 Redesenhar `sorteio/resultado.html`: cartão central com capa grande, título em Instrument Serif, artista, link, "Toquei ✅" e "Pular ⏭️"; manter os campos ocultos do Pular; verificar com o teste "Tela de resultado" atualizado (sem o botão "Avaliar" antes de tocar)
-- [ ] 4.2 Estrelas: renderizar as 5 só quando `tocada = 1`, `aria-pressed` na nota atual, hover/foco acendendo em sequência e pop escalonado (D3); atualizar os testes de avaliação; verificar com testes "Avaliar música tocada (RN07)", "Estrelas escondidas antes de tocar", "Avaliar sem ter tocado (RN07)" e "Nota fora da faixa", e pelo teclado no navegador (cenário "Avaliar pelo teclado")
-- [ ] 4.3 Revelação estilo roleta (D4): `session["revelar"]` em `POST /sortear`, `data-roleta` com até 12 títulos só na primeira visualização, animação de ~1,2 s em `app.js`, rede de segurança CSS de 2 s e nada com movimento reduzido; verificar com testes de que `data-roleta` aparece só na primeira visualização (cenários "Revelação depois de sortear" e "Recarregar não repete"), com JS desativado que o resultado aparece (cenário "Navegador sem JavaScript") e, emulando movimento reduzido, que aparece direto (cenário "Resultado sem roleta")
+- [x] 4.1 Redesenhar `sorteio/resultado.html`: cartão central com capa grande, título em Instrument Serif, artista, link, "Toquei ✅" e "Pular ⏭️"; manter os campos ocultos do Pular; verificar com o teste "Tela de resultado" atualizado (sem o botão "Avaliar" antes de tocar)
+- [x] 4.2 Estrelas: renderizar as 5 só quando `tocada = 1`, `aria-pressed` na nota atual, hover/foco acendendo em sequência e pop escalonado (D3); atualizar os testes de avaliação; verificar com testes "Avaliar música tocada (RN07)", "Estrelas escondidas antes de tocar", "Avaliar sem ter tocado (RN07)" e "Nota fora da faixa", e pelo teclado no navegador (cenário "Avaliar pelo teclado")
+- [x] 4.3 Revelação estilo roleta (D4): `session["revelar"]` em `POST /sortear`, `data-roleta` com até 12 títulos só na primeira visualização, animação de ~1,2 s em `app.js`, rede de segurança CSS de 2 s e nada com movimento reduzido; verificar com testes de que `data-roleta` aparece só na primeira visualização (cenários "Revelação depois de sortear" e "Recarregar não repete"), com JS desativado que o resultado aparece (cenário "Navegador sem JavaScript") e, emulando movimento reduzido, que aparece direto (cenário "Resultado sem roleta")
 
 ## 5. Repertório
 

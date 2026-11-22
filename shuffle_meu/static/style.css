@@ -530,7 +530,6 @@ ol.barras li:first-child .barra span { background: var(--vermelho); }
   color: var(--amarelo);
   text-decoration: none;
 }
-.marca .icone { width: 24px; height: 24px; }
 
 .navegacao {
   position: fixed;

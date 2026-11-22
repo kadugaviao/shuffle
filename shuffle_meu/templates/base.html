@@ -22,7 +22,7 @@
 </head>
 <body>
   <header class="topo">
-    <a class="marca" href="{{ url_for('sorteio.inicio') }}">{{ icone("shuffle") }}<span>Shuffle</span></a>
+    <a class="marca" href="{{ url_for('sorteio.inicio') }}"><span>Shuffle</span></a>
     <nav class="navegacao" aria-label="Principal">
       {% for blueprint, rotulo, nome_icone, endpoint in SECOES %}
       <a class="aba" href="{{ url_for(endpoint) }}"{% if request.blueprint == blueprint %} aria-current="page"{% endif %}>{{ icone(nome_icone) }}<span>{{ rotulo }}</span></a>

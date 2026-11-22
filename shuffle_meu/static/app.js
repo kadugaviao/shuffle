@@ -12,7 +12,7 @@ function iniciarToasts() {
   for (const toast of document.querySelectorAll(".toast")) {
     const sair = () => {
       toast.classList.add("saindo");
-      setTimeout(() => toast.remove(), movimentoReduzido() ? 0 : 220);
+      setTimeout(() => toast.remove(), movimentoReduzido() ? 0 : 120); // = --rapido
     };
     const fechar = toast.querySelector(".toast-fechar");
     fechar.hidden = false;

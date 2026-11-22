@@ -20,9 +20,9 @@ Referências: comportamento em `specs/*/spec.md`, decisões em `design.md` (D1�
 
 ## 3. Navegação e avisos
 
-- [ ] 3.1 Navegação de D2/Componentes: faixa de tinta com "SHUFFLE" em Big Shoulders amarelo e links em Archivo condensado, régua vermelha de 4 px na aba atual; abaixo de 720 px, faixa só com a marca e barra inferior fixa com ícone + rótulo de 14 px; foco amarelo dentro da faixa; verificar com os testes de `aria-current` (cenário "Seção atual") e, a 360 px, que os 5 rótulos cabem sem cortar e a barra não cobre o fim da página (cenário "Menu no celular")
-- [ ] 3.2 Toasts como faixa de tinta com texto papel e ícone na cor do estado; em `app.js`, entrada de 160 ms e saída de 120 ms; verificar com os testes de toasts de `test_interface.py` e, no navegador, os cenários "Confirmação some sozinha" e "Alerta fica até fechar"
-- [ ] 3.3 Suíte verde; commitar o grupo
+- [x] 3.1 Navegação de D2/Componentes: faixa de tinta com "SHUFFLE" em Big Shoulders amarelo e links em Archivo condensado, régua vermelha de 4 px na aba atual; abaixo de 720 px, faixa só com a marca e barra inferior fixa com ícone + rótulo de 14 px; foco amarelo dentro da faixa; verificar com os testes de `aria-current` (cenário "Seção atual") e, a 360 px, que os 5 rótulos cabem sem cortar e a barra não cobre o fim da página (cenário "Menu no celular")
+- [x] 3.2 Toasts como faixa de tinta com texto papel e ícone na cor do estado; em `app.js`, entrada de 160 ms e saída de 120 ms; verificar com os testes de toasts de `test_interface.py` e, no navegador, os cenários "Confirmação some sozinha" e "Alerta fica até fechar"
+- [x] 3.3 Suíte verde; commitar o grupo
 
 ## 4. Tela inicial
 

@@ -1,4 +1,4 @@
-// Shuffle Meu: melhorias progressivas. Tudo funciona sem este arquivo; aqui só entram animação e atalhos.
+// Shuffle: melhorias progressivas. Tudo funciona sem este arquivo; aqui só entram animação e atalhos.
 const movimentoReduzido = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // Confirmação antes de enviar formulários marcados com data-confirmar (exclusões).

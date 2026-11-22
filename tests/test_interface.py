@@ -43,3 +43,19 @@ class TestToasts(BaseTest):
 
     def test_sem_mensagens_sem_regiao(self):
         self.assertNotIn('class="toasts"', self.texto(self.client.get("/artistas")))
+
+
+class TestNome(BaseTest):
+    def test_titulo_e_marca(self):
+        html = self.texto(self.client.get("/musicas"))
+        self.assertIn("<title>Repertório | Shuffle</title>", html)
+        self.assertRegex(html, r'<a class="marca" href="/">.*<span>Shuffle</span></a>')
+
+    def test_nome_antigo_ausente(self):
+        m = self.musica("Tempo Perdido")
+        p = self.inserir("INSERT INTO playlist (nome) VALUES ('Roda')")
+        s = self.sorteio(m)
+        for url in ("/", f"/sorteios/{s}", "/musicas", "/musicas/nova", "/artistas", "/playlists", f"/playlists/{p}",
+                    "/historico"):
+            with self.subTest(url=url):
+                self.assertNotIn("Shuffle Meu", self.texto(self.client.get(url)))

@@ -1,4 +1,4 @@
-# Plano do Projeto — **Shuffle Meu** 🎵
+# Plano do Projeto — **Shuffle**
 ### Sistema de sorteio de músicas conhecidas
 
 > Projeto da disciplina de Engenharia de Software: **Trabalho de G2 (avaliação final, em trios)**
@@ -12,7 +12,7 @@
 
 ## 1. Visão geral
 
-O **Shuffle Meu** é um sistema para cadastrar as músicas que o usuário **já conhece** (sabe cantar, tocar ou gosta muito) e **sortear qual tocar** a seguir. Ele serve para quem toca um instrumento e não sabe o que praticar, para quem quer animar uma roda de amigos ou um karaokê e para quem cansou do aleatório dos aplicativos de streaming, que tocam músicas desconhecidas.
+O **Shuffle** é um sistema para cadastrar as músicas que o usuário **já conhece** (sabe cantar, tocar ou gosta muito) e **sortear qual tocar** a seguir. Ele serve para quem toca um instrumento e não sabe o que praticar, para quem quer animar uma roda de amigos ou um karaokê e para quem cansou do aleatório dos aplicativos de streaming, que tocam músicas desconhecidas.
 
 O sorteio é **inteligente**: ele evita repetir músicas tocadas há pouco tempo e permite filtrar por gênero, humor, dificuldade e playlist.
 
@@ -172,7 +172,7 @@ openspec init        # na raiz do repositório; escolha o agente usado pelo trio
 ```
 
 ### 9.2 O fluxo de 4 passos aplicado ao projeto
-| Passo | Comando no agente | O que o trio faz no Shuffle Meu |
+| Passo | Comando no agente | O que o trio faz no Shuffle |
 |---|---|---|
 | 1. **Explore** | `/opsx:explore` | Discute com a IA o modelo de dados, as regras do sorteio e os casos de uso, **sem escrever código**. |
 | 2. **Propose** | `/opsx:propose add-mvp` | A IA formaliza a discussão nos artefatos (`proposal.md`, `design.md`, `tasks.md` e as specs). O trio revisa e corrige antes de seguir. |
@@ -226,7 +226,7 @@ O sistema DEVE impedir que uma música sorteada nas últimas N rodadas seja sort
 3. **Formulário de música:** cadastro e edição.
 4. **Artistas:** CRUD simples.
 5. **Playlists:** lista e gerenciamento das músicas de cada playlist.
-6. **Resultado do sorteio:** música, artista, link, e os botões "Toquei ✅", "Pular ⏭️" e "Avaliar ⭐".
+6. **Resultado do sorteio:** música, artista, link, os botões "Toquei" e "Pular" e as estrelas de avaliação.
 7. **Histórico e estatísticas.**
 
 ---

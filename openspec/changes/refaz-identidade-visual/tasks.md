@@ -5,9 +5,9 @@ Referências: comportamento em `specs/*/spec.md`, decisões em `design.md` (D1�
 ## 1. Renomeação para "Shuffle"
 
 - [x] 1.1 Commitar os artefatos desta mudança antes de qualquer código (`docs: specs refaz-identidade-visual`); verificar com `git log -1 --stat` que só arquivos de `openspec/changes/refaz-identidade-visual/` entraram
-- [ ] 1.2 Em `base.html`, trocar o `<title>` para `{% block titulo %}{% endblock %} | Shuffle` e o texto da marca para "Shuffle" (a caixa alta vem do CSS, D5); criar em `tests/test_interface.py` o teste de nome (título termina com "| Shuffle", marca presente, "Shuffle Meu" ausente em Início, resultado, Repertório, formulário de música, Artistas, Playlists e Histórico); verificar que o teste passa e falha se a marca voltar a "Shuffle Meu"
-- [ ] 1.3 Trocar o nome em README, `docs/plan.md` (título, apresentação, tabela de passos e a descrição da tela 6 sem emoji nos botões), `openspec/config.yaml` (`context`) e nos comentários de `seed.py`, `schema.sql`, `app.js` e `style.css`, tirando o 🎵 dos títulos; verificar com `git grep -n "Shuffle Meu" -- . ':!openspec/changes/archive' ':!openspec/changes/refaz-identidade-visual'` sem resultado e com `git grep -n shuffle_meu` mostrando o pacote, o comando e os imports intactos (D1)
-- [ ] 1.4 Rodar a suíte e `flask --app shuffle_meu run` seguindo o README; verificar que tudo passa e a aba do navegador mostra "Início | Shuffle"; commitar o grupo
+- [x] 1.2 Em `base.html`, trocar o `<title>` para `{% block titulo %}{% endblock %} | Shuffle` e o texto da marca para "Shuffle" (a caixa alta vem do CSS, D5); criar em `tests/test_interface.py` o teste de nome (título termina com "| Shuffle", marca presente, "Shuffle Meu" ausente em Início, resultado, Repertório, formulário de música, Artistas, Playlists e Histórico); verificar que o teste passa e falha se a marca voltar a "Shuffle Meu"
+- [x] 1.3 Trocar o nome em README, `docs/plan.md` (título, apresentação, tabela de passos e a descrição da tela 6 sem emoji nos botões), `openspec/config.yaml` (`context`) e nos comentários de `seed.py`, `schema.sql`, `app.js` e `style.css`, tirando o 🎵 dos títulos; verificar com `git grep -n "Shuffle Meu" -- . ':!openspec/changes/archive' ':!openspec/changes/refaz-identidade-visual'` sem resultado e com `git grep -n shuffle_meu` mostrando o pacote, o comando e os imports intactos (D1)
+- [x] 1.4 Rodar a suíte e `flask --app shuffle_meu run` seguindo o README; verificar que tudo passa e a aba do navegador mostra "Início | Shuffle"; commitar o grupo
 
 ## 2. Tokens, fontes e base
 

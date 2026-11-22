@@ -1,4 +1,4 @@
-"""Carga inicial de demonstração do Shuffle Meu.
+"""Carga inicial de demonstração do Shuffle.
 
 Uso: python seed.py
 Pode ser rodado várias vezes: não duplica nada e não sobrescreve o que o usuário editou

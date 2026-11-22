@@ -1,4 +1,4 @@
--- Schema do Shuffle Meu (design.md D3). Idempotente: roda a cada início da aplicação.
+-- Schema do Shuffle (design.md D3). Idempotente: roda a cada início da aplicação.
 
 CREATE TABLE IF NOT EXISTS artista (
     id         INTEGER PRIMARY KEY AUTOINCREMENT,

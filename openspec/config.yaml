@@ -1,7 +1,7 @@
 schema: spec-driven
 
 context: |
-  Projeto: "Shuffle Meu", sistema web para cadastrar músicas que o usuário já conhece e sortear qual tocar.
+  Projeto: "Shuffle", sistema web para cadastrar músicas que o usuário já conhece e sortear qual tocar.
   Trabalho acadêmico de Engenharia de Software (G2, trio). Apresentação em 24/11/2026: prazo curto.
   Metodologia obrigatória: OpenSpec. Especificar e documentar antes de programar; o histórico de commits
   deve mostrar as specs antes do código. Plano completo em docs/plan.md.

@@ -1,4 +1,4 @@
-# Shuffle Meu 🎵
+# Shuffle
 
 Sistema web para cadastrar as músicas que você **já conhece** e **sortear qual tocar** a seguir. O sorteio só usa músicas ativas, aceita filtros (gênero, humor, dificuldade máxima, artista, playlist), evita repetir as últimas N sorteadas e dá o dobro de chance às favoritas. A tela de histórico mostra as estatísticas: músicas mais tocadas, nunca sorteadas, média de notas e músicas por gênero.
 

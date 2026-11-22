@@ -193,7 +193,7 @@ Desktop                                     Celular (360 px)
 | Botão de perigo | só texto `--perigo` até o hover, quando ganha fundo `rgba(239,68,68,0.12)` |
 | Chip | pílula com borda; selecionado com `--superficie-alta`, borda `--borda-hover` e texto `--texto` |
 | Cartão de música | capa gerada (quadrado 56 px, raio 12), título, artista, chips de gênero/humor, barrinhas de dificuldade (5, preenchidas = nível, `aria-label="Dificuldade 3 de 5"`), atalhos coração e interruptor |
-| Interruptor (ativa) | trilho 36×20, bolinha com `--mola`; ligado = verde `--sucesso` |
+| Interruptor (ativa) | trilho 40×24 (área de toque maior), bolinha com `--mola`; ligado = verde `--sucesso` |
 | Coração (favorita) | traço quando desligado, preenchido em `--perigo`/rosa quando ligado, pop de 1,2× |
 | Resultado | cartão central com capa grande, título em Instrument Serif, artista, link, "Toquei ✅", "Pular ⏭️" e estrelas após tocar; revelação estilo roleta |
 | Estrelas | 5 botões; acesas com o gradiente, hover acende em sequência, pop no clique |

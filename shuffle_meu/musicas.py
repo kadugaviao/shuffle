@@ -53,6 +53,13 @@ def validar_musica(form):
     return dados, erros
 
 
+def rotulo_genero(genero):
+    """Só para exibir: 'pop' -> 'Pop', 'rock progressivo' -> 'Rock progressivo'; siglas como 'MPB' ficam como estão."""
+    if not genero or genero.isupper():
+        return genero or ""
+    return genero[0].upper() + genero[1:]
+
+
 def generos(db):
     """Gêneros já usados no repertório, sem repetir 'rock' e 'Rock'."""
     return [r[0] for r in db.execute(
@@ -112,7 +119,7 @@ def lista():
         q = q.casefold()
         musicas = [m for m in musicas if q in m["titulo"].casefold() or q in m["artista"].casefold()]
     return render_template("musicas/lista.html", musicas=musicas, q=request.args.get("q", ""), f=f,
-                           generos=[(g, g) for g in generos(db)], qs=_filtros_lista(request.args))
+                           generos=[(g, rotulo_genero(g)) for g in generos(db)], qs=_filtros_lista(request.args))
 
 
 @bp.route("/nova", methods=["GET", "POST"])

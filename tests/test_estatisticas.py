@@ -94,4 +94,5 @@ class TestTelaEstatisticas(BaseTest):
         self.sorteio(1, tocada=1, nota=5)
         r = self.client.get("/historico")
         self.assertEqual(r.status_code, 200)
-        self.assertIn("rock", self.texto(r))
+        self.assertIn("<span>Rock</span>", self.texto(r))  # rótulo capitalizado só na exibição
+        self.assertIn("<span>MPB</span>", self.texto(r))

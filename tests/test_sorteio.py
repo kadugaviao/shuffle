@@ -173,8 +173,25 @@ class TestSorteio(BaseTest):
         html = self.texto(self.client.get("/?humor=calma&dificuldade_max=3&genero=ROCK&n=7"))
         self.assertIn('name="humor" value="calma" checked', html)
         self.assertIn('name="dificuldade_max" value="3" checked', html)
-        self.assertIn('name="genero" value="rock" checked', html)
+        self.assertIn('name="genero" value="rock" checked><span>Rock</span>', html)  # exibe capitalizado, valor intacto
         self.assertIn('value="7"', html)
+        self.assertIn('<span class="unidade" aria-hidden="true">rodadas</span>', html)
+
+    def test_sem_filtros_marca_todos(self):
+        self.musica("Tempo Perdido", genero="rock")
+        html = self.texto(self.client.get("/"))
+        for nome in ("humor", "dificuldade_max", "genero"):
+            self.assertIn(f'name="{nome}" value="" checked', html)
+
+    def test_cartao_de_espera_sem_sorteios(self):
+        self.musica("Tempo Perdido")
+        html = self.texto(self.client.get("/"))
+        self.assertIn("Sua última música aparece aqui", html)
+        self.assertNotIn("Última sorteada:", html)
+        self.sorteio(1)
+        html = self.texto(self.client.get("/"))
+        self.assertIn("Última sorteada: Tempo Perdido — Legião Urbana", html)
+        self.assertNotIn("Sua última música aparece aqui", html)
 
     def test_desempenho_com_1000_musicas(self):
         a = self.artista_padrao()

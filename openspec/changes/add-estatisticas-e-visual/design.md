@@ -40,6 +40,7 @@ SELECT m.id, m.titulo, a.nome AS artista, AVG(s.nota) AS media, COUNT(s.nota) AS
  WHERE s.nota IS NOT NULL GROUP BY m.id ORDER BY media DESC, avaliacoes DESC, m.titulo COLLATE PT;
 ```
 - **Por gênero** é agrupado em Python: `SELECT genero FROM musica`, chave `casefold()` (vazio vira "Sem gênero"), rótulo = grafia mais frequente do grupo (empate: a primeira em ordem alfabética), ordenado por quantidade e depois pelo rótulo. Fazer isso em SQL exigiria subconsultas para a "grafia mais usada"; em Python são poucas linhas.
+- **Exibição de gêneros** (em todas as telas, não só nas estatísticas): filtro Jinja `genero` põe a primeira letra em maiúscula ("pop" vira "Pop") e mantém siglas já em caixa alta ("MPB"). Só na exibição: o banco, os valores dos filtros e o campo do formulário continuam com o texto digitado.
 - **Arredondamento:** a ordem usa a média exata; a exibição usa um filtro Jinja `decimal1` com `Decimal(...).quantize(Decimal("0.1"), ROUND_HALF_UP)` e vírgula ("4,25" vira "4,3"). O `round()` do Python arredonda para o par e mostraria "4,2".
 - **Barras:** largura proporcional ao maior valor da seção, passada como `style="--p: 75%"`.
 - Listas longas ("nunca sorteadas" e "médias") mostram 10 itens e o resto dentro de um `<details>` "Ver todas (N)".
@@ -163,7 +164,8 @@ Palco de show à noite: interface escura, cartões de vidro fosco flutuando sobr
 
 ### Layout
 
-- Largura máxima do conteúdo: 64rem, alinhado à esquerda dentro do contêiner centralizado; o resultado do sorteio é a única tela centralizada.
+- Largura máxima do conteúdo: 64rem, alinhado à esquerda dentro do contêiner centralizado, ocupando a mesma largura da navegação (nenhuma tela deixa um vazio de um lado só); o resultado do sorteio é a única tela centralizada.
+- Início: a partir de 960 px, duas colunas (sorteio e filtros à esquerda, cartão da última sorteada à direita, 20rem). Sem sorteios, a coluna da direita mostra um cartão de espera no mesmo estilo; abaixo de 960 px ele não aparece.
 - Repertório: grade `repeat(auto-fill, minmax(16rem, 1fr))` no desktop, uma coluna no celular.
 - Ponto de quebra único: 720 px (barra de navegação muda de cima para baixo).
 - Camadas (`z-index`): fundo −1, conteúdo 0, navegação 10, toasts 20.

@@ -66,12 +66,12 @@ O sistema DEVE (MUST) mostrar, para cada música com ao menos uma nota, a média
 - **THEN** a seção exibe "Nenhuma música avaliada ainda."
 
 ### Requirement: Músicas por gênero
-O sistema DEVE (MUST) mostrar quantas músicas do repertório (ativas e inativas) existem em cada gênero, do maior para o menor, com empates em ordem alfabética. Gêneros que diferem só em maiúsculas/minúsculas DEVEM (MUST) contar juntos, exibidos com a grafia mais usada entre eles, e músicas sem gênero DEVEM (MUST) aparecer como "Sem gênero".
+O sistema DEVE (MUST) mostrar quantas músicas do repertório (ativas e inativas) existem em cada gênero, do maior para o menor, com empates em ordem alfabética. Gêneros que diferem só em maiúsculas/minúsculas DEVEM (MUST) contar juntos, exibidos com a grafia mais usada entre eles e a primeira letra maiúscula (siglas como MPB ficam como estão), e músicas sem gênero DEVEM (MUST) aparecer como "Sem gênero".
 
 #### Scenario: Contagem por gênero
 - **GIVEN** o repertório tem 3 músicas "rock", 1 "Rock", 2 "MPB" e 1 sem gênero
 - **WHEN** o usuário abre a tela de histórico
-- **THEN** a contagem mostra rock 4, MPB 2 e Sem gênero 1, nessa ordem
+- **THEN** a contagem mostra Rock 4, MPB 2 e Sem gênero 1, nessa ordem
 
 #### Scenario: Repertório vazio
 - **GIVEN** não há músicas cadastradas

@@ -3,7 +3,7 @@ import random
 from flask import Blueprint, abort, flash, redirect, render_template, request, session, url_for
 
 from .db import get_db
-from .musicas import generos
+from .musicas import generos, rotulo_genero
 
 bp = Blueprint("sorteio", __name__)
 
@@ -63,7 +63,7 @@ def inicio():
         " JOIN musica m ON m.id = s.musica_id JOIN artista a ON a.id = m.artista_id ORDER BY s.id DESC LIMIT 1"
     ).fetchone()
     return render_template(
-        "inicio.html", f=filtros, n=n, ultimo=ultimo, generos=[(g, g) for g in generos(db)],
+        "inicio.html", f=filtros, n=n, ultimo=ultimo, generos=[(g, rotulo_genero(g)) for g in generos(db)],
         tem_musicas=db.execute("SELECT EXISTS (SELECT 1 FROM musica)").fetchone()[0],
         artistas=db.execute("SELECT id, nome FROM artista ORDER BY nome COLLATE PT").fetchall(),
         playlists=db.execute("SELECT id, nome FROM playlist ORDER BY nome COLLATE PT").fetchall(),

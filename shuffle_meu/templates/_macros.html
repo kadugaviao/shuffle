@@ -19,16 +19,17 @@ id="campo-{{ nome }}"{% if erros and erros.get(nome) %} aria-invalid="true" aria
 </div>
 {%- endmacro %}
 
-{# Grupo de chips (radios) com legenda; `todos` cria a opção vazia ("Todos", "Qualquer"...). #}
+{# Grupo de chips (radios) com legenda; `todos` cria a opção vazia ("Todos", "Qualquer"...).
+   `atual` pode chegar indefinido (filtro ausente no dict): conta como vazio. #}
 {% macro chips(nome, rotulo, opcoes, atual, todos=none, erros=none, classe="chips") -%}
 <fieldset class="campo"{% if erros and erros.get(nome) %} aria-describedby="erro-{{ nome }}"{% endif %}>
   <legend>{{ rotulo }}</legend>
   <div class="{{ classe }}">
     {% if todos %}
-    <label class="chip"><input type="radio" name="{{ nome }}" value="" {% if atual is none or atual == "" %}checked{% endif %}><span>{{ todos }}</span></label>
+    <label class="chip"><input type="radio" name="{{ nome }}" value="" {% if atual is not defined or atual is none or atual == "" %}checked{% endif %}><span>{{ todos }}</span></label>
     {% endif %}
     {% for valor, texto in opcoes %}
-    <label class="chip"><input type="radio" name="{{ nome }}" value="{{ valor }}" {% if atual is not none and atual|string|lower == valor|string|lower %}checked{% endif %}><span>{{ texto }}</span></label>
+    <label class="chip"><input type="radio" name="{{ nome }}" value="{{ valor }}" {% if atual is defined and atual is not none and atual|string|lower == valor|string|lower %}checked{% endif %}><span>{{ texto }}</span></label>
     {% endfor %}
   </div>
   {{ erro(nome, erros) }}

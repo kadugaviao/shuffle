@@ -2,6 +2,7 @@ import unittest
 import zlib
 
 from shuffle_meu import decimal1, iniciais, matiz
+from shuffle_meu.musicas import rotulo_genero
 from tests.base import BaseTest
 
 ICONES = ("dado", "shuffle", "musica", "microfone", "lista", "historico", "coracao", "estrela", "check", "pular",
@@ -19,6 +20,12 @@ class TestFiltros(unittest.TestCase):
         self.assertEqual(iniciais("Djavan"), "D")
         self.assertEqual(iniciais("The Beatles"), "TB")
         self.assertEqual(iniciais(""), "")
+
+    def test_rotulo_genero(self):
+        self.assertEqual([rotulo_genero(g) for g in ("pop", "rock", "MPB", "samba", "sertanejo")],
+                         ["Pop", "Rock", "MPB", "Samba", "Sertanejo"])
+        self.assertEqual(rotulo_genero("rock progressivo"), "Rock progressivo")
+        self.assertEqual(rotulo_genero(None), "")
 
     def test_decimal1(self):
         self.assertEqual(decimal1(4.25), "4,3")

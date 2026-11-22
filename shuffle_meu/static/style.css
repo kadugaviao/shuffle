@@ -413,11 +413,20 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .estado-vazio h2 { font: italic 400 1.75rem/1.2 var(--fonte-serif); }
 
 /* ---------- Telas ---------- */
-.inicio { max-width: 44rem; }
 .inicio .sortear { margin-bottom: var(--espaco-4); }
 .filtros { gap: var(--espaco-5); }
 .ultima { display: flex; align-items: center; gap: var(--espaco-4); }
 .ultima p + p { margin-top: var(--espaco-1); }
+.ultima-vazia { display: none; } /* só equilibra as duas colunas; no celular seria rolagem à toa */
+.com-unidade { display: flex; align-items: center; gap: var(--espaco-2); }
+.com-unidade input { width: 6rem; flex: none; font-family: var(--fonte-mono); font-variant-numeric: tabular-nums; }
+.unidade { color: var(--texto-2); }
+@media (min-width: 960px) {
+  .inicio { display: grid; grid-template-columns: minmax(0, 1fr) 20rem; gap: var(--espaco-5); align-items: start; }
+  .inicio-lado { position: sticky; top: 88px; }
+  .inicio-lado .ultima { flex-direction: column; align-items: flex-start; }
+  .ultima-vazia { display: flex; }
+}
 
 /* Formulários */
 .formulario { max-width: 40rem; }

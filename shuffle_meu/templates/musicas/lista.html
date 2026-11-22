@@ -27,7 +27,7 @@
       <a class="musica-titulo" href="{{ url_for('musicas.editar', id=m.id) }}">{{ m.titulo }}</a>
       <p class="meta">{{ m.artista }}</p>
       <div class="etiquetas">
-        {% if m.genero %}<span class="etiqueta">{{ m.genero }}</span>{% endif %}
+        {% if m.genero %}<span class="etiqueta">{{ m.genero|genero }}</span>{% endif %}
         {% if m.humor %}<span class="etiqueta">{{ HUMORES[m.humor] }}</span>{% endif %}
         <span class="etiqueta etiqueta-inativa">Inativa</span>
         {{ dificuldade(m.dificuldade) }}

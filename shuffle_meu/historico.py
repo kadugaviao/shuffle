@@ -1,6 +1,7 @@
 from flask import Blueprint, abort, flash, redirect, render_template, request, session, url_for
 
 from .db import get_db
+from .estatisticas import calcular
 from .sorteio import ler_filtros
 
 bp = Blueprint("historico", __name__)
@@ -49,8 +50,9 @@ def avaliar(id):
 
 @bp.get("/historico")
 def lista():
-    sorteios = get_db().execute(
+    db = get_db()
+    sorteios = db.execute(
         "SELECT s.*, m.titulo, a.nome AS artista FROM sorteio s"
         " JOIN musica m ON m.id = s.musica_id JOIN artista a ON a.id = m.artista_id ORDER BY s.id DESC LIMIT 50"
     ).fetchall()
-    return render_template("historico.html", sorteios=sorteios)
+    return render_template("historico.html", sorteios=sorteios, est=calcular(db))

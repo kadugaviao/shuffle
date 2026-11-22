@@ -92,7 +92,7 @@ class TestHistorico(BaseTest):
         self.sorteio(tempo, sorteado_em="2026-11-22 23:05:00", tocada=1, nota=4)
         html = self.texto(self.client.get("/historico"))
         self.assertLess(html.index("Tempo Perdido"), html.index("Oceano"))
-        self.assertIn("Tocada · nota 4", html)
+        self.assertIn('<span class="etiqueta etiqueta-tocada">Tocada</span><span class="etiqueta">nota <span class="numero">4</span></span>', html)
         self.assertIn("Não tocada", html)
         self.assertIn(f'href="/sorteios/{1}"', html)
 

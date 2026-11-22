@@ -691,3 +691,33 @@ main { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
   .rotulo-largo { display: inline; }
   .icone-no-celular { padding: 0 var(--espaco-4); }
 }
+
+/* Histórico e estatísticas */
+.metricas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--espaco-3); margin-bottom: var(--espaco-4); }
+@media (min-width: 720px) { .metricas { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.metrica {
+  display: grid;
+  gap: var(--espaco-1);
+  padding: var(--espaco-4);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
+  box-shadow: var(--sombra-cartao);
+}
+.metrica-valor { font-size: 2.5rem; font-weight: 500; line-height: 1; }
+.metrica-rotulo { font-size: 0.875rem; color: var(--texto-2); }
+.painel { display: grid; gap: 0 var(--espaco-4); }
+@media (min-width: 720px) { .painel { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; } }
+.painel h2, .ultimos h2 { margin-bottom: var(--espaco-4); }
+.barras { display: grid; gap: var(--espaco-3); margin: 0; padding: 0; list-style: none; }
+.barra-texto { display: flex; justify-content: space-between; gap: var(--espaco-3); margin-bottom: 6px; overflow-wrap: anywhere; }
+.barra { height: 6px; background: var(--superficie-alta); border-radius: var(--raio-pilula); overflow: hidden; }
+.barra span { display: block; width: var(--p); height: 100%; background: var(--gradiente); border-radius: inherit; }
+.lista-simples { display: grid; gap: var(--espaco-2); margin: 0; padding: 0; list-style: none; }
+.linha-simples { display: flex; justify-content: space-between; gap: var(--espaco-3); overflow-wrap: anywhere; }
+.linha-valor { flex: none; text-align: right; }
+.ver-todas { margin-top: var(--espaco-3); }
+.ver-todas summary { min-height: 44px; display: flex; align-items: center; color: var(--texto-2); cursor: pointer; }
+.ver-todas[open] summary { margin-bottom: var(--espaco-2); }
+.etiqueta-tocada { color: var(--sucesso); border-color: rgba(34, 197, 94, 0.4); }
+.ultimos { margin-top: var(--espaco-3); }

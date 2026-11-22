@@ -1,19 +1,103 @@
 {% extends "base.html" %}
-{% block titulo %}Histórico{% endblock %}
-{% block conteudo %}
-<h1>Histórico</h1>
-{% if sorteios %}
-<ul class="itens">
-  {% for s in sorteios %}
-  <li class="item">
-    <div>
-      <a href="{{ url_for('sorteio.resultado', id=s.id) }}"><strong>{{ s.titulo }}</strong></a> <span class="meta">{{ s.artista }}</span>
-      <div class="meta">{{ s.sorteado_em|data_local }} · {{ "Tocada" if s.tocada else "Não tocada" }}{% if s.nota %} · nota {{ s.nota }} ⭐{% endif %}</div>
-    </div>
-  </li>
-  {% endfor %}
-</ul>
-{% else %}
-<p class="vazio">Nenhum sorteio ainda. <a href="{{ url_for('sorteio.inicio') }}">Que tal sortear agora?</a></p>
+{% from "_icones.html" import icone %}
+{% from "_macros.html" import capa, vazio %}
+{% block titulo %}Histórico e estatísticas{% endblock %}
+
+{% macro lista_musicas(linhas, extra=none) -%}
+{% for m in linhas %}
+<li class="linha-simples"><span>{{ m.titulo }} <span class="meta">{{ m.artista }}</span></span>{% if extra %}{{ extra(m) }}{% endif %}</li>
+{% endfor %}
+{%- endmacro %}
+
+{% macro ver_todas(linhas, extra=none) -%}
+<ul class="lista-simples">{{ lista_musicas(linhas[:10], extra) }}</ul>
+{% if linhas|length > 10 %}
+<details class="ver-todas">
+  <summary>Ver todas ({{ linhas|length }})</summary>
+  <ul class="lista-simples">{{ lista_musicas(linhas[10:], extra) }}</ul>
+</details>
 {% endif %}
+{%- endmacro %}
+
+{% macro nota_media(m) -%}
+<span class="linha-valor"><span class="numero">{{ m.media|decimal1 }}</span> <span class="meta">({{ m.avaliacoes }} {{ "avaliação" if m.avaliacoes == 1 else "avaliações" }})</span></span>
+{%- endmacro %}
+
+{% block conteudo %}
+{% set r = est.resumo %}
+<h1>Histórico e estatísticas</h1>
+
+<section class="metricas" aria-label="Resumo">
+  <div class="metrica"><span class="numero metrica-valor">{{ r.musicas }}</span><span class="metrica-rotulo">músicas no repertório</span></div>
+  <div class="metrica"><span class="numero metrica-valor">{{ r.sorteios }}</span><span class="metrica-rotulo">sorteios feitos</span></div>
+  <div class="metrica"><span class="numero metrica-valor">{{ r.tocadas }}</span><span class="metrica-rotulo">tocadas</span></div>
+  <div class="metrica"><span class="numero metrica-valor">{{ r.media|decimal1 }}</span><span class="metrica-rotulo">nota média</span></div>
+</section>
+
+<div class="painel">
+  <section class="cartao">
+    <h2>Mais tocadas</h2>
+    {% if est.top5 %}
+    {% set maior = est.top5[0].vezes %}
+    <ol class="barras">
+      {% for m in est.top5 %}
+      <li>
+        <div class="barra-texto"><span>{{ m.titulo }} <span class="meta">{{ m.artista }}</span></span>
+          <span class="numero">{{ m.vezes }}<span class="visualmente-oculto"> vezes</span></span></div>
+        <div class="barra" aria-hidden="true"><span style="--p: {{ (m.vezes / maior * 100)|round(1) }}%"></span></div>
+      </li>
+      {% endfor %}
+    </ol>
+    {% else %}<p class="vazio">Nenhuma música tocada ainda.</p>{% endif %}
+  </section>
+
+  <section class="cartao">
+    <h2>Músicas por gênero</h2>
+    {% if est.generos %}
+    {% set maior = est.generos[0][1] %}
+    <ul class="barras">
+      {% for rotulo, quantidade in est.generos %}
+      <li>
+        <div class="barra-texto"><span>{{ rotulo }}</span><span class="numero">{{ quantidade }}</span></div>
+        <div class="barra" aria-hidden="true"><span style="--p: {{ (quantidade / maior * 100)|round(1) }}%"></span></div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}<p class="vazio">Nenhuma música no repertório.</p>{% endif %}
+  </section>
+
+  <section class="cartao">
+    <h2>Média de notas</h2>
+    {% if est.medias %}{{ ver_todas(est.medias, nota_media) }}
+    {% else %}<p class="vazio">Nenhuma música avaliada ainda.</p>{% endif %}
+  </section>
+
+  <section class="cartao">
+    <h2>Nunca sorteadas</h2>
+    {% if est.nunca %}{{ ver_todas(est.nunca) }}
+    {% elif r.musicas == 0 %}<p class="vazio">Nenhuma música no repertório.</p>
+    {% else %}<p class="vazio">Todas as músicas ativas já foram sorteadas.</p>{% endif %}
+  </section>
+</div>
+
+<section class="ultimos">
+  <h2>Últimos sorteios</h2>
+  {% if sorteios %}
+  <ul class="lista-cartoes">
+    {% for s in sorteios %}
+    <li class="linha-cartao">
+      {{ capa(s.artista) }}
+      <div class="linha-info">
+        <a class="linha-titulo" href="{{ url_for('sorteio.resultado', id=s.id) }}">{{ s.titulo }}</a>
+        <p class="meta">{{ s.artista }}</p>
+        <p class="meta">{{ s.sorteado_em|data_local }}</p>
+        <div class="etiquetas">{% if s.tocada %}<span class="etiqueta etiqueta-tocada">Tocada</span>{% else %}<span class="etiqueta">Não tocada</span>{% endif %}{% if s.nota %}<span class="etiqueta">nota <span class="numero">{{ s.nota }}</span></span>{% endif %}</div>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <section class="cartao">{{ vazio("historico", "Nenhum sorteio ainda.", none, url_for("sorteio.inicio"), "Que tal sortear agora?") }}</section>
+  {% endif %}
+</section>
 {% endblock %}

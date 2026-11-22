@@ -46,8 +46,8 @@ Referências: comportamento em `specs/*/spec.md`, decisões em `design.md` (D1�
 
 ## 8. Histórico e estatísticas
 
-- [ ] 8.1 Criar `estatisticas.py` com `calcular(db)` (resumo, top 5, nunca sorteadas, médias, gêneros agrupados em Python, D1); verificar com `tests/test_estatisticas.py` cobrindo todos os cenários da spec `estatisticas` (empate no top 5, só ativas nas nunca sorteadas, "4,7" no resumo, ordem das médias, "rock 4" com grafias misturadas, estados vazios)
-- [ ] 8.2 Redesenhar `historico.html` com as estatísticas no topo (4 cartões de métrica, ranking com barras no gradiente, nunca sorteadas e médias com "Ver todas (N)" acima de 10, gêneros em barras) e a lista de sorteios abaixo; atualizar os testes de histórico; verificar com testes de que as mensagens de estado vazio aparecem sem sorteios e que a página responde 200 com o seed carregado
+- [x] 8.1 Criar `estatisticas.py` com `calcular(db)` (resumo, top 5, nunca sorteadas, médias, gêneros agrupados em Python, D1); verificar com `tests/test_estatisticas.py` cobrindo todos os cenários da spec `estatisticas` (empate no top 5, só ativas nas nunca sorteadas, "4,7" no resumo, ordem das médias, "rock 4" com grafias misturadas, estados vazios)
+- [x] 8.2 Redesenhar `historico.html` com as estatísticas no topo (4 cartões de métrica, ranking com barras no gradiente, nunca sorteadas e médias com "Ver todas (N)" acima de 10, gêneros em barras) e a lista de sorteios abaixo; atualizar os testes de histórico; verificar com testes de que as mensagens de estado vazio aparecem sem sorteios e que a página responde 200 com o seed carregado
 
 ## 9. Conferência visual, documentação e integração
 

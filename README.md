@@ -72,7 +72,7 @@ openspec/          especificação (specs, proposta, design e tarefas)
 
 ## Especificação (OpenSpec)
 
-Os requisitos, as regras de negócio RN01 a RN08 e os cenários de cada funcionalidade estão em [`openspec/specs/`](openspec/specs/). A mudança que implementou o MVP está em [`openspec/changes/add-mvp/`](openspec/changes/add-mvp/) (ou em `openspec/changes/archive/` depois de arquivada).
+Os requisitos, as regras de negócio RN01 a RN08 e os cenários de cada funcionalidade estão em [`openspec/specs/`](openspec/specs/). A mudança que implementou o MVP está arquivada em [`openspec/changes/archive/2026-11-22-add-mvp/`](openspec/changes/archive/2026-11-22-add-mvp/).
 
 ```bash
 openspec validate --specs --strict
@@ -82,4 +82,4 @@ openspec validate --specs --strict
 
 - Feito para uso local por uma pessoa: não há login nem proteção CSRF. Não publique o servidor na internet sem adicionar isso e definir a variável de ambiente `SECRET_KEY`.
 - A anti-repetição vale para o histórico inteiro, independentemente dos filtros usados no sorteio.
-- Estatísticas, modo "Esquecidas", setlist e os extras do plano ficaram para trabalhos futuros (ver `openspec/changes/add-mvp/proposal.md`).
+- Estatísticas, modo "Esquecidas", setlist e os extras do plano ficaram para trabalhos futuros (ver [`proposal.md`](openspec/changes/archive/2026-11-22-add-mvp/proposal.md) da mudança arquivada).

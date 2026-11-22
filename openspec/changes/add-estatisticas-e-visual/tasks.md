@@ -51,10 +51,10 @@ Referências: comportamento em `specs/*/spec.md`, decisões em `design.md` (D1�
 
 ## 9. Conferência visual, documentação e integração
 
-- [ ] 9.1 Conferência a 360 px e em 1440 px de largura, com o seed carregado e alguns sorteios tocados e avaliados: sem rolagem horizontal em nenhuma tela (cenário "Telas a 360 px"), foco visível percorrendo cada tela com Tab, emulação de movimento reduzido; salvar screenshots em `docs/screenshots/` (início, resultado, repertório, formulário, histórico com estatísticas; celular e desktop) e verificar que os 10 arquivos existem
-- [ ] 9.2 Verificar o funcionamento sem internet: desligar a rede (ou bloquear requisições externas no DevTools), recarregar todas as telas e conferir no painel Rede que nenhuma requisição sai de `localhost` e que as fontes aparecem (cenário "Apresentação offline")
-- [ ] 9.3 Atualizar o README (seção de estatísticas, créditos de fontes OFL e ícones Lucide ISC, screenshots); verificar seguindo o README do zero numa cópia limpa
-- [ ] 9.4 Integração final: `python -m unittest`, `openspec validate add-estatisticas-e-visual --strict` e `openspec validate --specs --strict` sem erros, e o fluxo de ponta a ponta no navegador (sortear com chips, revelação, Toquei, 4 estrelas, favoritar pelo atalho, conferir estatísticas)
+- [x] 9.1 Conferência a 360 px e em 1440 px de largura, com o seed carregado e alguns sorteios tocados e avaliados: sem rolagem horizontal em nenhuma tela (cenário "Telas a 360 px"), foco visível percorrendo cada tela com Tab, emulação de movimento reduzido; salvar screenshots em `docs/screenshots/` (início, resultado, repertório, formulário, histórico com estatísticas; celular e desktop) e verificar que os 10 arquivos existem
+- [x] 9.2 Verificar o funcionamento sem internet: desligar a rede (ou bloquear requisições externas no DevTools), recarregar todas as telas e conferir no painel Rede que nenhuma requisição sai de `localhost` e que as fontes aparecem (cenário "Apresentação offline")
+- [x] 9.3 Atualizar o README (seção de estatísticas, créditos de fontes OFL e ícones Lucide ISC, screenshots); verificar seguindo o README do zero numa cópia limpa
+- [x] 9.4 Integração final: `python -m unittest`, `openspec validate add-estatisticas-e-visual --strict` e `openspec validate --specs --strict` sem erros, e o fluxo de ponta a ponta no navegador (sortear com chips, revelação, Toquei, 4 estrelas, favoritar pelo atalho, conferir estatísticas)
 
 ## Workflow follow-up
 

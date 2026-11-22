@@ -1,8 +1,18 @@
 # Shuffle Meu 🎵
 
-Sistema web para cadastrar as músicas que você **já conhece** e **sortear qual tocar** a seguir. O sorteio só usa músicas ativas, aceita filtros (gênero, humor, dificuldade máxima, artista, playlist), evita repetir as últimas N sorteadas e dá o dobro de chance às favoritas.
+Sistema web para cadastrar as músicas que você **já conhece** e **sortear qual tocar** a seguir. O sorteio só usa músicas ativas, aceita filtros (gênero, humor, dificuldade máxima, artista, playlist), evita repetir as últimas N sorteadas e dá o dobro de chance às favoritas. A tela de histórico mostra as estatísticas: músicas mais tocadas, nunca sorteadas, média de notas e músicas por gênero.
+
+A interface segue o design system "Midnight Stage" (tema escuro, cartões de vidro, um único gradiente de destaque), funciona no celular a partir de 360 px, respeita a preferência de movimento reduzido e não depende de internet: fontes e ícones são servidos pelo próprio sistema.
 
 Trabalho de G2 da disciplina de Engenharia de Software, desenvolvido com **OpenSpec** (especificar antes de programar).
+
+## Telas
+
+| Início | Resultado do sorteio | Histórico e estatísticas |
+|---|---|---|
+| ![Início no celular](docs/screenshots/inicio-celular.png) | ![Resultado no celular](docs/screenshots/resultado-celular.png) | ![Histórico no celular](docs/screenshots/historico-celular.png) |
+
+Mais capturas, no celular e no desktop, em [`docs/screenshots/`](docs/screenshots/).
 
 ## Integrantes
 
@@ -62,9 +72,10 @@ shuffle_meu/
   musicas.py       CRUD de músicas e validações
   playlists.py     playlists e suas músicas
   sorteio.py       algoritmo do sorteio e tela de resultado
-  historico.py     Toquei / Avaliar e lista de sorteios
+  historico.py     Toquei / Avaliar e tela de histórico
+  estatisticas.py  consultas das estatísticas
   templates/       telas (Jinja)
-  static/          CSS e JS
+  static/          CSS (design system), JS e fontes (static/fonts)
 tests/             testes (unittest)
 seed.py            carga inicial
 openspec/          especificação (specs, proposta, design e tarefas)
@@ -82,4 +93,9 @@ openspec validate --specs --strict
 
 - Feito para uso local por uma pessoa: não há login nem proteção CSRF. Não publique o servidor na internet sem adicionar isso e definir a variável de ambiente `SECRET_KEY`.
 - A anti-repetição vale para o histórico inteiro, independentemente dos filtros usados no sorteio.
-- Estatísticas, modo "Esquecidas", setlist e os extras do plano ficaram para trabalhos futuros (ver [`proposal.md`](openspec/changes/archive/2026-11-22-add-mvp/proposal.md) da mudança arquivada).
+- Modo "Esquecidas", setlist, modo festa, CSV, desafio e player embutido ficaram para trabalhos futuros (ver o `proposal.md` das mudanças em `openspec/changes/`).
+
+## Créditos
+
+- Fontes [Geist e Geist Mono](https://github.com/vercel/geist-font) e [Instrument Serif](https://github.com/Instrument/instrument-serif), sob a SIL Open Font License 1.1, distribuídas pelos pacotes do [Fontsource](https://fontsource.org) (licenças em `shuffle_meu/static/fonts/`).
+- Ícones do [Lucide](https://lucide.dev), licença ISC.

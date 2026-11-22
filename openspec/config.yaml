@@ -1,32 +1,28 @@
 schema: spec-driven
 
-# Project context (optional)
-# Add only constraints that should guide OpenSpec artifacts and workflows.
-# Include constraints an agent cannot infer by reading the code.
-# Keep general project documentation and discoverable codebase facts out.
-# Example:
-#   context: |
-#     Designs and tasks must cover Windows, macOS, and Linux
-#     Write all artifacts in Spanish
+context: |
+  Projeto: "Shuffle Meu", sistema web para cadastrar músicas que o usuário já conhece e sortear qual tocar.
+  Trabalho acadêmico de Engenharia de Software (G2, trio). Apresentação em 24/11/2026: prazo curto.
+  Metodologia obrigatória: OpenSpec. Especificar e documentar antes de programar; o histórico de commits
+  deve mostrar as specs antes do código. Plano completo em docs/plan.md.
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always state what is out of scope
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+  Stack:
+  - Back-end: Python 3 + Flask.
+  - Banco: SQLite, acessado pelo módulo sqlite3 da biblioteca padrão (sem ORM).
+  - Front-end: templates Jinja + HTML/CSS/JS puro (sem React, sem bundler). Interface responsiva (celular).
 
-# Per-operation guidance (optional)
-# Add advisory guidance for how apply and archive work should be conducted.
-# This is separate from artifact rules above.
-# Example:
-#   operations:
-#     apply:
-#       guidance:
-#         - Keep test summaries concise
-#     archive:
-#       guidance:
-#         - Summarize the archive outcome before finishing
+  Convenções:
+  - Código, nomes de tabelas e colunas em português, sem acentos e em snake_case (ex.: artista_id, criado_em).
+  - Mensagens e textos da interface em português (com acentos).
+  - Todos os artefatos OpenSpec escritos em português.
+
+  Restrições:
+  - Preferir simplicidade a abstrações: sem camadas extras, sem ORM, sem dependências além do Flask.
+  - Escopo obrigatório: banco com no mínimo 2 tabelas e CRUD completo (artistas e músicas) da tela ao banco.
+
+rules:
+  specs:
+    - Requisitos usam DEVE / NÃO DEVE e citam o código da regra de negócio (RN01..RN08) quando houver.
+    - Cenários usam GIVEN/WHEN/THEN.
+  tasks:
+    - Tarefas pequenas, ordenadas e verificáveis (cada uma diz como conferir que ficou pronta).

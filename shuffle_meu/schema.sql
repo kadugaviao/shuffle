@@ -14,7 +14,9 @@ CREATE TABLE IF NOT EXISTS musica (
     genero       TEXT,
     humor        TEXT    CHECK (humor IN ('animada', 'calma', 'triste', 'romantica')),
     dificuldade  INTEGER NOT NULL DEFAULT 3 CHECK (dificuldade BETWEEN 1 AND 5),       -- RN03
-    link         TEXT    CHECK (link LIKE 'http://%' OR link LIKE 'https://%'),
+    link         TEXT    CHECK (link LIKE 'http://%' OR link LIKE 'https://%'),            -- "Outro link"
+    youtube      TEXT    CHECK (youtube LIKE 'http://%' OR youtube LIKE 'https://%'),      -- mesma definição de db.COLUNAS_NOVAS
+    spotify      TEXT    CHECK (spotify LIKE 'http://%' OR spotify LIKE 'https://%'),
     favorita     INTEGER NOT NULL DEFAULT 0 CHECK (favorita IN (0, 1)),
     ativa        INTEGER NOT NULL DEFAULT 1 CHECK (ativa IN (0, 1)),
     criado_em    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -31,9 +31,23 @@ def close_db(e=None):
         db.close()
 
 
+# Colunas acrescentadas depois da primeira versão do schema (add-links-por-servico, D2). O schema.sql já as cria
+# em bancos novos; aqui elas chegam a bancos antigos, sem perder dados. Definição igual à do schema.sql.
+COLUNAS_NOVAS = {
+    "youtube": "TEXT CHECK (youtube LIKE 'http://%' OR youtube LIKE 'https://%')",
+    "spotify": "TEXT CHECK (spotify LIKE 'http://%' OR spotify LIKE 'https://%')",
+}
+
+
 def init_db():
+    db = get_db()
     with current_app.open_resource("schema.sql") as f:
-        get_db().executescript(f.read().decode("utf-8"))
+        db.executescript(f.read().decode("utf-8"))
+    existentes = {linha[1] for linha in db.execute("PRAGMA table_info(musica)")}
+    for nome, definicao in COLUNAS_NOVAS.items():
+        if nome not in existentes:  # idempotente: na próxima inicialização não há nada a acrescentar
+            db.execute(f"ALTER TABLE musica ADD COLUMN {nome} {definicao}")  # nomes fixos acima, sem entrada do usuário
+    db.commit()
 
 
 def init_app(app):

@@ -59,7 +59,7 @@ python -m unittest
 
 ## Zerar o banco
 
-Pare o servidor e apague o arquivo `instance/shuffle.db`. Ele é recriado vazio na próxima execução; rode `python seed.py` se quiser os dados de exemplo de novo. O mesmo vale se o `schema.sql` mudar: não há migrações.
+Pare o servidor e apague o arquivo `instance/shuffle.db`. Ele é recriado vazio na próxima execução; rode `python seed.py` se quiser os dados de exemplo de novo. O mesmo vale se o `schema.sql` mudar: não há migrações. A exceção são as colunas de link por serviço (`youtube` e `spotify`): um banco criado antes delas as recebe sozinho, vazias, na próxima vez que o app inicia, sem perder músicas. Recriar o banco pelo seed também funciona e já traz os links verificados.
 
 ## Estrutura
 

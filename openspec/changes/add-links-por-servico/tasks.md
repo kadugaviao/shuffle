@@ -10,8 +10,8 @@ Referências: comportamento nas deltas `specs/musicas/spec.md` e `specs/sorteio/
 
 ## 2. Banco
 
-- [ ] 2.1 Acrescentar `youtube` e `spotify` ao `CREATE TABLE musica` em `schema.sql` e o acréscimo idempotente em `db.init_db()` (D2); verificar com testes: banco novo tem as colunas; banco criado com o schema antigo, com uma música, recebe as colunas vazias sem perder a música (cenário "Banco criado antes dos campos novos"); a segunda inicialização não falha; `CHECK` recusa `javascript:` nas colunas novas
-- [ ] 2.2 Registrar no README (seção "Zerar o banco") que bancos antigos recebem as colunas sozinhos e que recriar pelo seed também vale; suíte verde; commitar o grupo
+- [x] 2.1 Acrescentar `youtube` e `spotify` ao `CREATE TABLE musica` em `schema.sql` e o acréscimo idempotente em `db.init_db()` (D2); verificar com testes: banco novo tem as colunas; banco criado com o schema antigo, com uma música, recebe as colunas vazias sem perder a música (cenário "Banco criado antes dos campos novos"); a segunda inicialização não falha; `CHECK` recusa `javascript:` nas colunas novas
+- [x] 2.2 Registrar no README (seção "Zerar o banco") que bancos antigos recebem as colunas sozinhos e que recriar pelo seed também vale; suíte verde; commitar o grupo
 
 ## 3. Formulário de música
 

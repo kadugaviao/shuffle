@@ -25,17 +25,17 @@ Referências: comportamento nas deltas `specs/musicas/spec.md` e `specs/sorteio/
 
 ## 5. Seed com links verificados
 
-- [ ] 5.1 Criar `tools/verificar_links.py` (D8) e a seção "Comandos úteis" do README com o uso; verificar rodando-o com um vídeo que incorpora (`https://youtu.be/jNQXAC9IVRw`), um que bloqueia (`https://youtu.be/dQw4w9WgXcQ`) e a faixa `https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC`, esperando OK, FALHA e OK, e conferindo que nenhum teste em `tests/` o importa
-- [ ] 5.2 Levantar, para cada uma das 25 músicas do seed, os candidatos de D6 por pesquisa na web, na ordem oficial → outro vídeo do canal oficial (ao vivo, acústico, lyric) → ao vivo/acústico de canal confiável, e a faixa no Spotify, anotando a página de origem de cada candidato; verificar que nenhum ID foi escrito sem ter vindo de uma página encontrada
-- [ ] 5.3 Verificar cada candidato com `tools/verificar_links.py`: YouTube passa só com título e canal esperados no texto do iframe e sem mensagem de erro; Spotify só com título e artista; quando falhar, passar ao próximo candidato da ordem de D6
-- [ ] 5.4 Escrever `docs/links-verificados.md` (música, artista, link do YouTube, canal, tipo de vídeo, incorpora?, motivo quando vazio, link do Spotify, data) com o resultado de 5.3, sem nenhuma linha "sim" que não tenha passado na verificação
-- [ ] 5.5 `seed.py` com `LINKS` e o preenchimento de bancos existentes (D5); verificar com testes: links do seed válidos e presentes como "sim" no `docs/links-verificados.md`; música sem `youtube` com a busca no `link`; segunda execução idempotente; link colado pelo usuário não é sobrescrito; `link` só é limpo quando ainda é a busca gerada pelo seed
-- [ ] 5.6 Rodar `python seed.py` num banco novo e num banco antigo de conferência e abrir no Chrome o resultado de uma música com YouTube e de uma com Spotify, confirmando o player tocando sem erro; suíte verde; commitar o grupo
+- [x] 5.1 Criar `tools/verificar_links.py` (D8) e a seção "Comandos úteis" do README com o uso; verificar rodando-o com um vídeo que incorpora (`https://youtu.be/jNQXAC9IVRw`), um que bloqueia (`https://youtu.be/dQw4w9WgXcQ`) e a faixa `https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC`, esperando OK, FALHA e OK, e conferindo que nenhum teste em `tests/` o importa
+- [x] 5.2 Levantar, para cada uma das 20 músicas do seed (lista nova de D5b), os candidatos de D6 por pesquisa na web, na ordem oficial → outro vídeo do canal oficial (ao vivo, acústico, lyric) → ao vivo/acústico de canal confiável, e a faixa no Spotify, anotando a página de origem de cada candidato; verificar que nenhum ID foi escrito sem ter vindo de uma página encontrada
+- [x] 5.3 Verificar cada candidato com `tools/verificar_links.py`: YouTube passa só com título e canal esperados no texto do iframe e sem mensagem de erro; Spotify só com título e artista; quando falhar, passar ao próximo candidato da ordem de D6
+- [x] 5.4 Escrever `docs/links-verificados.md` (música, artista, link do YouTube, canal, tipo de vídeo, incorpora?, motivo quando vazio, link do Spotify, data) com o resultado de 5.3, sem nenhuma linha "sim" que não tenha passado na verificação
+- [x] 5.5 `seed.py` com a lista nova de músicas, artistas e playlists (D5b), `LINKS` e o preenchimento de bancos existentes (D5); verificar com testes: links do seed válidos e presentes como "sim" no `docs/links-verificados.md`; música sem `youtube` com a busca no `link`; segunda execução idempotente; link colado pelo usuário não é sobrescrito; `link` só é limpo quando ainda é a busca gerada pelo seed
+- [x] 5.6 Rodar `python seed.py` num banco novo e num banco antigo de conferência e abrir no Chrome o resultado de uma música com YouTube e de uma com Spotify, confirmando o player tocando sem erro; suíte verde; commitar o grupo
 
 ## 6. Documentação e integração
 
 - [ ] 6.1 Atualizar o README: três campos de link; botões por link e escolha de player no resultado; o seed já traz links verificados (com link para `docs/links-verificados.md`); remover das limitações a orientação de colar link real para demonstrar, deixando a observação sobre vídeos que bloqueiam incorporação
-- [ ] 6.2 Regenerar os screenshots do resultado (`resultado-celular.webp`, `resultado-desktop.webp`) com uma música do seed que tenha os dois links; verificar abrindo os arquivos
+- [ ] 6.2 Regenerar os 10 screenshots (a lista de músicas do seed mudou), com o resultado de uma música do seed que tenha os dois links; verificar abrindo os arquivos
 - [ ] 6.3 Rodar a suíte, `openspec validate add-links-por-servico --strict` e `openspec validate --all --strict`; verificar que tudo passa e que nenhum servidor ficou rodando; commitar o grupo
 
 ## Workflow follow-up

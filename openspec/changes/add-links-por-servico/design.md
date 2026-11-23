@@ -75,6 +75,14 @@ Motivação em `proposal.md`; comportamento nas deltas de `musicas` e `sorteio`.
   - O `link` só é limpo quando o seed preencheu o `youtube` **e** o `link` ainda é exatamente a busca que o próprio seed gerou. Um link editado pelo usuário nunca é apagado.
 - O seed continua idempotente e o teste de não sobrescrever ganha um caso para os links.
 
+### D5b. Músicas do seed (trocadas durante a implementação)
+
+A pedido do trio, o seed passa a ter estas 18 músicas, em 6 gêneros: rock ("Here Comes the Sun", "Sweet Child O' Mine", "Back in Black"), rock brasileiro ("Bete Balanço", "Tempo Perdido", "Sonífera Ilha"), metal ("Creeping Death", "Sonne", "Nightmare"), samba ("Trem das Onze", "Mina do Condomínio", "Canta, Canta, Minha Gente"), sertanejo ("Evidências", "Boate Azul", "É o Amor") e MPB ("Descobridor dos Sete Mares", "Construção", "Samurai").
+
+- Os filtros continuam cobertos: os 4 humores, dificuldades de 1 a 5, pelo menos 4 favoritas e 1 inativa. Como só "Here Comes the Sun" seria "calma", entram mais duas calmas de bandas já presentes: "Nothing Else Matters" (Metallica) e "Patience" (Guns N' Roses). "Patience" é a inativa, para que todas as músicas pedidas participem do sorteio. Total: 20 músicas, 18 artistas.
+- As playlists "Roda de violão" e "Churrasco" continuam, com 8 músicas cada, escolhidas da lista nova.
+- `test_seed.py` atualiza as contagens (18 artistas, 20 músicas, 16 vínculos) e os títulos usados nos casos de edição.
+
 ### D6. Como os links do seed são encontrados e verificados
 
 Durante a implementação, nunca no app:

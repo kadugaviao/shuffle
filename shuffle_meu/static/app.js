@@ -95,5 +95,20 @@ document.addEventListener("change", (evento) => {
   if (form && ultimoPeloPonteiro && evento.target.matches("input[type=radio], input[type=checkbox]")) form.requestSubmit();
 });
 
+// Player embutido (add-player-embutido, D2): o iframe fica num <template> inerte e só é criado no clique,
+// então abrir o resultado não faz nenhuma requisição a YouTube ou Spotify. Sem JS fica só o "Abrir link".
+function iniciarPlayer() {
+  const botao = document.querySelector("[data-ouvir]");
+  if (!botao) return;
+  botao.hidden = false;
+  botao.addEventListener("click", () => {
+    const bloco = document.querySelector("[data-player]");
+    bloco.append(document.querySelector("[data-player-modelo]").content.cloneNode(true));
+    botao.hidden = true;
+    bloco.querySelector("iframe").focus();
+  }, { once: true });
+}
+
 iniciarToasts();
 iniciarRoleta();
+iniciarPlayer();

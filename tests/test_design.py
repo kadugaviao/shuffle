@@ -11,7 +11,7 @@ PACOTE = Path(__file__).resolve().parent.parent / "shuffle_meu"
 FAMILIAS = {"Big Shoulders Display", "Archivo", "IBM Plex Mono"}
 
 ICONES = ("dado", "shuffle", "musica", "microfone", "lista", "historico", "coracao", "estrela", "check", "pular",
-          "fechar", "mais", "lapis", "lixeira", "busca", "link", "alerta", "grafico")
+          "fechar", "mais", "lapis", "lixeira", "busca", "link", "alerta", "grafico", "fone")
 
 
 class TestFiltros(unittest.TestCase):

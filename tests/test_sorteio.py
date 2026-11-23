@@ -1,5 +1,6 @@
 import json
 import random
+import re
 import time
 import unittest
 
@@ -41,6 +42,44 @@ class TestPlayer(unittest.TestCase):
                      f"https://spotify.com/track/{SP}", "https://www.cifraclub.com.br/legiao-urbana/tempo-perdido/"):
             with self.subTest(link=link):
                 self.assertIsNone(player(link))
+
+
+class TestPlayerNaTela(BaseTest):
+    def tela(self, link, titulo="Tempo Perdido"):
+        return self.texto(self.client.get(f"/sorteios/{self.sorteio(self.musica(titulo, link=link))}"))
+
+    def assertSoNoTemplate(self, html, src):
+        self.assertEqual(html.count(src), 1)
+        self.assertLess(html.index("<template data-player-modelo>"), html.index(src))
+        self.assertLess(html.index(src), html.index("</template>"))
+        self.assertEqual(html.count("<iframe"), 1)  # só o do template, inerte
+
+    def test_video_do_youtube(self):
+        html = self.tela(f"https://music.youtube.com/watch?v={YT}")
+        self.assertIn("Ouvir aqui</button>", html)
+        self.assertIn("data-ouvir hidden>", html)  # sem JS não há botão morto
+        self.assertSoNoTemplate(html, f'src="https://www.youtube-nocookie.com/embed/{YT}?autoplay=1"')
+        self.assertIn('title="Player do YouTube: Tempo Perdido"', html)
+        self.assertIn("Abrir link", html)
+
+    def test_faixa_do_spotify(self):
+        html = self.tela(f"https://open.spotify.com/intl-pt/track/{SP}?si=abc")
+        self.assertSoNoTemplate(html, f'src="https://open.spotify.com/embed/track/{SP}"')
+        self.assertIn("Abrir link", html)
+
+    def test_link_sem_player(self):
+        html = self.tela("https://www.youtube.com/results?search_query=tempo+perdido")
+        self.assertNotIn("Ouvir aqui", html)
+        self.assertNotIn("<template", html)
+        self.assertIn("Abrir link", html)
+
+    def test_links_maliciosos_nao_viram_player(self):
+        for i, link in enumerate((f"https://youtube.com.exemplo.net/watch?v={YT}", 'https://youtu.be/abc"onload=x')):
+            with self.subTest(link=link):
+                html = self.tela(link, titulo=f"Música {i}")
+                self.assertNotIn("Ouvir aqui", html)
+                self.assertNotIn("<iframe", html)
+                self.assertFalse(any("exemplo.net" in v or "onload" in v for v in re.findall(r'src="([^"]*)"', html)))
 
 
 def c(id, favorita=0):

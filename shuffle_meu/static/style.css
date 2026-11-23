@@ -518,6 +518,13 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .resultado .artista { font-size: var(--t-20); color: var(--tinta-2); }
 .acoes-resultado { margin-top: var(--espaco-2); }
 .avaliacao { display: grid; gap: var(--espaco-1); }
+
+/* Player embutido: bloco com borda de tinta, raio 0; vazio até o clique em "Ouvir aqui" */
+.player { width: 100%; max-width: 40rem; border: var(--regua); background: var(--papel); }
+.player:empty { display: none; }
+.player iframe { display: block; width: 100%; border: 0; }
+.player-youtube iframe { aspect-ratio: 16 / 9; height: auto; }
+.player-spotify iframe { height: 152px; }
 .avaliacao .rotulo { display: block; }
 
 /* Carimbo: vermelho "Toca essa!" ou verde "Tocada"; sempre texto grande (D4) */

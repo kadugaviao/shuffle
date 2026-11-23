@@ -141,4 +141,5 @@ def resultado(id):
             "SELECT titulo FROM musica WHERE ativa = 1 AND id != ? ORDER BY RANDOM() LIMIT 12", (s["musica_id"],))]
         roleta.append(s["titulo"])  # o rolo para sempre na música sorteada
     return render_template("sorteio/resultado.html", s=s, f=filtros, n=n, qs=dict(filtros, n=n), roleta=roleta,
+                           player=player(s["link"]),
                            entrar_estrelas=session.pop("tocou", None) == id)

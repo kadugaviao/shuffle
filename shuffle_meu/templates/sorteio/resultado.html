@@ -16,16 +16,23 @@
       <p class="carimbo{% if s.tocada %} carimbo-tocada{% endif %}" aria-hidden="true">{{ "Tocada" if s.tocada else "Toca essa!" }}</p>
     </div>
     <p class="artista">{{ s.artista }}</p>
-    {% if s.link %}
+    {% set nova_aba %}<span class="visualmente-oculto"> (abre em nova aba)</span>{% endset %}
+    {% if s.youtube or s.spotify or s.link %}
     <div class="botoes">
-      {% if player %}<button type="button" data-ouvir hidden>{{ icone("fone") }}Ouvir aqui</button>{% endif %}
-      <a class="botao" href="{{ s.link }}" target="_blank" rel="noopener noreferrer">{{ icone("link") }}Abrir link<span class="visualmente-oculto"> (abre em nova aba)</span></a>
+      {% for p in players %}
+      <button type="button" data-ouvir="{{ p.chave }}" hidden>{{ icone("fone") }}{{ "Ouvir aqui" if players|length == 1 else "Ouvir no " ~ p.servico }}</button>
+      {% endfor %}
+      {% if s.youtube %}<a class="botao" href="{{ s.youtube }}" target="_blank" rel="noopener noreferrer">{{ icone("link") }}Abrir no YouTube{{ nova_aba }}</a>{% endif %}
+      {% if s.spotify %}<a class="botao" href="{{ s.spotify }}" target="_blank" rel="noopener noreferrer">{{ icone("link") }}Abrir no Spotify{{ nova_aba }}</a>{% endif %}
+      {% if s.link %}<a class="botao" href="{{ s.link }}" target="_blank" rel="noopener noreferrer">{{ icone("link") }}Abrir link{{ nova_aba }}</a>{% endif %}
     </div>
-    {% if player %}
-    {# Inerte até o clique em "Ouvir aqui" (design D2): nada de YouTube/Spotify carrega ao abrir a tela. #}
-    <div class="player player-{{ player.servico|lower }}" data-player></div>
-    <template data-player-modelo><iframe src="{{ player.src }}" title="Player do {{ player.servico }}: {{ s.titulo }}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></template>
     {% endif %}
+    {% if players %}
+    {# Inertes até o clique num botão de ouvir: nada de YouTube/Spotify carrega ao abrir a tela; um player por vez. #}
+    <div class="player" data-player></div>
+    {% for p in players %}
+    <template data-player-modelo="{{ p.chave }}"><iframe class="player-{{ p.chave }}" src="{{ p.src }}" title="Player do {{ p.servico }}: {{ s.titulo }}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></template>
+    {% endfor %}
     {% endif %}
 
     <div class="botoes acoes-resultado">

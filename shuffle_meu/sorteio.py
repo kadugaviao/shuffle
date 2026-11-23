@@ -93,7 +93,7 @@ def sortear():
 def resultado(id):
     db = get_db()
     s = db.execute(
-        "SELECT s.*, m.titulo, m.link, a.nome AS artista FROM sorteio s"
+        "SELECT s.*, m.titulo, m.link, m.youtube, m.spotify, a.nome AS artista FROM sorteio s"
         " JOIN musica m ON m.id = s.musica_id JOIN artista a ON a.id = m.artista_id WHERE s.id = ?",
         (id,),
     ).fetchone()
@@ -106,5 +106,5 @@ def resultado(id):
             "SELECT titulo FROM musica WHERE ativa = 1 AND id != ? ORDER BY RANDOM() LIMIT 12", (s["musica_id"],))]
         roleta.append(s["titulo"])  # o rolo para sempre na música sorteada
     return render_template("sorteio/resultado.html", s=s, f=filtros, n=n, qs=dict(filtros, n=n), roleta=roleta,
-                           player=next(iter(players(s["link"], s["link"])), None),  # até o grupo 4: um campo só
+                           players=players(s["youtube"], s["spotify"]),  # o "Outro link" nunca vira player
                            entrar_estrelas=session.pop("tocou", None) == id)

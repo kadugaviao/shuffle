@@ -523,8 +523,8 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .player { width: 100%; max-width: 40rem; border: var(--regua); background: var(--papel); }
 .player:empty { display: none; }
 .player iframe { display: block; width: 100%; border: 0; }
-.player-youtube iframe { aspect-ratio: 16 / 9; height: auto; }
-.player-spotify iframe { height: 152px; }
+.player iframe.player-youtube { aspect-ratio: 16 / 9; height: auto; }
+.player iframe.player-spotify { height: 152px; }
 .avaliacao .rotulo { display: block; }
 
 /* Carimbo: vermelho "Toca essa!" ou verde "Tocada"; sempre texto grande (D4) */

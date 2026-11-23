@@ -95,18 +95,21 @@ document.addEventListener("change", (evento) => {
   if (form && ultimoPeloPonteiro && evento.target.matches("input[type=radio], input[type=checkbox]")) form.requestSubmit();
 });
 
-// Player embutido (add-player-embutido, D2): o iframe fica num <template> inerte e só é criado no clique,
-// então abrir o resultado não faz nenhuma requisição a YouTube ou Spotify. Sem JS fica só o "Abrir link".
+// Player embutido (add-player-embutido D2, add-links-por-servico D4): cada iframe fica num <template> inerte e só
+// é criado no clique, então abrir o resultado não faz requisição a YouTube ou Spotify. Um player por vez: o outro
+// botão de ouvir substitui o player atual. Sem JS ficam só os botões de abrir.
 function iniciarPlayer() {
-  const botao = document.querySelector("[data-ouvir]");
-  if (!botao) return;
-  botao.hidden = false;
-  botao.addEventListener("click", () => {
-    const bloco = document.querySelector("[data-player]");
-    bloco.append(document.querySelector("[data-player-modelo]").content.cloneNode(true));
-    botao.hidden = true;
-    bloco.querySelector("iframe").focus();
-  }, { once: true });
+  const botoes = document.querySelectorAll("[data-ouvir]");
+  const bloco = document.querySelector("[data-player]");
+  for (const botao of botoes) {
+    botao.hidden = false;
+    botao.addEventListener("click", () => {
+      const modelo = document.querySelector(`[data-player-modelo="${botao.dataset.ouvir}"]`);
+      bloco.replaceChildren(modelo.content.cloneNode(true));
+      for (const outro of botoes) outro.hidden = outro === botao;
+      bloco.querySelector("iframe").focus();
+    });
+  }
 }
 
 iniciarToasts();

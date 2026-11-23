@@ -20,8 +20,8 @@ Referências: comportamento nas deltas `specs/musicas/spec.md` e `specs/sorteio/
 
 ## 4. Resultado do sorteio
 
-- [ ] 4.1 Rota e `sorteio/resultado.html` com os botões por link e um `<template>` por player (D4); verificar com testes: 0, 1 e 2 players (rótulos "Ouvir aqui" / "Ouvir no YouTube" / "Ouvir no Spotify"), botões "Abrir no YouTube", "Abrir no Spotify" e "Abrir link" só para campos preenchidos, nenhum iframe fora de `<template>`, cenários "Vídeo no outro link" e "ID com caracteres inválidos" (valor gravado direto no banco), e `test_atributos_do_iframe` para os dois serviços
-- [ ] 4.2 `app.js` (`iniciarPlayer` com troca de player) e CSS; verificar no Chrome via DevTools Protocol com uma música de teste do banco de conferência que tenha os dois links: abrir o resultado gera zero requisições a YouTube ou Spotify; "Ouvir no Spotify" carrega o Spotify; "Ouvir no YouTube" depois troca pelo YouTube e o botão do Spotify volta; foco no player; a 360 px sem rolagem horizontal; suíte verde; commitar o grupo
+- [x] 4.1 Rota e `sorteio/resultado.html` com os botões por link e um `<template>` por player (D4); verificar com testes: 0, 1 e 2 players (rótulos "Ouvir aqui" / "Ouvir no YouTube" / "Ouvir no Spotify"), botões "Abrir no YouTube", "Abrir no Spotify" e "Abrir link" só para campos preenchidos, nenhum iframe fora de `<template>`, cenários "Vídeo no outro link" e "ID com caracteres inválidos" (valor gravado direto no banco), e `test_atributos_do_iframe` para os dois serviços
+- [x] 4.2 `app.js` (`iniciarPlayer` com troca de player) e CSS; verificar no Chrome via DevTools Protocol com uma música de teste do banco de conferência que tenha os dois links: abrir o resultado gera zero requisições a YouTube ou Spotify; "Ouvir no Spotify" carrega o Spotify; "Ouvir no YouTube" depois troca pelo YouTube e o botão do Spotify volta; foco no player; a 360 px sem rolagem horizontal; suíte verde; commitar o grupo
 
 ## 5. Seed com links verificados
 

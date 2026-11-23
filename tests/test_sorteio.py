@@ -12,35 +12,52 @@ SP = "4uLU6hMCjMI75M1A2tKUQC"
 
 
 class TestPlayerNaTela(BaseTest):
-    def tela(self, link, titulo="Tempo Perdido"):
-        return self.texto(self.client.get(f"/sorteios/{self.sorteio(self.musica(titulo, link=link))}"))
+    """Cenários de "Player embutido no resultado" e "Validação estrita do link do player" (delta de sorteio)."""
 
-    def assertSoNoTemplate(self, html, src):
-        self.assertEqual(html.count(src), 1)
-        self.assertLess(html.index("<template data-player-modelo>"), html.index(src))
-        self.assertLess(html.index(src), html.index("</template>"))
-        self.assertEqual(html.count("<iframe"), 1)  # só o do template, inerte
+    def tela(self, titulo="Tempo Perdido", **links):
+        return self.texto(self.client.get(f"/sorteios/{self.sorteio(self.musica(titulo, **links))}"))
+
+    def assertIframesSoNoTemplate(self, html, quantos):
+        self.assertEqual(html.count("<iframe"), quantos)
+        fora = re.sub(r"<template data-player-modelo=.*?</template>", "", html, flags=re.S)
+        self.assertNotIn("<iframe", fora)  # inertes até o clique
 
     def test_video_do_youtube(self):
-        html = self.tela(f"https://music.youtube.com/watch?v={YT}")
+        html = self.tela(youtube=f"https://music.youtube.com/watch?v={YT}")
+        self.assertIn('<button type="button" data-ouvir="youtube" hidden>', html)  # sem JS não há botão morto
         self.assertIn("Ouvir aqui</button>", html)
-        self.assertIn("data-ouvir hidden>", html)  # sem JS não há botão morto
-        self.assertSoNoTemplate(html, f'src="https://www.youtube-nocookie.com/embed/{YT}?autoplay=1"')
+        self.assertIn(f'src="https://www.youtube-nocookie.com/embed/{YT}?autoplay=1"', html)
+        self.assertIframesSoNoTemplate(html, 1)
         self.assertIn('title="Player do YouTube: Tempo Perdido"', html)
-        self.assertIn("Abrir link", html)
+        self.assertIn("Abrir no YouTube", html)
+        self.assertNotIn("Abrir no Spotify", html)
+        self.assertNotIn("Abrir link<", html)
 
     def test_faixa_do_spotify(self):
-        html = self.tela(f"https://open.spotify.com/intl-pt/track/{SP}?si=abc")
-        self.assertSoNoTemplate(html, f'src="https://open.spotify.com/embed/track/{SP}"')
-        self.assertIn("Abrir link", html)
+        html = self.tela(spotify=f"https://open.spotify.com/intl-pt/track/{SP}?si=abc")
+        self.assertIn('data-ouvir="spotify"', html)
+        self.assertIn("Ouvir aqui</button>", html)
+        self.assertIn(f'src="https://open.spotify.com/embed/track/{SP}"', html)
+        self.assertIframesSoNoTemplate(html, 1)
+        self.assertIn("Abrir no Spotify", html)
+
+    def test_youtube_e_spotify(self):
+        html = self.tela(youtube=f"https://youtu.be/{YT}", spotify=f"https://open.spotify.com/track/{SP}",
+                         link="https://www.cifraclub.com.br/legiao-urbana/tempo-perdido/")
+        for texto in ("Ouvir no YouTube</button>", "Ouvir no Spotify</button>", "Abrir no YouTube", "Abrir no Spotify", "Abrir link<"):
+            self.assertIn(texto, html)
+        self.assertNotIn("Ouvir aqui", html)
+        self.assertLess(html.index('data-ouvir="youtube"'), html.index('data-ouvir="spotify"'))  # YouTube primeiro
+        self.assertIframesSoNoTemplate(html, 2)
 
     def test_atributos_do_iframe(self):
         # O YouTube exige o Referer (sem ele: "Error 153"); strict-origin-when-cross-origin manda só a origem.
-        for i, (link, src) in enumerate(((f"https://youtu.be/{YT}", f"https://www.youtube-nocookie.com/embed/{YT}?autoplay=1"),
-                                         (f"https://open.spotify.com/track/{SP}", f"https://open.spotify.com/embed/track/{SP}"))):
-            with self.subTest(link=link):
-                html = self.tela(link, titulo=f"Faixa {i}")
-                iframe = re.search(r"<iframe [^>]*>", html).group(0)
+        html = self.tela(youtube=f"https://youtu.be/{YT}", spotify=f"https://open.spotify.com/track/{SP}")
+        iframes = re.findall(r"<iframe [^>]*>", html)
+        srcs = (f"https://www.youtube-nocookie.com/embed/{YT}?autoplay=1", f"https://open.spotify.com/embed/track/{SP}")
+        self.assertEqual(len(iframes), 2)
+        for iframe, src in zip(iframes, srcs):
+            with self.subTest(src=src):
                 self.assertIn(f'src="{src}"', iframe)
                 self.assertIn('referrerpolicy="strict-origin-when-cross-origin"', iframe)
                 self.assertIn('allow="autoplay; encrypted-media; picture-in-picture; fullscreen"', iframe)
@@ -49,16 +66,30 @@ class TestPlayerNaTela(BaseTest):
                 self.assertNotIn("no-referrer", iframe)
 
     def test_link_sem_player(self):
-        html = self.tela("https://www.youtube.com/results?search_query=tempo+perdido")
-        self.assertNotIn("Ouvir aqui", html)
+        html = self.tela(link="https://www.youtube.com/results?search_query=tempo+perdido")
+        self.assertNotIn("data-ouvir", html)
         self.assertNotIn("<template", html)
-        self.assertIn("Abrir link", html)
+        self.assertIn("Abrir link<", html)
+
+    def test_video_no_outro_link(self):
+        html = self.tela(link=f"https://www.youtube.com/watch?v={YT}")
+        self.assertNotIn("data-ouvir", html)
+        self.assertNotIn("<iframe", html)
+        self.assertIn("Abrir link<", html)
+
+    def test_sem_links(self):
+        html = self.tela()
+        self.assertNotIn("Abrir", html)
+        self.assertNotIn("data-ouvir", html)
 
     def test_links_maliciosos_nao_viram_player(self):
-        for i, link in enumerate((f"https://youtube.com.exemplo.net/watch?v={YT}", 'https://youtu.be/abc"onload=x')):
-            with self.subTest(link=link):
-                html = self.tela(link, titulo=f"Música {i}")
-                self.assertNotIn("Ouvir aqui", html)
+        casos = ({"link": f"https://youtube.com.exemplo.net/watch?v={YT}"},
+                 {"youtube": 'https://youtu.be/abc"onload=x'},  # gravado direto no banco, sem passar pelo formulário
+                 {"spotify": "https://open.spotify.com.exemplo.net/track/" + SP})
+        for i, links in enumerate(casos):
+            with self.subTest(links=links):
+                html = self.tela(titulo=f"Música {i}", **links)
+                self.assertNotIn("data-ouvir", html)
                 self.assertNotIn("<iframe", html)
                 self.assertFalse(any("exemplo.net" in v or "onload" in v for v in re.findall(r'src="([^"]*)"', html)))
 

@@ -15,7 +15,7 @@
     <div class="linha-info">
       <strong>{{ a.nome }}</strong>
       <p class="meta">{{ a.pais or "País não informado" }}</p>
-      <p class="meta"><span class="numero">{{ a.total }}</span> música(s)</p>
+      <p class="meta"><span class="numero">{{ a.total }}</span> {{ (a.total)|plural("música", "músicas") }}</p>
     </div>
     <div class="acoes">
       <a class="botao botao-icone" href="{{ url_for('artistas.editar', id=a.id) }}" aria-label="Editar {{ a.nome }}">{{ icone("lapis") }}</a>

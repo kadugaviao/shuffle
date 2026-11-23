@@ -12,11 +12,11 @@ Referências: achados em `docs/revisao-final.md` (IDs entre parênteses), compor
 
 ## 2. Outras telas (D6–D9, D12, D13, D15, B1, S1, S3)
 
-- [ ] 2.1 Teste e cenário do filtro por gênero no sorteio (S1): "ROCK" traz só a música de rock; verificar que passa (o comportamento já existe; o teste trava o requisito)
-- [ ] 2.2 Teste de remover música fora da playlist (B1), conferido falhando; corrigir `playlists.remover()` com `rowcount` (D5); verificar que passa
-- [ ] 2.3 Testes do repertório vazio (D15) e do plural (D12), conferidos falhando; implementar o "Caderno em branco" sem filtros e o filtro `plural` nas 4 contagens, ajustando os testes que conferiam "música(s)"; verificar que passam
-- [ ] 2.4 Início: linha compacta "Última sorteada" abaixo do "Sortear" abaixo de 960 px (D6); hover do "Sortear" (D7); verificar a 360 px que a linha aparece sem rolar e a 1440 px que só a folha da direita aparece
-- [ ] 2.5 Repertório: dificuldade no início de `.musica-acoes` (D8); aba atual com rótulo amarelo (D9); ícone `dado` no CTA do histórico vazio (D13); ajustes de base 4 (D10); verificar a 360 px que todas as linhas do repertório têm a mesma estrutura, e que os testes anti-slop e de contraste continuam passando; suíte verde; commitar o grupo
+- [x] 2.1 Teste e cenário do filtro por gênero no sorteio (S1): "ROCK" traz só a música de rock; verificar que passa (o comportamento já existe; o teste trava o requisito)
+- [x] 2.2 Teste de remover música fora da playlist (B1), conferido falhando; corrigir `playlists.remover()` com `rowcount` (D5); verificar que passa
+- [x] 2.3 Testes do repertório vazio (D15) e do plural (D12), conferidos falhando; implementar o "Caderno em branco" sem filtros e o filtro `plural` nas 4 contagens, ajustando os testes que conferiam "música(s)"; verificar que passam
+- [x] 2.4 Início: linha compacta "Última sorteada" abaixo do "Sortear" abaixo de 960 px (D6); hover do "Sortear" (D7); verificar a 360 px que a linha aparece sem rolar e a 1440 px que só a folha da direita aparece
+- [x] 2.5 Repertório: dificuldade na linha do artista (D8); aba atual com rótulo amarelo (D9); ícone `dado` no CTA do histórico vazio (D13); ajustes de base 4 (D10); verificar a 360 px que todas as linhas do repertório têm a mesma estrutura, e que os testes anti-slop e de contraste continuam passando; suíte verde; commitar o grupo
 
 ## 3. Formulários e acessibilidade (A1–A3, A5, A6, SEG1)
 

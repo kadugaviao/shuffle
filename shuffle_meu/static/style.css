@@ -235,7 +235,7 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   box-shadow: var(--impressao);
   transition: transform var(--rapido) ease-out, box-shadow var(--rapido) ease-out;
 }
-.sortear:hover { background: var(--vermelho); }
+.sortear:hover { background: var(--vermelho); text-decoration: underline 4px; text-underline-offset: 8px; }
 .sortear:active { transform: translate(2px, 2px); box-shadow: none; }
 @media (min-width: 720px) { .sortear { min-height: 128px; font-size: var(--t-72); } }
 
@@ -293,7 +293,7 @@ label.chip { position: relative; display: inline-flex; cursor: pointer; }
   justify-content: center;
   min-width: 40px; /* 44 de altura; 40 de largura cabe Qualquer + 1–5 numa linha a 360 px */
   min-height: 44px;
-  padding: 0 14px;
+  padding: 0 var(--espaco-3);
   font-size: var(--t-16);
   font-weight: 600;
   font-stretch: condensed;
@@ -302,7 +302,7 @@ label.chip { position: relative; display: inline-flex; cursor: pointer; }
 }
 .chip:hover span { background: var(--papel-2); }
 .chip input:checked + span { background: var(--amarelo); } /* sem trocar o peso: não muda a largura nem quebra a linha */
-.chip input:checked + span::before { content: ""; position: absolute; top: 5px; left: 5px; width: 6px; height: 6px; background: var(--tinta); } /* estado sem depender de cor, sem mudar a largura */
+.chip input:checked + span::before { content: ""; position: absolute; top: var(--espaco-1); left: var(--espaco-1); width: 8px; height: 8px; background: var(--tinta); } /* estado sem depender de cor, sem mudar a largura */
 .chip input:focus-visible + span { outline: 3px solid var(--tinta); outline-offset: 2px; }
 
 /* Seletor segmentado (dificuldade 1–5 no formulário): quadrados colados */
@@ -352,7 +352,7 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .linha-info strong, .linha-titulo { font-size: var(--t-20); font-weight: 700; }
 .linha-lado { display: grid; justify-items: end; gap: var(--espaco-1); text-align: right; }
 .linha-lado .etiquetas { justify-content: flex-end; }
-@media (max-width: 719px) { .linha-cartao:has(.linha-lado) { flex-wrap: wrap; row-gap: var(--espaco-1); } .linha-lado { flex-basis: 100%; justify-items: start; padding-left: 64px; text-align: left; } .linha-lado .etiquetas { justify-content: flex-start; } }
+@media (max-width: 719px) { .linha-cartao:has(.linha-lado) { flex-wrap: wrap; row-gap: var(--espaco-1); } .linha-lado { flex-basis: 100%; justify-items: start; padding-left: calc(48px + var(--espaco-4)); text-align: left; } /* alinha com o texto, depois do ícone de 48 px */ .linha-lado .etiquetas { justify-content: flex-start; } }
 .linha-titulo { text-decoration: none; }
 .linha-titulo:hover { text-decoration: underline; }
 .icone-playlist { display: grid; place-items: center; flex: none; width: 48px; aspect-ratio: 1; color: var(--papel); background: var(--tinta); }
@@ -384,7 +384,7 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 /* Etiquetas: texto pequeno em caixa alta, borda fina, sem fundo */
 .etiquetas { display: flex; flex-wrap: wrap; align-items: center; gap: var(--espaco-2); }
 .etiqueta {
-  padding: 0 6px;
+  padding: 0 var(--espaco-2);
   font-size: var(--t-14);
   font-weight: 700;
   font-stretch: condensed;
@@ -455,15 +455,18 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .hero { font-size: var(--t-72); line-height: 1.05; text-wrap: initial; }
 @media (min-width: 720px) { .hero { font-size: var(--t-120); } }
 .inicio-principal .sortear { margin-bottom: var(--espaco-6); }
-.inicio-lado { margin-top: var(--espaco-7); }
 .ultima { display: grid; justify-items: start; gap: var(--espaco-3); }
 .ultima p + p { margin-top: 0; }
 .ultima-titulo { font-size: var(--t-20); font-weight: 700; overflow-wrap: anywhere; }
 .ultima-vazia { display: none; } /* só equilibra as duas colunas; no celular seria rolagem à toa */
+/* Abaixo de 960 px a folha ficaria depois de todos os filtros: no lugar dela, uma linha logo abaixo do Sortear */
+.ultima-compacta { margin: calc(var(--espaco-4) - var(--espaco-6)) 0 var(--espaco-6); overflow-wrap: anywhere; }
+@media (max-width: 959px) { .inicio-lado { display: none; } }
 @media (min-width: 960px) {
   .inicio { display: grid; grid-template-columns: minmax(0, 1fr) 20rem; gap: var(--espaco-7); align-items: start; }
   .inicio-lado { position: sticky; top: 88px; margin-top: var(--espaco-3); }
   .ultima-vazia { display: grid; }
+  .ultima-compacta { display: none; }
 }
 
 .formulario { max-width: 40rem; }
@@ -497,6 +500,7 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .musica-cartao > .etiquetas { grid-column: 3; }
 .musica-acoes { grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: var(--espaco-1); }
 .musica-acoes form { margin: 0; }
+.musica-artista { display: flex; flex-wrap: wrap; align-items: center; gap: var(--espaco-1) var(--espaco-3); } /* dificuldade ao lado do artista: posição fixa, não depende das etiquetas */
 @media (min-width: 960px) {
   .musica-cartao { grid-template-columns: 2.5ch 48px minmax(0, 1fr) minmax(0, 18rem) auto; }
   .musica-cartao > .etiquetas, .musica-acoes { grid-column: auto; }
@@ -670,7 +674,7 @@ ol.barras li:first-child .barra span { background: var(--vermelho); }
 }
 .aba .icone { width: 24px; height: 24px; }
 .aba:hover { text-decoration: underline; }
-.aba[aria-current="page"] { font-weight: 700; }
+.aba[aria-current="page"] { font-weight: 700; color: var(--amarelo); } /* além da régua: amarelo sobre tinta, 12,8:1 */
 .aba[aria-current="page"]::before {
   content: "";
   position: absolute;

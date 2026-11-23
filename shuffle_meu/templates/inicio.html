@@ -14,6 +14,7 @@
   <form class="inicio-principal" method="post" action="{{ url_for('sorteio.sortear') }}">
     <h1 class="hero">Qual<br> vai ser?</h1>
     <button class="primario sortear">Sortear</button>
+    {% if ultimo %}<p class="ultima-compacta meta">Última sorteada: {{ ultimo.titulo }} — {{ ultimo.artista }}</p>{% endif %}
     <div class="cartao campos filtros">
       {{ chips("humor", "Humor", HUMORES.items(), f.humor, "Todos") }}
       {{ chips("dificuldade_max", "Dificuldade máxima", [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], f.dificuldade_max, "Qualquer") }}

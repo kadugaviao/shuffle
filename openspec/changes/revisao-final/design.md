@@ -75,9 +75,9 @@ Motivação e itens em `proposal.md`; achados com IDs, reprodução e severidade
 
 - **Início no celular (D6):** `<p class="ultima-compacta meta">` logo abaixo do "Sortear", com o mesmo texto "Última sorteada: título — artista". Visível abaixo de 960 px; a folha da coluna direita aparece só a partir de 960 px. A spec de histórico continua atendida em qualquer largura.
 - **Hover do "Sortear" (D7):** `text-decoration: underline 4px; text-underline-offset: 8px`, instantâneo, como os outros primários.
-- **Dificuldade no repertório (D8):** sai de `.etiquetas` e vai para o início de `.musica-acoes`, antes do coração. Assim cada linha tem sempre 3 faixas no celular, e o desktop mantém a ordem visual.
+- **Dificuldade no repertório (D8):** sai de `.etiquetas` e vai para a linha do artista, em `.musica-info`. Na linha das ações não cabe: a 360 px ela já ocupa 303 de 312 px. Assim a dificuldade fica sempre no mesmo lugar, sem depender da largura das etiquetas.
 - **Aba atual (D9):** além da régua vermelha, o rótulo fica em `--amarelo` (amarelo sobre tinta: 12,8:1).
-- **Plural (D12):** filtro Jinja `plural(n, "música", "músicas")` em `__init__.py`, que devolve "1 música" ou "8 músicas" com o número em `<span class="numero">`. Usado nas 4 contagens; a mensagem de exclusão de artista não muda.
+- **Plural (D12):** filtro Jinja `n|plural("música", "músicas")` em `__init__.py`, que devolve a palavra certa para o número; o número continua em `<span class="numero">`. Usado nas 4 contagens; a mensagem de exclusão de artista não muda.
 - **Histórico vazio (D13):** o CTA "Que tal sortear agora?" usa o ícone `dado`. O macro `vazio()` ganha o parâmetro `icone_cta` (padrão `mais`).
 - **Repertório vazio (D15):** com zero músicas e sem busca ou filtro, o template renderiza só o cabeçalho e `vazio("Caderno em branco", "Anota a primeira que você sabe tocar.", …, "Nova música")`, sem o formulário de busca e filtros. O caso "busca sem resultado" continua "Nenhuma música encontrada.".
 - **Base 4 (D10):** chip com `padding: 0 var(--espaco-3)`, etiqueta com `padding: 0 var(--espaco-2)`, marca do chip com 4 px de afastamento e `.linha-lado` com `padding-left` derivado de `calc(48px + var(--espaco-4))`. O teste anti-slop não muda.

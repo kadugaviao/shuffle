@@ -46,10 +46,10 @@ id="campo-{{ nome }}"{% if erros and erros.get(nome) %} aria-invalid="true" aria
 {%- endmacro %}
 
 {# Estado vazio: a tipografia faz o trabalho; título, frase e, opcionalmente, o botão primário. #}
-{% macro vazio(titulo, texto, cta_url=none, cta_texto=none) -%}
+{% macro vazio(titulo, texto, cta_url=none, cta_texto=none, icone_cta="mais") -%}
 <div class="estado-vazio">
   <h2>{{ titulo }}</h2>
   {% if texto %}<p>{{ texto }}</p>{% endif %}
-  {% if cta_url %}<a class="botao primario" href="{{ cta_url }}">{{ icone("mais") }}{{ cta_texto }}</a>{% endif %}
+  {% if cta_url %}<a class="botao primario" href="{{ cta_url }}">{{ icone(icone_cta) }}{{ cta_texto }}</a>{% endif %}
 </div>
 {%- endmacro %}

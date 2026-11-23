@@ -23,7 +23,7 @@
     <div class="linha-info">
       <a class="linha-titulo" href="{{ url_for('playlists.detalhe', id=p.id) }}">{{ p.nome }}</a>
       {% if p.descricao %}<p class="meta">{{ p.descricao }}</p>{% endif %}
-      <p class="meta"><span class="numero">{{ p.total }}</span> música(s)</p>
+      <p class="meta"><span class="numero">{{ p.total }}</span> {{ (p.total)|plural("música", "músicas") }}</p>
     </div>
     <div class="acoes">
       <form class="inline" method="post" action="{{ url_for('playlists.excluir', id=p.id) }}"

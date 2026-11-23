@@ -12,7 +12,7 @@ class TestPlaylists(BaseTest):
         self.client.post("/playlists", data={"nome": "Roda de violão", "descricao": "Fáceis de tocar"})
         html = self.texto(self.client.get("/playlists"))
         self.assertIn("Roda de violão", html)
-        self.assertIn('<span class="numero">0</span> música(s)', html)
+        self.assertIn('<span class="numero">0</span> músicas', html)
 
     def test_nome_vazio(self):
         r = self.client.post("/playlists", data={"nome": "  ", "descricao": "Fáceis"})
@@ -39,8 +39,8 @@ class TestPlaylists(BaseTest):
         html = self.texto(self.client.get("/playlists"))
         html = html[html.index('<ul class="lista-cartoes">'):]  # o placeholder do formulário também cita "Roda de violão"
         self.assertLess(html.index("Churrasco"), html.index("Roda de violão"))
-        self.assertIn('<span class="numero">4</span> música(s)', html)
-        self.assertIn('<span class="numero">2</span> música(s)', html)
+        self.assertIn('<span class="numero">4</span> músicas', html)
+        self.assertIn('<span class="numero">2</span> músicas', html)
 
     def test_renomear(self):
         m = self.musica("Oceano")
@@ -92,6 +92,14 @@ class TestPlaylists(BaseTest):
         self.assertNotIn("<strong>Tempo Perdido</strong>", self.texto(self.client.get(f"/playlists/{roda}")))
         self.assertEqual(self.um("SELECT COUNT(*) FROM musica"), 1)
         self.assertEqual(self.um("SELECT playlist_id FROM playlist_musica"), outra)
+
+    def test_remover_musica_fora_da_playlist(self):
+        roda = self.playlist("Roda de violão", self.musica("Tempo Perdido"))
+        oceano = self.musica("Oceano")
+        html = self.texto(self.client.post(f"/playlists/{roda}/musicas/{oceano}/remover", follow_redirects=True))
+        self.assertIn('class="toast toast-erro"', html)
+        self.assertIn("Essa música não está na playlist.", html)
+        self.assertNotIn("Música removida da playlist.", html)
 
     def test_playlist_inexistente_404(self):
         self.assertEqual(self.client.get("/playlists/999").status_code, 404)

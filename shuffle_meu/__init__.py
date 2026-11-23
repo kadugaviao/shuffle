@@ -26,7 +26,8 @@ def create_app(config=None):
     for modulo in (artistas, musicas, playlists, sorteio, historico):
         app.register_blueprint(modulo.bp)
     app.jinja_env.filters.update(data_local=data_local, matiz=matiz, iniciais=iniciais, decimal1=decimal1,
-                                  genero=musicas.rotulo_genero)
+                                  genero=musicas.rotulo_genero,
+                                  plural=lambda n, um, varios: um if n == 1 else varios)
     app.jinja_env.globals["HUMORES"] = musicas.HUMORES
     return app
 

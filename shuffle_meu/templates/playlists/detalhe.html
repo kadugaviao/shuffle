@@ -16,7 +16,7 @@
   </form>
 
   {% if musicas %}
-  <p class="meta contagem"><span class="numero">{{ musicas|length }}</span> música(s)</p>
+  <p class="meta contagem"><span class="numero">{{ musicas|length }}</span> {{ (musicas|length)|plural("música", "músicas") }}</p>
   <ol class="lista-cartoes">
     {% for m in musicas %}
     <li class="linha-cartao">

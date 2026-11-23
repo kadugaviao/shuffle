@@ -7,6 +7,8 @@
   <h1>Repertório</h1>
   <a class="botao primario" href="{{ url_for('musicas.nova') }}">{{ icone("mais") }}Nova música</a>
 </div>
+{% set filtrando = q or f.values()|select|list %}
+{% if musicas or filtrando %}
 <form class="cartao campos filtros" method="get" data-auto-enviar>
   {% call campo("q", "Buscar por título ou artista", none) %}
   <input name="q" type="search" value="{{ q }}" placeholder="Título ou nome do artista" {{ aria("q", none) }}>
@@ -18,9 +20,10 @@
     <button>{{ icone("busca") }}Filtrar</button>
   </div>
 </form>
+{% endif %}
 
 {% if musicas %}
-<p class="meta contagem"><span class="numero">{{ musicas|length }}</span> música(s)</p>
+<p class="meta contagem"><span class="numero">{{ musicas|length }}</span> {{ (musicas|length)|plural("música", "músicas") }}</p>
 <ol class="setlist">
   {% for m in musicas %}
   <li class="musica-cartao{% if not m.ativa %} inativa{% endif %}" id="musica-{{ m.id }}">
@@ -28,13 +31,12 @@
     {{ capa(m.artista) }}
     <div class="musica-info">
       <a class="musica-titulo" href="{{ url_for('musicas.editar', id=m.id) }}">{{ m.titulo }}</a>
-      <p class="meta">{{ m.artista }}</p>
+      <p class="meta musica-artista">{{ m.artista }}{{ dificuldade(m.dificuldade) }}</p>
     </div>
     <div class="etiquetas">
       {% if m.genero %}<span class="etiqueta">{{ m.genero|genero }}</span>{% endif %}
       {% if m.humor %}<span class="etiqueta">{{ HUMORES[m.humor] }}</span>{% endif %}
       <span class="etiqueta etiqueta-inativa">Inativa</span>
-      {{ dificuldade(m.dificuldade) }}
     </div>
     <div class="musica-acoes">
       <form method="post" action="{{ url_for('musicas.favorita', id=m.id, **qs) }}" data-atalho>
@@ -55,10 +57,10 @@
   {% endfor %}
 </ol>
 {% else %}
-{% if q or f.values()|select|list %}
+{% if filtrando %}
 <section class="cartao">{{ vazio("Nenhuma música encontrada.", "Tira um filtro ou busca outro nome.") }}</section>
 {% else %}
-<section class="cartao">{{ vazio("Nenhuma música encontrada.", "O caderno ainda está em branco. Anota a primeira que você sabe tocar.", url_for("musicas.nova"), "Nova música") }}</section>
+<section class="cartao">{{ vazio("Caderno em branco", "Anota a primeira que você sabe tocar.", url_for("musicas.nova"), "Nova música") }}</section>
 {% endif %}
 {% endif %}
 {% endblock %}

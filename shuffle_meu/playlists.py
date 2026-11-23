@@ -106,7 +106,10 @@ def adicionar(id):
 def remover(id, musica_id):
     _buscar(id)
     db = get_db()
-    db.execute("DELETE FROM playlist_musica WHERE playlist_id = ? AND musica_id = ?", (id, musica_id))
+    apagadas = db.execute("DELETE FROM playlist_musica WHERE playlist_id = ? AND musica_id = ?", (id, musica_id)).rowcount
     db.commit()
-    flash("Música removida da playlist.")
+    if apagadas:
+        flash("Música removida da playlist.")
+    else:
+        flash("Essa música não está na playlist.", "erro")
     return redirect(url_for(".detalhe", id=id))

@@ -210,6 +210,14 @@ class TestSorteio(BaseTest):
     def test_resultado_inexistente_404(self):
         self.assertEqual(self.client.get("/sorteios/999").status_code, 404)
 
+    def test_filtro_por_genero(self):
+        # cenário "Filtro por gênero": sem diferenciar maiúsculas
+        self.musica("Tempo Perdido", genero="rock")
+        self.musica("Oceano", genero="MPB")
+        for _ in range(10):
+            self.sortear(genero="ROCK", n="0")
+            self.assertEqual(self.ultimo(), "Tempo Perdido")
+
     def test_filtro_por_humor_e_dificuldade(self):
         self.musica("Oceano", humor="calma", dificuldade=4)
         self.musica("Tempo Perdido", humor="calma", dificuldade=2)

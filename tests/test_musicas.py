@@ -153,11 +153,22 @@ class TestMusicas(BaseTest):
         self.assertIn("Nenhuma música encontrada.", self.texto(self.client.get("/musicas?q=xyz")))
 
     def test_repertorio_zerado_convida_a_cadastrar(self):
+        # cenário "Repertório vazio": sem busca nem filtros, que não teriam o que filtrar
         html = self.texto(self.client.get("/musicas"))
-        self.assertIn("Nenhuma música encontrada.", html)
-        self.assertIn("O caderno ainda está em branco.", html)
+        self.assertIn("<h2>Caderno em branco</h2>", html)
+        self.assertNotIn("Nenhuma música encontrada.", html)
         self.assertIn('href="/musicas/nova"', html)
-        self.assertNotIn("O caderno ainda está em branco.", self.texto(self.client.get("/musicas?q=xyz")))
+        self.assertNotIn('name="q"', html)
+        filtrado = self.texto(self.client.get("/musicas?q=xyz"))
+        self.assertIn("Nenhuma música encontrada.", filtrado)
+        self.assertNotIn("Caderno em branco", filtrado)
+        self.assertIn('name="q"', filtrado)  # com busca ativa, o formulário continua para desfazer
+
+    def test_contagem_no_singular_e_no_plural(self):
+        self.musica("Tempo Perdido", self.legiao)
+        self.assertIn('<span class="numero">1</span> música</p>', self.texto(self.client.get("/musicas")))
+        self.musica("Índios", self.legiao)
+        self.assertIn('<span class="numero">2</span> músicas</p>', self.texto(self.client.get("/musicas")))
 
     def test_marcar_favorita_e_desativar(self):
         m = self.musica("Tempo Perdido", self.legiao)

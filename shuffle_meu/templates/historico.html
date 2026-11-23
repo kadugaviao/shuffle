@@ -99,7 +99,7 @@
     {% endfor %}
   </ul>
   {% else %}
-  <section class="cartao">{{ vazio("Nenhum sorteio ainda.", none, url_for("sorteio.inicio"), "Que tal sortear agora?") }}</section>
+  <section class="cartao">{{ vazio("Nenhum sorteio ainda.", none, url_for("sorteio.inicio"), "Que tal sortear agora?", "dado") }}</section>
   {% endif %}
 </section>
 {% endblock %}

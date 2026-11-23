@@ -6,60 +6,74 @@
 <section class="folha resultado"{% if roleta %} data-roleta='{{ roleta|tojson }}'{% endif %}>
   <div class="rolo" aria-hidden="true"><div class="rolo-lista"><ol class="rolo-faixa"></ol></div></div>
   <p class="visualmente-oculto" aria-live="polite" data-anuncio></p>
-  <div class="revelavel">
-    <div class="resultado-topo">
-      {{ capa(s.artista, grande=true) }}
-      <p class="meta">Sorteada em <span class="numero">{{ s.sorteado_em|data_local }}</span></p>
-    </div>
-    <div class="resultado-titulo">
-      <h1 class="titulo-sorteado{% if s.titulo|length > 24 or s.titulo.split()|map('length')|max > 8 %} titulo-longo{% endif %}">{{ s.titulo }}</h1>
-      <p class="carimbo{% if s.tocada %} carimbo-tocada{% endif %}" aria-hidden="true">{{ "Tocada" if s.tocada else "Toca essa!" }}</p>
-    </div>
-    <p class="artista">{{ s.artista }}</p>
-    {% set nova_aba %}<span class="visualmente-oculto"> (abre em nova aba)</span>{% endset %}
-    {% if s.youtube or s.spotify or s.link %}
-    <div class="botoes">
-      {% for p in players %}
-      <button type="button" data-ouvir="{{ p.chave }}" hidden>{{ icone("fone") }}{{ "Ouvir aqui" if players|length == 1 else "Ouvir no " ~ p.servico }}</button>
-      {% endfor %}
-      {% if s.youtube %}<a class="botao" href="{{ s.youtube }}" target="_blank" rel="noopener noreferrer">{{ icone("link") }}Abrir no YouTube{{ nova_aba }}</a>{% endif %}
-      {% if s.spotify %}<a class="botao" href="{{ s.spotify }}" target="_blank" rel="noopener noreferrer">{{ icone("link") }}Abrir no Spotify{{ nova_aba }}</a>{% endif %}
-      {% if s.link %}<a class="botao" href="{{ s.link }}" target="_blank" rel="noopener noreferrer">{{ icone("link") }}Abrir link{{ nova_aba }}</a>{% endif %}
-    </div>
-    {% endif %}
-    {% if players %}
-    {# Inertes até o clique num botão de ouvir: nada de YouTube/Spotify carrega ao abrir a tela; um player por vez. #}
-    <div class="player" data-player></div>
-    {% for p in players %}
-    <template data-player-modelo="{{ p.chave }}"><iframe class="player-{{ p.chave }}" src="{{ p.src }}" title="Player do {{ p.servico }}: {{ s.titulo }}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></template>
-    {% endfor %}
-    {% endif %}
+  {% set tem_links = s.youtube or s.spotify or s.link %}
+  <div class="revelavel{% if tem_links %} com-ouvir{% endif %}">
+    <div class="resultado-principal">
+      <div class="resultado-topo">
+        {{ capa(s.artista, grande=true) }}
+        <p class="carimbo{% if s.tocada %} carimbo-tocada{% endif %}" aria-hidden="true">{{ "Tocada" if s.tocada else "Toca essa!" }}</p>
+        <p class="meta data-sorteio">Sorteada em <span class="numero">{{ s.sorteado_em|data_local }}</span></p>
+      </div>
+      {% set classe_titulo %}{% if s.titulo|length > 24 %} titulo-longo{% elif s.titulo.split()|map('length')|max > 8 %} titulo-palavra-longa{% endif %}{% endset %}
+      <h1 class="titulo-sorteado{{ classe_titulo }}">{{ s.titulo }}</h1>
+      <p class="artista">{{ s.artista }}</p>
 
-    <div class="botoes acoes-resultado">
+      <div class="botoes acoes-resultado">
+        {% if s.tocada %}
+        <p class="status-tocada visualmente-oculto">Tocada</p>
+        {% else %}
+        <form class="inline" method="post" action="{{ url_for('historico.toquei', id=s.id, **qs) }}">
+          <button class="botao-sucesso">{{ icone("check") }}Toquei</button>
+        </form>
+        {% endif %}
+        <form class="inline" method="post" action="{{ url_for('sorteio.sortear') }}">
+          {% for chave, valor in f.items() %}<input type="hidden" name="{{ chave }}" value="{{ valor }}">{% endfor %}
+          <input type="hidden" name="n" value="{{ n }}">
+          <button>{{ icone("pular") }}Pular</button>
+        </form>
+      </div>
+
       {% if s.tocada %}
-      <p class="status-tocada visualmente-oculto">Tocada</p>
-      {% else %}
-      <form class="inline" method="post" action="{{ url_for('historico.toquei', id=s.id, **qs) }}">
-        <button class="botao-sucesso">{{ icone("check") }}Toquei</button>
+      <form class="avaliacao" method="post" action="{{ url_for('historico.avaliar', id=s.id, **qs) }}">
+        <p class="rotulo" id="rotulo-nota">{% if s.nota %}Sua nota: <span class="numero">{{ s.nota }}</span>{% else %}Quanto valeu?{% endif %}</p>
+        <div class="estrelas{% if entrar_estrelas %} entrando{% endif %}" role="group" aria-labelledby="rotulo-nota">
+          {% for i in range(1, 6) %}
+          <button class="estrela{% if s.nota and i <= s.nota %} acesa{% endif %}" name="nota" value="{{ i }}"
+                  aria-label="Dar nota {{ i }} de 5" aria-pressed="{{ 'true' if s.nota == i else 'false' }}">{{ icone("estrela") }}</button>
+          {% endfor %}
+        </div>
       </form>
       {% endif %}
-      <form class="inline" method="post" action="{{ url_for('sorteio.sortear') }}">
-        {% for chave, valor in f.items() %}<input type="hidden" name="{{ chave }}" value="{{ valor }}">{% endfor %}
-        <input type="hidden" name="n" value="{{ n }}">
-        <button>{{ icone("pular") }}Pular</button>
-      </form>
     </div>
 
-    {% if s.tocada %}
-    <form class="avaliacao" method="post" action="{{ url_for('historico.avaliar', id=s.id, **qs) }}">
-      <p class="rotulo" id="rotulo-nota">{% if s.nota %}Sua nota: <span class="numero">{{ s.nota }}</span>{% else %}Quanto valeu?{% endif %}</p>
-      <div class="estrelas{% if entrar_estrelas %} entrando{% endif %}" role="group" aria-labelledby="rotulo-nota">
-        {% for i in range(1, 6) %}
-        <button class="estrela{% if s.nota and i <= s.nota %} acesa{% endif %}" name="nota" value="{{ i }}"
-                aria-label="Dar nota {{ i }} de 5" aria-pressed="{{ 'true' if s.nota == i else 'false' }}">{{ icone("estrela") }}</button>
-        {% endfor %}
+    {% if tem_links %}
+    <section class="resultado-ouvir" aria-label="Ouvir e abrir">
+      {% if players %}
+      {# Inertes até o clique: nada de YouTube/Spotify carrega ao abrir a tela; um player por vez. Sem JS o bloco fica escondido. #}
+      <div class="ouvir" data-ouvir-bloco hidden>
+        {% if players|length == 1 %}
+        <button type="button" data-ouvir="{{ players[0].chave }}">{{ icone("fone") }}Ouvir aqui</button>
+        {% else %}
+        <p class="rotulo" id="rotulo-ouvir">Ouvir aqui</p>
+        <div class="segmentado segmentado-2" role="group" aria-labelledby="rotulo-ouvir">
+          {% for p in players %}<button type="button" data-ouvir="{{ p.chave }}" aria-pressed="false">{{ p.servico }}</button>{% endfor %}
+        </div>
+        {% endif %}
+        <div class="player" data-player></div>
+        <button type="button" class="fechar-player" data-fechar-player hidden>{{ icone("fechar") }}Fechar player</button>
+        <p class="visualmente-oculto" aria-live="polite" data-anuncio-player></p>
       </div>
-    </form>
+      {% for p in players %}
+      <template data-player-modelo="{{ p.chave }}"><iframe class="player-{{ p.chave }}" src="{{ p.src }}" title="Player do {{ p.servico }}: {{ s.titulo }}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></template>
+      {% endfor %}
+      {% endif %}
+      {% set nova_aba %}<span class="visualmente-oculto"> (abre em nova aba)</span>{% endset %}
+      <p class="links-abrir">
+        {% if s.youtube %}<a class="link-abrir" href="{{ s.youtube }}" target="_blank" rel="noopener noreferrer">{{ icone("link") }}Abrir no YouTube{{ nova_aba }}</a>{% endif %}
+        {% if s.spotify %}<a class="link-abrir" href="{{ s.spotify }}" target="_blank" rel="noopener noreferrer">{{ icone("link") }}Abrir no Spotify{{ nova_aba }}</a>{% endif %}
+        {% if s.link %}<a class="link-abrir" href="{{ s.link }}" target="_blank" rel="noopener noreferrer">{{ icone("link") }}Abrir link{{ nova_aba }}</a>{% endif %}
+      </p>
+    </section>
     {% endif %}
   </div>
 </section>

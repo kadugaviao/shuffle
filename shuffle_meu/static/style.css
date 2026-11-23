@@ -504,23 +504,52 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 }
 
 
-/* Resultado do sorteio: a folha de setlist, alinhada à esquerda */
-.resultado { max-width: 52rem; margin-top: var(--espaco-3); margin-bottom: var(--espaco-5); }
-.resultado .revelavel { display: grid; justify-items: start; gap: var(--espaco-4); }
-.resultado-topo { display: flex; align-items: end; gap: var(--espaco-4); }
-.resultado-titulo { display: flex; flex-wrap: wrap; align-items: center; gap: var(--espaco-3) var(--espaco-5); }
-.titulo-sorteado { margin: 0; font-size: var(--t-72); line-height: 1.05; } /* abaixo de ~1 o acento da linha de baixo encosta na de cima (Ê sob C virava Ç) */
-.titulo-longo { font-size: var(--t-44); }
+/* Resultado do sorteio: a folha de setlist na largura do contêiner. A partir de 960 px, ações à esquerda e
+   "Ouvir aqui" à direita, separados por régua; abaixo disso, ouvir vem depois das ações (mesma ordem do HTML). */
+.resultado { margin-top: var(--espaco-3); margin-bottom: var(--espaco-5); }
+.resultado .revelavel { display: grid; gap: var(--espaco-6); }
+.resultado-principal { display: grid; justify-items: start; align-content: start; gap: var(--espaco-4); min-width: 0; }
+.resultado-ouvir { display: grid; align-content: start; gap: var(--espaco-4); min-width: 0; padding-top: var(--espaco-5); border-top: var(--regua); }
+@media (min-width: 960px) {
+  .resultado .revelavel.com-ouvir { grid-template-columns: minmax(0, 1fr) 26rem; gap: var(--espaco-7); }
+  .resultado-ouvir { padding: 0 0 0 var(--espaco-6); border-top: 0; border-left: var(--regua); }
+}
+.resultado-topo { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: var(--espaco-3) var(--espaco-5); }
+.resultado-topo .carimbo { justify-self: start; }
+.data-sorteio { grid-column: 1 / -1; white-space: nowrap; }
+.titulo-sorteado { max-width: 100%; margin: 0; font-size: var(--t-72); line-height: 1.05; overflow-wrap: break-word; } /* abaixo de ~1 o acento da linha de baixo encosta na de cima (Ê sob C virava Ç) */
+.titulo-longo, .titulo-palavra-longa { font-size: var(--t-44); } /* palavra longa só desce no celular, onde não cabe a 72 px */
 @media (min-width: 720px) {
-  .titulo-sorteado { font-size: var(--t-120); }
+  .titulo-sorteado, .titulo-palavra-longa { font-size: var(--t-120); }
   .titulo-longo { font-size: var(--t-72); }
 }
 .resultado .artista { font-size: var(--t-20); color: var(--tinta-2); }
 .acoes-resultado { margin-top: var(--espaco-2); }
 .avaliacao { display: grid; gap: var(--espaco-1); }
 
+/* Ouvir aqui: botão simples (um serviço) ou seletor [YouTube | Spotify]; links "Abrir no…" em texto pequeno */
+.ouvir { display: grid; justify-items: start; gap: var(--espaco-3); }
+.segmentado-2 { grid-template-columns: repeat(2, 1fr); width: 100%; max-width: 20rem; }
+.segmentado-2 button { position: relative; font-stretch: condensed; }
+.segmentado-2 button + button { border-left: 0; }
+.segmentado-2 button[aria-pressed="true"] { background: var(--amarelo); }
+.segmentado-2 button[aria-pressed="true"]::before { content: ""; position: absolute; top: var(--espaco-1); left: var(--espaco-1); width: 8px; height: 8px; background: var(--tinta); } /* estado sem depender de cor */
+.links-abrir { display: flex; flex-wrap: wrap; gap: 0 var(--espaco-5); margin: 0; }
+.link-abrir {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espaco-1);
+  min-height: 44px;
+  font: 600 var(--t-14)/1 var(--fonte);
+  color: var(--tinta);
+  text-decoration: underline 1px;
+  text-underline-offset: 4px;
+}
+.link-abrir:hover { text-decoration-thickness: 2px; }
+.link-abrir .icone { width: 16px; height: 16px; }
+
 /* Player embutido: bloco com borda de tinta, raio 0; vazio até o clique em "Ouvir aqui" */
-.player { width: 100%; max-width: 40rem; border: var(--regua); background: var(--papel); }
+.player { width: 100%; border: var(--regua); background: var(--papel); }
 .player:empty { display: none; }
 .player iframe { display: block; width: 100%; border: 0; }
 .player iframe.player-youtube { aspect-ratio: 16 / 9; height: auto; }
@@ -538,6 +567,7 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
   transform: rotate(-6deg);
 }
 .carimbo-tocada { color: var(--sucesso); }
+@media (max-width: 719px) { .resultado-topo .carimbo { font-size: var(--t-28); } } /* cabe ao lado da capa a 360 px; 28 px 900 ainda é texto grande */
 .revelado .carimbo { animation: carimbar var(--medio) ease-out; }
 @keyframes carimbar { from { opacity: 0; transform: rotate(-6deg) scale(1.2); } }
 
@@ -549,7 +579,7 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
   inset: 0;
   display: grid;
   align-content: start;
-  padding: calc(var(--espaco-5) + 96px + var(--espaco-4)) var(--espaco-5) 0; /* onde o título vai aparecer */
+  padding: 0 var(--espaco-5); /* o padding-top vem do JS: a posição real do título (offsetTop) */
 }
 .rolo-lista { /* janela de uma linha; a faixa de títulos sobe por dentro dela */
   --linha: var(--t-72);
@@ -560,9 +590,9 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 }
 .rolo-faixa { margin: 0; padding: 0; list-style: none; transition: transform var(--rolar); }
 .rolo-faixa li { height: var(--linha); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.rolo-lista.rolo-longo { --linha: var(--t-44); font-size: var(--t-44); }
+.rolo-lista.rolo-longo, .rolo-lista.rolo-palavra-longa { --linha: var(--t-44); font-size: var(--t-44); }
 @media (min-width: 720px) {
-  .rolo-lista { --linha: var(--t-120); font-size: var(--t-120); }
+  .rolo-lista, .rolo-lista.rolo-palavra-longa { --linha: var(--t-120); font-size: var(--t-120); }
   .rolo-lista.rolo-longo { --linha: var(--t-72); font-size: var(--t-72); }
 }
 .js [data-roleta].revelado .revelavel { visibility: visible; animation: none; }

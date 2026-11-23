@@ -48,7 +48,10 @@ function iniciarRoleta() {
   const itens = Array.from({ length: 20 }, (_, i) => (outros.length ? outros[i % outros.length] : sorteada));
   itens.push(sorteada);
   const faixa = folha.querySelector(".rolo-faixa");
-  faixa.parentElement.classList.toggle("rolo-longo", folha.querySelector(".titulo-longo") !== null); // mesmo degrau do título
+  const titulo = folha.querySelector(".titulo-sorteado");
+  faixa.parentElement.classList.toggle("rolo-longo", titulo.classList.contains("titulo-longo")); // mesmo degrau do título
+  faixa.parentElement.classList.toggle("rolo-palavra-longa", titulo.classList.contains("titulo-palavra-longa"));
+  folha.querySelector(".rolo").style.paddingTop = `${titulo.offsetTop}px`; // a janela abre onde o título vai aparecer
   faixa.replaceChildren(...itens.map((t) => Object.assign(document.createElement("li"), { textContent: t })));
   folha.classList.add("rodando");
   requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -95,21 +98,40 @@ document.addEventListener("change", (evento) => {
   if (form && ultimoPeloPonteiro && evento.target.matches("input[type=radio], input[type=checkbox]")) form.requestSubmit();
 });
 
-// Player embutido (add-player-embutido D2, add-links-por-servico D4): cada iframe fica num <template> inerte e só
-// é criado no clique, então abrir o resultado não faz requisição a YouTube ou Spotify. Um player por vez: o outro
-// botão de ouvir substitui o player atual. Sem JS ficam só os botões de abrir.
+// Player embutido (add-player-embutido D2, revisao-final D2): cada iframe fica num <template> inerte e só é criado
+// no clique, então abrir o resultado não faz requisição a YouTube ou Spotify. Um player por vez: com dois serviços,
+// o seletor troca o player; "Fechar player" esvazia o bloco. Sem JS o bloco fica escondido e sobram os links de abrir.
 function iniciarPlayer() {
-  const botoes = document.querySelectorAll("[data-ouvir]");
-  const bloco = document.querySelector("[data-player]");
+  const bloco = document.querySelector("[data-ouvir-bloco]");
+  if (!bloco) return;
+  bloco.hidden = false;
+  const botoes = [...bloco.querySelectorAll("[data-ouvir]")];
+  const player = bloco.querySelector("[data-player]");
+  const fechar = bloco.querySelector("[data-fechar-player]");
+  const anuncio = bloco.querySelector("[data-anuncio-player]");
+  const seletor = botoes[0].hasAttribute("aria-pressed");
+  const marcar = (escolhido) => {
+    for (const b of botoes) {
+      if (seletor) b.setAttribute("aria-pressed", String(b === escolhido));
+      else b.hidden = b === escolhido; // botão simples some enquanto o player está aberto
+    }
+    fechar.hidden = escolhido === null;
+  };
   for (const botao of botoes) {
-    botao.hidden = false;
     botao.addEventListener("click", () => {
-      const modelo = document.querySelector(`[data-player-modelo="${botao.dataset.ouvir}"]`);
-      bloco.replaceChildren(modelo.content.cloneNode(true));
-      for (const outro of botoes) outro.hidden = outro === botao;
-      bloco.querySelector("iframe").focus();
+      if (botao.getAttribute("aria-pressed") === "true") return;
+      player.replaceChildren(document.querySelector(`[data-player-modelo="${botao.dataset.ouvir}"]`).content.cloneNode(true));
+      marcar(botao);
+      anuncio.textContent = `${player.querySelector("iframe").title.split(":")[0]} aberto.`;
+      (seletor ? botao : fechar).focus(); // o foco não entra no iframe de terceiros
     });
   }
+  fechar.addEventListener("click", () => {
+    player.replaceChildren();
+    marcar(null);
+    anuncio.textContent = "Player fechado.";
+    botoes[0].focus();
+  });
 }
 
 iniciarToasts();

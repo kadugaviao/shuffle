@@ -63,7 +63,7 @@ Motivação e itens em `proposal.md`; achados com IDs, reprodução e severidade
 
 ### D3. Topo, carimbo, data e título
 
-- **Carimbo:** sai de `.resultado-titulo` e vai para `.resultado-topo`, à direita da capa e da data. Fica sempre no mesmo lugar, independentemente do tamanho do título (D5 do relatório).
+- **Carimbo:** sai de `.resultado-titulo` e vai para `.resultado-topo`, à direita da capa e da data. Fica sempre no mesmo lugar, independentemente do tamanho do título (D5 do relatório). Abaixo de 720 px o carimbo usa `--t-28` (900, ainda texto grande): a 44 px ele mede 216 px e não cabe ao lado da capa a 360 px.
 - **Data:** uma linha só, em Plex Mono 14, abaixo da capa (`white-space: nowrap`).
 - **Degraus de título:**
   - `titulo-longo` (mais de 24 caracteres) desce um degrau em qualquer largura;

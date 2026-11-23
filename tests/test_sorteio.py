@@ -24,8 +24,11 @@ class TestPlayerNaTela(BaseTest):
 
     def test_video_do_youtube(self):
         html = self.tela(youtube=f"https://music.youtube.com/watch?v={YT}")
-        self.assertIn('<button type="button" data-ouvir="youtube" hidden>', html)  # sem JS não há botão morto
+        self.assertIn('<div class="ouvir" data-ouvir-bloco hidden>', html)  # sem JS não há botão morto
+        self.assertIn('<button type="button" data-ouvir="youtube">', html)
         self.assertIn("Ouvir aqui</button>", html)
+        self.assertNotIn("aria-pressed", html.split('class="resultado-ouvir"')[1])  # um serviço: botão simples
+        self.assertIn('<button type="button" class="fechar-player" data-fechar-player hidden>', html)
         self.assertIn(f'src="https://www.youtube-nocookie.com/embed/{YT}?autoplay=1"', html)
         self.assertIframesSoNoTemplate(html, 1)
         self.assertIn('title="Player do YouTube: Tempo Perdido"', html)
@@ -44,10 +47,16 @@ class TestPlayerNaTela(BaseTest):
     def test_youtube_e_spotify(self):
         html = self.tela(youtube=f"https://youtu.be/{YT}", spotify=f"https://open.spotify.com/track/{SP}",
                          link="https://www.cifraclub.com.br/legiao-urbana/tempo-perdido/")
-        for texto in ("Ouvir no YouTube</button>", "Ouvir no Spotify</button>", "Abrir no YouTube", "Abrir no Spotify", "Abrir link<"):
-            self.assertIn(texto, html)
-        self.assertNotIn("Ouvir aqui", html)
+        self.assertIn('<p class="rotulo" id="rotulo-ouvir">Ouvir aqui</p>', html)
+        self.assertIn('role="group" aria-labelledby="rotulo-ouvir"', html)
+        self.assertIn('<button type="button" data-ouvir="youtube" aria-pressed="false">YouTube</button>', html)
+        self.assertIn('<button type="button" data-ouvir="spotify" aria-pressed="false">Spotify</button>', html)
+        self.assertNotIn('aria-pressed="true"', html)  # nenhum serviço escolhido: o player só carrega no clique
+        self.assertNotIn("Ouvir no ", html)
         self.assertLess(html.index('data-ouvir="youtube"'), html.index('data-ouvir="spotify"'))  # YouTube primeiro
+        links = re.findall(r'<a class="link-abrir"[^>]*>.*?</a>', html, flags=re.S)
+        self.assertEqual([re.sub(r"<[^>]+>", "", l).replace(" (abre em nova aba)", "").strip() for l in links],
+                         ["Abrir no YouTube", "Abrir no Spotify", "Abrir link"])  # links de texto, não botões
         self.assertIframesSoNoTemplate(html, 2)
 
     def test_atributos_do_iframe(self):
@@ -81,6 +90,12 @@ class TestPlayerNaTela(BaseTest):
         html = self.tela()
         self.assertNotIn("Abrir", html)
         self.assertNotIn("data-ouvir", html)
+        self.assertNotIn("resultado-ouvir", html)
+
+    def test_acoes_principais_antes_de_ouvir(self):
+        html = self.tela(youtube=f"https://youtu.be/{YT}")
+        self.assertLess(html.index("Toquei</button>"), html.index('class="resultado-ouvir"'))
+        self.assertLess(html.index("Pular</button>"), html.index('class="resultado-ouvir"'))
 
     def test_links_maliciosos_nao_viram_player(self):
         casos = ({"link": f"https://youtube.com.exemplo.net/watch?v={YT}"},
@@ -186,6 +201,11 @@ class TestSorteio(BaseTest):
     def test_titulo_longo_desce_um_degrau(self):
         s = self.sorteio(self.musica("Eu Sei Que Vou Te Amar (ao vivo)"))
         self.assertIn('<h1 class="titulo-sorteado titulo-longo">', self.texto(self.client.get(f"/sorteios/{s}")))
+
+    def test_palavra_longa_so_desce_no_celular(self):
+        # "Evidências" cabe a 120 px no desktop; a classe só reduz abaixo de 720 px (CSS)
+        s = self.sorteio(self.musica("Evidências"))
+        self.assertIn('<h1 class="titulo-sorteado titulo-palavra-longa">', self.texto(self.client.get(f"/sorteios/{s}")))
 
     def test_resultado_inexistente_404(self):
         self.assertEqual(self.client.get("/sorteios/999").status_code, 404)

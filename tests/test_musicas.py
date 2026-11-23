@@ -1,8 +1,12 @@
 import unittest
 
 from shuffle_meu import create_app
-from shuffle_meu.musicas import validar_musica
+from shuffle_meu.musicas import MSG_SPOTIFY, MSG_YOUTUBE, validar_musica
 from tests.base import BaseTest
+
+YT = "jNQXAC9IVRw"
+SP = "4uLU6hMCjMI75M1A2tKUQC"
+CIFRA = "https://www.cifraclub.com.br/legiao-urbana/tempo-perdido/"
 
 
 def form(**campos):
@@ -22,8 +26,9 @@ class TestValidarMusica(unittest.TestCase):
         self.assertIsNone(dados["link"])
 
     def test_erros_por_campo(self):
-        erros = validar_musica(form(titulo="", artista_id="", dificuldade="9", humor="x", link="ftp://a"))[1]
-        self.assertEqual(set(erros), {"titulo", "artista_id", "dificuldade", "humor", "link"})
+        erros = validar_musica(form(titulo="", artista_id="", dificuldade="9", humor="x", link="ftp://a",
+                                    youtube="https://exemplo.net/", spotify="https://exemplo.net/"))[1]
+        self.assertEqual(set(erros), {"titulo", "artista_id", "dificuldade", "humor", "link", "youtube", "spotify"})
 
     def test_titulo_obrigatorio_rn01(self):
         self.assertIn("Informe o título da música.", self.erros(titulo="   "))
@@ -43,7 +48,24 @@ class TestValidarMusica(unittest.TestCase):
 
     def test_link_seguro(self):
         self.assertIn("O link deve começar com http:// ou https://.", self.erros(link="javascript:alert(1)"))
-        self.assertEqual(self.erros(link="https://www.youtube.com/watch?v=abc"), [])
+        self.assertEqual(self.erros(link="https://www.cifraclub.com.br/legiao-urbana/tempo-perdido/"), [])
+
+    def test_links_por_servico(self):
+        dados, erros = validar_musica(form(youtube=f" https://youtu.be/{YT} ", spotify=f"https://open.spotify.com/track/{SP}"))
+        self.assertEqual(erros, {})
+        self.assertEqual((dados["youtube"], dados["spotify"]), (f"https://youtu.be/{YT}", f"https://open.spotify.com/track/{SP}"))
+        self.assertEqual(validar_musica(form(youtube="", spotify=""))[0]["youtube"], None)
+
+    def test_youtube_so_aceita_video(self):
+        for link in ("https://www.youtube.com/results?search_query=tempo+perdido", f"https://open.spotify.com/track/{SP}",
+                     f"https://youtube.com.exemplo.net/watch?v={YT}", "javascript:alert(1)"):
+            with self.subTest(link=link):
+                self.assertEqual(validar_musica(form(youtube=link))[1], {"youtube": MSG_YOUTUBE})
+
+    def test_spotify_so_aceita_faixa(self):
+        for link in (f"https://open.spotify.com/album/{SP}", f"https://youtu.be/{YT}", "https://spotify.com/track/x"):
+            with self.subTest(link=link):
+                self.assertEqual(validar_musica(form(spotify=link))[1], {"spotify": MSG_SPOTIFY})
 
 
 class TestMusicas(BaseTest):
@@ -169,6 +191,54 @@ class TestMusicas(BaseTest):
         self.client.post("/musicas/nova", data=form(artista_id=str(self.legiao)))
         reiniciado = create_app({"TESTING": True, "DATABASE": self.caminho}).test_client()
         self.assertIn("Tempo Perdido", self.texto(reiniciado.get("/musicas")))
+
+
+class TestLinksNoFormulario(BaseTest):
+    """Cenários de "Links do YouTube e do Spotify" (delta de musicas)."""
+
+    def setUp(self):
+        super().setUp()
+        self.legiao = self.artista("Legião Urbana")
+
+    def postar(self, url="/musicas/nova", **campos):
+        return self.client.post(url, data=form(artista_id=str(self.legiao), **campos), follow_redirects=True)
+
+    def test_os_tres_links(self):
+        r = self.postar(youtube=f"https://youtu.be/{YT}", spotify=f"https://open.spotify.com/track/{SP}", link=CIFRA)
+        self.assertIn("Música cadastrada.", self.texto(r))
+        linha = self.sql("SELECT youtube, spotify, link FROM musica")[0]
+        self.assertEqual(tuple(linha), (f"https://youtu.be/{YT}", f"https://open.spotify.com/track/{SP}", CIFRA))
+
+    def test_busca_no_campo_youtube(self):
+        html = self.texto(self.postar(youtube="https://www.youtube.com/results?search_query=tempo+perdido", link=CIFRA,
+                                      spotify=f"https://open.spotify.com/track/{SP}"))
+        self.assertEqual(self.um("SELECT COUNT(*) FROM musica"), 0)
+        self.assertIn('id="campo-youtube" aria-invalid="true" aria-describedby="erro-youtube"', html)
+        self.assertIn(MSG_YOUTUBE, html)
+        self.assertLess(html.index('id="campo-youtube"'), html.index(MSG_YOUTUBE))  # erro logo abaixo do campo
+        self.assertLess(html.index(MSG_YOUTUBE), html.index('id="campo-spotify"'))
+        self.assertIn(f'value="{CIFRA}"', html)  # demais campos preservados
+        self.assertIn(f'value="https://open.spotify.com/track/{SP}"', html)
+
+    def test_album_no_campo_spotify(self):
+        html = self.texto(self.postar(spotify=f"https://open.spotify.com/album/{SP}"))
+        self.assertEqual(self.um("SELECT COUNT(*) FROM musica"), 0)
+        self.assertIn('id="campo-spotify" aria-invalid="true" aria-describedby="erro-spotify"', html)
+        self.assertIn(MSG_SPOTIFY, html)
+
+    def test_link_do_servico_trocado(self):
+        html = self.texto(self.postar(youtube=f"https://open.spotify.com/track/{SP}"))
+        self.assertEqual(self.um("SELECT COUNT(*) FROM musica"), 0)
+        self.assertIn('aria-describedby="erro-youtube"', html)
+
+    def test_editar_mostra_e_grava_os_links(self):
+        m = self.musica("Tempo Perdido", self.legiao, youtube=f"https://youtu.be/{YT}", link=CIFRA)
+        html = self.texto(self.client.get(f"/musicas/{m}/editar"))
+        self.assertIn(f'value="https://youtu.be/{YT}"', html)
+        self.assertIn(f'value="{CIFRA}"', html)
+        self.postar(f"/musicas/{m}/editar", youtube="", spotify=f"https://open.spotify.com/intl-pt/track/{SP}", link=CIFRA)
+        linha = self.sql("SELECT youtube, spotify FROM musica")[0]
+        self.assertEqual(tuple(linha), (None, f"https://open.spotify.com/intl-pt/track/{SP}"))
 
 
 class TestAtalhos(BaseTest):

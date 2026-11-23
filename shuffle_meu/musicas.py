@@ -3,6 +3,7 @@ import sqlite3
 from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
 
 from .db import get_db
+from .links import spotify_id, youtube_id
 
 bp = Blueprint("musicas", __name__, url_prefix="/musicas")
 
@@ -10,6 +11,8 @@ bp = Blueprint("musicas", __name__, url_prefix="/musicas")
 HUMORES = {"animada": "Animada", "calma": "Calma", "triste": "Triste", "romantica": "Romântica"}
 MSG_DUPLICADA = "Essa música já está cadastrada para esse artista."
 MSG_ARTISTA = "Escolha o artista da música."
+MSG_YOUTUBE = "Cole o link de um vídeo do YouTube (youtube.com/watch?v=… ou youtu.be/…)."
+MSG_SPOTIFY = "Cole o link de uma faixa do Spotify (open.spotify.com/track/…)."
 FILTROS_LISTA = ("q", "genero", "humor", "favorita")
 
 
@@ -19,7 +22,7 @@ def _filtros_lista(args):
 
 
 def validar_musica(form):
-    """Valida o formulário de música (RN01, RN03, humor, link). Retorna (dados, erros {campo: mensagem})."""
+    """Valida o formulário de música (RN01, RN03, humor, links). Retorna (dados, erros {campo: mensagem})."""
 
     def campo(nome):
         return (form.get(nome) or "").strip() or None
@@ -28,7 +31,9 @@ def validar_musica(form):
         "titulo": campo("titulo"),
         "genero": campo("genero"),
         "humor": campo("humor"),
-        "link": campo("link"),
+        "link": campo("link"),  # "Outro link": cifra, letra, busca
+        "youtube": campo("youtube"),
+        "spotify": campo("spotify"),
         "favorita": 1 if form.get("favorita") else 0,
         "ativa": 1 if form.get("ativa") else 0,
     }
@@ -50,6 +55,11 @@ def validar_musica(form):
         erros["humor"] = "Escolha um humor da lista."
     if dados["link"] and not dados["link"].lower().startswith(("http://", "https://")):
         erros["link"] = "O link deve começar com http:// ou https://."
+    # mesmas regras estritas do player: o campo de cada serviço só aceita vídeo ou faixa reconhecidos
+    if dados["youtube"] and not youtube_id(dados["youtube"]):
+        erros["youtube"] = MSG_YOUTUBE
+    if dados["spotify"] and not spotify_id(dados["spotify"]):
+        erros["spotify"] = MSG_SPOTIFY
     return dados, erros
 
 
@@ -128,8 +138,8 @@ def nova():
         dados, erros = validar_musica(request.form)
         dados.update(favorita=0, ativa=1)  # toda música nova começa ativa e não favorita
         erros = erros or _gravar(
-            "INSERT INTO musica (titulo, artista_id, genero, humor, dificuldade, link, favorita, ativa)"
-            " VALUES (:titulo, :artista_id, :genero, :humor, :dificuldade, :link, :favorita, :ativa)",
+            "INSERT INTO musica (titulo, artista_id, genero, humor, dificuldade, link, youtube, spotify, favorita, ativa)"
+            " VALUES (:titulo, :artista_id, :genero, :humor, :dificuldade, :link, :youtube, :spotify, :favorita, :ativa)",
             dados,
         )
         if not erros:
@@ -147,7 +157,8 @@ def editar(id):
         dados["id"] = id
         erros = erros or _gravar(
             "UPDATE musica SET titulo = :titulo, artista_id = :artista_id, genero = :genero, humor = :humor,"
-            " dificuldade = :dificuldade, link = :link, favorita = :favorita, ativa = :ativa WHERE id = :id",
+            " dificuldade = :dificuldade, link = :link, youtube = :youtube, spotify = :spotify,"
+            " favorita = :favorita, ativa = :ativa WHERE id = :id",
             dados,
             id,
         )

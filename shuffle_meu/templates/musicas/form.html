@@ -31,7 +31,15 @@
   {{ chips("dificuldade", "Dificuldade: 1 é fácil, 5 é difícil", [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)],
            musica.dificuldade or 3, erros=erros, classe="chips segmentado") }}
 
-  {% call campo("link", "Link (opcional: YouTube, Spotify, cifra)", erros) %}
+  {% call campo("youtube", "YouTube (opcional: link do vídeo)", erros) %}
+  <input name="youtube" type="url" value="{{ musica.youtube or '' }}" placeholder="https://youtu.be/…" autocomplete="off" {{ aria("youtube", erros) }}>
+  {% endcall %}
+
+  {% call campo("spotify", "Spotify (opcional: link da faixa)", erros) %}
+  <input name="spotify" type="url" value="{{ musica.spotify or '' }}" placeholder="https://open.spotify.com/track/…" autocomplete="off" {{ aria("spotify", erros) }}>
+  {% endcall %}
+
+  {% call campo("link", "Outro link (opcional: cifra, letra…)", erros) %}
   <input name="link" type="url" value="{{ musica.link or '' }}" placeholder="https://…" autocomplete="off" {{ aria("link", erros) }}>
   {% endcall %}
 

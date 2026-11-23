@@ -15,8 +15,8 @@ Referências: comportamento nas deltas `specs/musicas/spec.md` e `specs/sorteio/
 
 ## 3. Formulário de música
 
-- [ ] 3.1 `validar_musica()`, `INSERT` e `UPDATE` com `youtube`, `spotify` e `link` e as mensagens de D3; verificar com os testes dos cenários "Os três links", "Busca no campo YouTube", "Álbum no campo Spotify" e "Link do serviço trocado" (erro no campo certo, dados preservados, nada gravado), e com os testes atuais de "Link seguro" no outro link
-- [ ] 3.2 `musicas/form.html` com os três campos via `campo()` (D3); verificar no navegador a 360 px e a 1440 px, com e sem erro, e que editar uma música mostra os três links gravados; suíte verde; commitar o grupo
+- [x] 3.1 `validar_musica()`, `INSERT` e `UPDATE` com `youtube`, `spotify` e `link` e as mensagens de D3; verificar com os testes dos cenários "Os três links", "Busca no campo YouTube", "Álbum no campo Spotify" e "Link do serviço trocado" (erro no campo certo, dados preservados, nada gravado), e com os testes atuais de "Link seguro" no outro link
+- [x] 3.2 `musicas/form.html` com os três campos via `campo()` (D3); verificar no navegador a 360 px e a 1440 px, com e sem erro, e que editar uma música mostra os três links gravados; suíte verde; commitar o grupo
 
 ## 4. Resultado do sorteio
 

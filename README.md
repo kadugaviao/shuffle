@@ -2,7 +2,7 @@
 
 Sistema web para cadastrar as músicas que você **já conhece** e **sortear qual tocar** a seguir. O sorteio só usa músicas ativas, aceita filtros (gênero, humor, dificuldade máxima, artista, playlist), evita repetir as últimas N sorteadas e dá o dobro de chance às favoritas. A tela de histórico mostra as estatísticas: músicas mais tocadas, nunca sorteadas, média de notas e músicas por gênero.
 
-A interface segue o design system "Midnight Stage" (tema escuro, cartões de vidro, um único gradiente de destaque), funciona no celular a partir de 360 px, respeita a preferência de movimento reduzido e não depende de internet: fontes e ícones são servidos pelo próprio sistema.
+A interface segue o design system "Lambe-lambe", inspirado nos cartazes de show colados nos muros e na folha de setlist presa com fita no chão do palco: papel, tinta, amarelo e vermelho chapados, letras condensadas gigantes e listas com réguas no lugar de cartões. Funciona no celular a partir de 360 px, respeita a preferência de movimento reduzido e não depende de internet: fontes e ícones são servidos pelo próprio sistema.
 
 Trabalho de G2 da disciplina de Engenharia de Software, desenvolvido com **OpenSpec** (especificar antes de programar).
 
@@ -10,7 +10,7 @@ Trabalho de G2 da disciplina de Engenharia de Software, desenvolvido com **OpenS
 
 | Início | Resultado do sorteio | Histórico e estatísticas |
 |---|---|---|
-| ![Início no celular](docs/screenshots/inicio-celular.png) | ![Resultado no celular](docs/screenshots/resultado-celular.png) | ![Histórico no celular](docs/screenshots/historico-celular.png) |
+| ![Início no celular](docs/screenshots/inicio-celular.webp) | ![Resultado no celular](docs/screenshots/resultado-celular.webp) | ![Histórico no celular](docs/screenshots/historico-celular.webp) |
 
 Mais capturas, no celular e no desktop, em [`docs/screenshots/`](docs/screenshots/).
 
@@ -83,7 +83,7 @@ openspec/          especificação (specs, proposta, design e tarefas)
 
 ## Especificação (OpenSpec)
 
-Os requisitos, as regras de negócio RN01 a RN08 e os cenários de cada funcionalidade estão em [`openspec/specs/`](openspec/specs/). As mudanças já entregues estão arquivadas em [`openspec/changes/archive/`](openspec/changes/archive/): `add-mvp` (banco, CRUD, sorteio e histórico) e `add-estatisticas-e-visual` (estatísticas, atalhos e o design system "Midnight Stage").
+Os requisitos, as regras de negócio RN01 a RN08 e os cenários de cada funcionalidade estão em [`openspec/specs/`](openspec/specs/). As mudanças já entregues estão arquivadas em [`openspec/changes/archive/`](openspec/changes/archive/): `add-mvp` (banco, CRUD, sorteio e histórico) e `add-estatisticas-e-visual` (estatísticas e atalhos). A mudança `refaz-identidade-visual` troca o nome para "Shuffle" e o visual para o design system "Lambe-lambe", com as regras anti-slop do seu `design.md`.
 
 ```bash
 openspec validate --specs --strict

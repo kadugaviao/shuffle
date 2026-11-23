@@ -301,7 +301,7 @@ label.chip { position: relative; display: inline-flex; cursor: pointer; }
   border: 2px solid var(--tinta);
 }
 .chip:hover span { background: var(--papel-2); }
-.chip input:checked + span { font-weight: 700; background: var(--amarelo); }
+.chip input:checked + span { background: var(--amarelo); } /* sem trocar o peso: não muda a largura nem quebra a linha */
 .chip input:checked + span::before { content: ""; position: absolute; top: 5px; left: 5px; width: 6px; height: 6px; background: var(--tinta); } /* estado sem depender de cor, sem mudar a largura */
 .chip input:focus-visible + span { outline: 3px solid var(--tinta); outline-offset: 2px; }
 

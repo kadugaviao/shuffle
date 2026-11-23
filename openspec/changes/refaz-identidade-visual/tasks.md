@@ -76,9 +76,9 @@ Referências: comportamento em `specs/*/spec.md`, decisões em `design.md` (D1�
 
 ## 11. Screenshots e documentação final
 
-- [ ] 11.1 Gerar os 10 screenshots (início, resultado, repertório, formulário, histórico; celular 360 px e desktop 1440 px) com Chrome headless e converter para WebP com o Pillow (D13), num script na pasta temporária, fora do repositório; apagar os PNG; verificar que `docs/screenshots/` tem exatamente os 10 `.webp` e nenhum `.png`, e abrir cada um conferindo que a roleta terminou
-- [ ] 11.2 Atualizar o README: descrição do design system "Lambe-lambe", tabela de screenshots apontando para os `.webp` e a menção às mudanças arquivadas; verificar que cada imagem citada existe (`ls`) e que o README renderiza no GitHub/visualizador de Markdown
-- [ ] 11.3 Rodar a suíte, `openspec validate refaz-identidade-visual --strict` e `openspec validate --all --strict`; verificar que tudo passa; commitar o grupo
+- [x] 11.1 Gerar os 10 screenshots (início, resultado, repertório, formulário, histórico; celular 360 px e desktop 1440 px) com Chrome headless e converter para WebP com o Pillow (D13), num script na pasta temporária, fora do repositório; apagar os PNG; verificar que `docs/screenshots/` tem exatamente os 10 `.webp` e nenhum `.png`, e abrir cada um conferindo que a roleta terminou
+- [x] 11.2 Atualizar o README: descrição do design system "Lambe-lambe", tabela de screenshots apontando para os `.webp` e a menção às mudanças arquivadas; verificar que cada imagem citada existe (`ls`) e que o README renderiza no GitHub/visualizador de Markdown
+- [x] 11.3 Rodar a suíte, `openspec validate refaz-identidade-visual --strict` e `openspec validate --all --strict`; verificar que tudo passa; commitar o grupo
 
 ## Workflow follow-up
 

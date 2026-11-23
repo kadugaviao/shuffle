@@ -263,7 +263,7 @@ Abaixo de 960 px o bloco "última sorteada" não aparece (como hoje). No celular
 | Botão de perigo | ícone ou texto em `--vermelho-texto`, borda 2 px na mesma cor; confirmação nativa como hoje |
 | Botão de ícone | quadrado de 44 px, ícone de traço tinta; pressionado/ligado conforme D9 |
 | Interruptor (ativa) | trilho retangular 40×24, borda 2 px tinta, raio 0; ligado = trilho amarelo e quadrado de tinta à direita; rótulo "Ativa" / "Fora do sorteio" ao lado (D9); área de toque de 44 px |
-| Chip | retângulo (raio 0), borda 2 px tinta, Archivo 600 condensado 16 px, altura mínima 44 px (largura mínima 40 px); selecionado = fundo amarelo, texto 700 e uma marca quadrada de tinta no canto (estado sem depender de cor); radio/checkbox nativo escondido com foco no rótulo |
+| Chip | retângulo (raio 0), borda 2 px tinta, Archivo 600 condensado 16 px, altura mínima 44 px (largura mínima 40 px); selecionado = fundo amarelo e uma marca quadrada de tinta no canto (o peso não muda, para a largura não mudar) (estado sem depender de cor); radio/checkbox nativo escondido com foco no rótulo |
 | Seletor de dificuldade (formulário) | 5 quadrados colados com borda 2 px, números em Plex Mono; selecionado = amarelo |
 | Input / select | fundo papel, borda 2 px tinta, raio 4 px, altura 48 px, rótulo acima em Archivo 600 condensado |
 | Erro de campo | borda do campo em `--vermelho`, mensagem em `--vermelho-texto` 14 px 700 com ícone de alerta logo abaixo |
@@ -317,7 +317,7 @@ Proibido nesta e nas próximas mudanças. Os itens marcados com ✔ são conferi
 - [Redesign completo a 2 dias da apresentação] → grupos que deixam o sistema funcionando, com testes verdes e commit em cada um; se o tempo acabar, dá para parar depois de qualquer grupo e voltar o resto com `git revert`.
 - [CSS reescrito quebra telas ainda não revisadas no meio do caminho] → o grupo de tokens já entrega base, campos, botões e listas genéricas, para as telas ficarem legíveis antes do seu grupo; a conferência a 360 px é feita em cada grupo, não só no fim.
 - [Vermelho e sucesso reprovam em texto pequeno] → regras de D4 + token derivado `--vermelho-texto` + teste de contraste que separa os pares só-grandes.
-- [Chip selecionado e estrela acesa em amarelo têm pouco contraste de luminância com o papel (1,26:1)] → o amarelo fica sempre dentro de contorno de tinta (12,8:1 com o amarelo), o chip selecionado ganha texto 700 e a nota aparece em número ("Sua nota: 4"); o estado vai para leitores de tela por `checked`/`aria-pressed`.
+- [Chip selecionado e estrela acesa em amarelo têm pouco contraste de luminância com o papel (1,26:1)] → o amarelo fica sempre dentro de contorno de tinta (12,8:1 com o amarelo), o chip selecionado ganha uma marca quadrada de tinta no canto e a nota aparece em número ("Sua nota: 4"); o estado vai para leitores de tela por `checked`/`aria-pressed`.
 - [Títulos longos estouram a 120 px ou a 360 px] → classe `titulo-longo`, `overflow-wrap: anywhere`, `text-wrap: balance`; o seed tem títulos de vários tamanhos para conferir.
 - [Navegador sem suporte a `font-stretch` em fonte variável] → o texto cai para a largura normal do Archivo, ainda legível; todos os navegadores atuais suportam.
 - [Testes acoplados a classes CSS] → classes mantidas (D2); só os trechos de HTML que mudam de verdade são atualizados, no grupo da tela.

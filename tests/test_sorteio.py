@@ -67,6 +67,20 @@ class TestPlayerNaTela(BaseTest):
         self.assertSoNoTemplate(html, f'src="https://open.spotify.com/embed/track/{SP}"')
         self.assertIn("Abrir link", html)
 
+    def test_atributos_do_iframe(self):
+        # O YouTube exige o Referer (sem ele: "Error 153"); strict-origin-when-cross-origin manda só a origem.
+        for i, (link, src) in enumerate(((f"https://youtu.be/{YT}", f"https://www.youtube-nocookie.com/embed/{YT}?autoplay=1"),
+                                         (f"https://open.spotify.com/track/{SP}", f"https://open.spotify.com/embed/track/{SP}"))):
+            with self.subTest(link=link):
+                html = self.tela(link, titulo=f"Faixa {i}")
+                iframe = re.search(r"<iframe [^>]*>", html).group(0)
+                self.assertIn(f'src="{src}"', iframe)
+                self.assertIn('referrerpolicy="strict-origin-when-cross-origin"', iframe)
+                self.assertIn('allow="autoplay; encrypted-media; picture-in-picture; fullscreen"', iframe)
+                self.assertIn("allowfullscreen", iframe)
+                self.assertNotIn("sandbox", iframe)  # o player do YouTube precisa de scripts + same-origin
+                self.assertNotIn("no-referrer", iframe)
+
     def test_link_sem_player(self):
         html = self.tela("https://www.youtube.com/results?search_query=tempo+perdido")
         self.assertNotIn("Ouvir aqui", html)

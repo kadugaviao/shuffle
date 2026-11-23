@@ -51,7 +51,12 @@ O iframe vai no HTML dentro de um `<template>`, que o navegador mantém inerte: 
 
 - `title="Player do <serviço>: <título da música>"` (leitores de tela e WCAG 4.1.2).
 - `allow="autoplay; encrypted-media; picture-in-picture; fullscreen"` e `allowfullscreen`. No YouTube o `src` leva `?autoplay=1`: o clique em "Ouvir aqui" já é o pedido para tocar, então não faz sentido pedir um segundo clique no play.
-- `referrerpolicy="strict-origin-when-cross-origin"`: o YouTube recusa embed sem referrer; essa política manda só a origem, não o caminho com o id do sorteio.
+- `referrerpolicy="strict-origin-when-cross-origin"`: o YouTube recusa embed sem referrer; essa política manda só a origem, não o caminho com o id do sorteio. Travado por teste (`test_atributos_do_iframe`), junto com o `src`, o `allow` e a ausência de `sandbox`.
+- Sem parâmetro `origin` no `src`: ele só serve para a API JavaScript do player (`enablejsapi`), que o app não usa.
+- **Verificação de 22/11** (Chrome pilotado pelo DevTools Protocol, lendo o texto dentro do iframe, a partir da página de resultado em `127.0.0.1`):
+  - Vídeos que permitem incorporação (`jNQXAC9IVRw`, `M7lc1UVf-VE`, `aqz-KE-bpKQ`) tocam com `youtube-nocookie.com` e com `youtube.com`, com ou sem `origin`.
+  - Com `referrerpolicy="no-referrer"` o player mostra "Error 153" (configuração do player): é esse o sintoma de Referer ausente.
+  - "This video is unavailable" aparece em qualquer combinação de domínio, `origin` e referrer quando o próprio vídeo bloqueia a reprodução fora do YouTube (ex.: `dQw4w9WgXcQ`). Não é corrigível pelo app.
 - Sem `sandbox`: o player do YouTube exige `allow-scripts` + `allow-same-origin`, o que anularia o sandbox; o isolamento já vem de ser outra origem.
 - Tamanho: YouTube `aspect-ratio: 16 / 9`, largura total do bloco; Spotify altura fixa de 152 px (o tamanho compacto oficial).
 
@@ -69,7 +74,7 @@ O iframe vai no HTML dentro de um `<template>`, que o navegador mantém inerte: 
 
 ## Risks / Trade-offs
 
-- [Muitos vídeos oficiais bloqueiam a incorporação e o player mostra erro] → "Abrir link" sempre ao lado (requisito da spec).
+- [Muitos vídeos de música bloqueiam a reprodução fora do YouTube, inclusive covers de canais pequenos, porque gravadoras restringem a incorporação via Content ID; o player mostra "This video is unavailable"] → é decisão do dono do conteúdo, não do app (ver a verificação em D3); "Abrir link" sempre ao lado (requisito da spec). Para a apresentação, testar antes o link escolhido.
 - [O Spotify toca só uma prévia de 30 s para quem não está logado no navegador] → limitação do serviço; "Abrir link" leva ao app do Spotify.
 - [Clicar em "Ouvir aqui" sem internet mostra a página de erro do navegador dentro do bloco] → a tela em si continua funcionando, e o clique foi uma escolha do usuário; aceitável para a apresentação offline.
 - [`youtube-nocookie` ainda grava dados depois que o vídeo toca] → é o modo de privacidade aprimorada oficial; o compromisso é não carregar nada antes do clique.

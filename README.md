@@ -1,6 +1,6 @@
 # Shuffle
 
-Sistema web para cadastrar as músicas que você **já conhece** e **sortear qual tocar** a seguir. O sorteio só usa músicas ativas, aceita filtros (gênero, humor, dificuldade máxima, artista, playlist), evita repetir as últimas N sorteadas e dá o dobro de chance às favoritas. A tela de histórico mostra as estatísticas: músicas mais tocadas, nunca sorteadas, média de notas e músicas por gênero.
+Sistema web para cadastrar as músicas que você **já conhece** e **sortear qual tocar** a seguir. O sorteio só usa músicas ativas, aceita filtros (gênero, humor, dificuldade máxima, artista, playlist), evita repetir as últimas N sorteadas e dá o dobro de chance às favoritas. A tela de histórico mostra as estatísticas: músicas mais tocadas, nunca sorteadas, média de notas e músicas por gênero. Quando o link da música sorteada é de um vídeo do YouTube (inclusive YouTube Music) ou de uma faixa do Spotify, o botão "Ouvir aqui" toca a música na própria tela; qualquer outro link abre em nova aba pelo "Abrir link", que fica sempre disponível.
 
 A interface segue o design system "Lambe-lambe", inspirado nos cartazes de show colados nos muros e na folha de setlist presa com fita no chão do palco: papel, tinta, amarelo e vermelho chapados, letras condensadas gigantes e listas com réguas no lugar de cartões. Funciona no celular a partir de 360 px, respeita a preferência de movimento reduzido e não depende de internet: fontes e ícones são servidos pelo próprio sistema.
 
@@ -83,7 +83,7 @@ openspec/          especificação (specs, proposta, design e tarefas)
 
 ## Especificação (OpenSpec)
 
-Os requisitos, as regras de negócio RN01 a RN08 e os cenários de cada funcionalidade estão em [`openspec/specs/`](openspec/specs/). As mudanças já entregues estão arquivadas em [`openspec/changes/archive/`](openspec/changes/archive/): `add-mvp` (banco, CRUD, sorteio e histórico) e `add-estatisticas-e-visual` (estatísticas e atalhos). A mudança `refaz-identidade-visual` troca o nome para "Shuffle" e o visual para o design system "Lambe-lambe", com as regras anti-slop do seu `design.md`.
+Os requisitos, as regras de negócio RN01 a RN08 e os cenários de cada funcionalidade estão em [`openspec/specs/`](openspec/specs/). As mudanças já entregues estão arquivadas em [`openspec/changes/archive/`](openspec/changes/archive/): `add-mvp` (banco, CRUD, sorteio e histórico) e `add-estatisticas-e-visual` (estatísticas e atalhos). A mudança `refaz-identidade-visual` troca o nome para "Shuffle" e o visual para o design system "Lambe-lambe", com as regras anti-slop do seu `design.md`, e a `add-player-embutido` acrescenta o player do YouTube e do Spotify na tela de resultado.
 
 ```bash
 openspec validate --specs --strict
@@ -93,7 +93,9 @@ openspec validate --specs --strict
 
 - Feito para uso local por uma pessoa: não há login nem proteção CSRF. Não publique o servidor na internet sem adicionar isso e definir a variável de ambiente `SECRET_KEY`.
 - A anti-repetição vale para o histórico inteiro, independentemente dos filtros usados no sorteio.
-- Modo "Esquecidas", setlist, modo festa, CSV, desafio e player embutido ficaram para trabalhos futuros (ver o `proposal.md` das mudanças em `openspec/changes/`).
+- **Player embutido na apresentação:** os links do seed são buscas do YouTube, que não têm player. Para mostrar o "Ouvir aqui", edite uma música e cole um link real de vídeo (`youtube.com/watch?v=…`, `youtu.be/…`, `youtube.com/shorts/…`, `music.youtube.com/watch?v=…`) ou de faixa do Spotify (`open.spotify.com/track/…` ou `open.spotify.com/intl-pt/track/…`).
+- O player só carrega depois do clique e precisa de internet nesse momento; a tela de resultado em si abre sem internet. Vários vídeos oficiais bloqueiam a incorporação e o Spotify toca só uma prévia de 30 s para quem não está logado no navegador: nesses casos, use o "Abrir link".
+- Modo "Esquecidas", setlist, modo festa, CSV e desafio ficaram para trabalhos futuros (ver o `proposal.md` das mudanças em `openspec/changes/`).
 
 ## Créditos
 

@@ -18,8 +18,8 @@ Referências: comportamento na delta `specs/sorteio/spec.md`, decisões em `desi
 
 ## 3. Documentação e integração
 
-- [ ] 3.1 Atualizar o README: o resultado toca vídeos do YouTube (inclusive YouTube Music) e faixas do Spotify ali mesmo, sob demanda; demais links abrem em nova aba; e, numa seção de apresentação/limitações, que para ver o player é preciso editar uma música e colar um link real de vídeo ou faixa (o seed só tem buscas); verificar que o texto confere com o comportamento
-- [ ] 3.2 Rodar a suíte, `openspec validate add-player-embutido --strict` e `openspec validate --all --strict`; verificar que tudo passa e que `git grep -n "youtube-nocookie\|embed/track" -- seed.py` não acha nada (seed sem IDs inventados); commitar o grupo
+- [x] 3.1 Atualizar o README: o resultado toca vídeos do YouTube (inclusive YouTube Music) e faixas do Spotify ali mesmo, sob demanda; demais links abrem em nova aba; e, numa seção de apresentação/limitações, que para ver o player é preciso editar uma música e colar um link real de vídeo ou faixa (o seed só tem buscas); verificar que o texto confere com o comportamento
+- [x] 3.2 Rodar a suíte, `openspec validate add-player-embutido --strict` e `openspec validate --all --strict`; verificar que tudo passa e que `git grep -n "youtube-nocookie\|embed/track" -- seed.py` não acha nada (seed sem IDs inventados); commitar o grupo
 
 ## Workflow follow-up
 

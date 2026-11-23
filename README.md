@@ -1,112 +1,197 @@
 # Shuffle
 
-Sistema web para cadastrar as músicas que você **já conhece** e **sortear qual tocar** a seguir. O sorteio só usa músicas ativas, aceita filtros (gênero, humor, dificuldade máxima, artista, playlist), evita repetir as últimas N sorteadas e dá o dobro de chance às favoritas. A tela de histórico mostra as estatísticas: músicas mais tocadas, nunca sorteadas, média de notas e músicas por gênero. Cada música pode ter três links: um vídeo do YouTube (inclusive YouTube Music), uma faixa do Spotify e um "Outro link" (cifra, letra, busca). No resultado do sorteio há um botão para abrir cada link preenchido ("Abrir no YouTube", "Abrir no Spotify", "Abrir link") e o player embutido toca a música na própria tela: "Ouvir aqui" quando há um serviço, ou "Ouvir no YouTube" / "Ouvir no Spotify" quando há os dois.
-
-A interface segue o design system "Lambe-lambe", inspirado nos cartazes de show colados nos muros e na folha de setlist presa com fita no chão do palco: papel, tinta, amarelo e vermelho chapados, letras condensadas gigantes e listas com réguas no lugar de cartões. Funciona no celular a partir de 360 px, respeita a preferência de movimento reduzido e não depende de internet: fontes e ícones são servidos pelo próprio sistema.
+Cadastre as músicas que você já sabe tocar e deixe o Shuffle sortear qual vai ser a próxima.
 
 Trabalho de G2 da disciplina de Engenharia de Software, desenvolvido com **OpenSpec** (especificar antes de programar).
 
-## Telas
-
-| Início | Resultado do sorteio | Histórico e estatísticas |
-|---|---|---|
-| ![Início no celular](docs/screenshots/inicio-celular.webp) | ![Resultado no celular](docs/screenshots/resultado-celular.webp) | ![Histórico no celular](docs/screenshots/historico-celular.webp) |
-
-Mais capturas, no celular e no desktop, em [`docs/screenshots/`](docs/screenshots/).
-
-## Integrantes
+## Equipe
 
 - Kadu Brum Gavião
 - Miguel Mombach Foza
 - Josiel Paz
 
-## Pré-requisitos
+## Requisitos
 
-- Python 3 (testado com 3.12)
+- Python 3 e git: testado com Python 3.12.3 e git 2.43.0.
+- Google Chrome (ou Chromium): só para a ferramenta `tools/verificar_links.py`.
+- Node.js 20+ e a CLI do OpenSpec: só para o `openspec validate`.
 
-## Instalação
+O app usa só o Flask 3.1.3 (instalado no passo 4) e o SQLite que já vem com o Python. Não precisa de internet para rodar: fontes e ícones são servidos pelo próprio sistema.
+
+## Como rodar
+
+1. Clonar o repositório:
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
+git clone https://github.com/kadugaviao/shuffle.git
+```
+
+2. Entrar na pasta:
+
+```bash
+cd shuffle
+```
+
+3. Criar e ativar o ambiente virtual (Linux e macOS):
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+No Windows (PowerShell):
+
+```powershell
+py -m venv .venv
+.venv\Scripts\activate
+```
+
+4. Instalar as dependências:
+
+```bash
 pip install -r requirements.txt
 ```
 
-## Carga inicial (opcional)
+5. Carregar os dados de exemplo (opcional):
 
 ```bash
 python seed.py
 ```
 
-Cria dados de exemplo para a demonstração: 18 artistas, 20 músicas (rock, rock brasileiro, metal, samba, sertanejo e MPB; os 4 humores; dificuldades de 1 a 5; 5 favoritas e 1 inativa) e as playlists "Roda de violão" e "Churrasco". Todas as músicas têm a faixa do Spotify e quatro têm vídeo do YouTube que toca no player ("Tempo Perdido", "Sonífera Ilha", "Trem das Onze" e "Evidências"); as demais ficam com uma busca do YouTube no "Outro link", porque os vídeos oficiais bloqueiam a incorporação. Os links foram conferidos no navegador e estão documentados em [`docs/links-verificados.md`](docs/links-verificados.md).
-
-- Pode ser rodado mais de uma vez: não duplica nada e não sobrescreve o que você editou.
-- Itens do seed que você excluiu **voltam a ser criados** se rodar de novo.
-
-## Execução
+6. Rodar:
 
 ```bash
 flask --app shuffle_meu run
 ```
 
-Abra http://127.0.0.1:5000. O banco SQLite é criado sozinho em `instance/shuffle.db` na primeira execução.
+7. Abrir no navegador: http://127.0.0.1:5000
 
-## Testes
+## Comandos úteis
+
+Rodar os testes:
 
 ```bash
 python -m unittest
 ```
 
-## Comandos úteis
-
-Conferir se links do YouTube e do Spotify tocam no player embutido (precisa de internet e do Google Chrome; não faz parte dos testes automáticos):
+Recriar o banco do zero com os dados de exemplo (pare o servidor antes):
 
 ```bash
-python tools/verificar_links.py "https://youtu.be/<ID>" "https://open.spotify.com/track/<ID>"
-python tools/verificar_links.py --arquivo links.txt   # um link por linha
+rm -f instance/shuffle.db
+python seed.py
 ```
 
-Para cada link, a ferramenta abre o player como o app abre e mostra `OK` ou `FALHA` com o texto que aparece no player (título e canal ou artista), para conferir se é a música certa. Vídeos que bloqueiam incorporação aparecem como `FALHA`. Foi com ela que os links do seed foram verificados (ver [`docs/links-verificados.md`](docs/links-verificados.md)).
+O banco fica em `instance/shuffle.db` e é criado sozinho na primeira execução. O seed cria 18 artistas, 20 músicas e as playlists "Roda de violão" e "Churrasco":
+- **Músicas:** rock, rock brasileiro, metal, samba, sertanejo e MPB, com os 4 humores, dificuldades de 1 a 5, 5 favoritas e 1 inativa.
+- **Links:** todas as músicas têm faixa do Spotify, e 4 têm vídeo do YouTube que toca no player embutido ("Tempo Perdido", "Sonífera Ilha", "Trem das Onze" e "Evidências"). Os links foram conferidos no navegador e estão em [`docs/links-verificados.md`](docs/links-verificados.md).
+- **Rodar de novo:** o seed pode rodar mais de uma vez. Ele não duplica nada nem sobrescreve o que você editou, mas recria os itens do seed que você excluiu.
 
-## Zerar o banco
-
-Pare o servidor e apague o arquivo `instance/shuffle.db`. Ele é recriado vazio na próxima execução; rode `python seed.py` se quiser os dados de exemplo de novo. O mesmo vale se o `schema.sql` mudar: não há migrações. A exceção são as colunas de link por serviço (`youtube` e `spotify`): um banco criado antes delas as recebe sozinho, vazias, na próxima vez que o app inicia, sem perder músicas. Recriar o banco pelo seed também funciona e já traz os links verificados.
-
-## Estrutura
-
-```
-shuffle_meu/
-  __init__.py      create_app(): configuração, banco e blueprints
-  db.py            conexão SQLite (foreign_keys ligado)
-  schema.sql       as 5 tabelas e as regras de negócio no banco
-  artistas.py      CRUD de artistas
-  musicas.py       CRUD de músicas e validações
-  playlists.py     playlists e suas músicas
-  sorteio.py       algoritmo do sorteio e tela de resultado
-  historico.py     Toquei / Avaliar e tela de histórico
-  estatisticas.py  consultas das estatísticas
-  templates/       telas (Jinja)
-  static/          CSS (design system), JS e fontes (static/fonts)
-tests/             testes (unittest)
-seed.py            carga inicial
-openspec/          especificação (specs, proposta, design e tarefas)
-```
-
-## Especificação (OpenSpec)
-
-Os requisitos, as regras de negócio RN01 a RN08 e os cenários de cada funcionalidade estão em [`openspec/specs/`](openspec/specs/). As mudanças já entregues estão arquivadas em [`openspec/changes/archive/`](openspec/changes/archive/): `add-mvp` (banco, CRUD, sorteio e histórico) e `add-estatisticas-e-visual` (estatísticas e atalhos). A mudança `refaz-identidade-visual` troca o nome para "Shuffle" e o visual para o design system "Lambe-lambe", com as regras anti-slop do seu `design.md`, e a `add-player-embutido` acrescenta o player do YouTube e do Spotify na tela de resultado.
+Validar as specs (precisa de Node.js 20+; instale a CLI uma vez):
 
 ```bash
-openspec validate --specs --strict
+npm install -g @fission-ai/openspec
+openspec validate --all --strict
 ```
 
-## Limitações conhecidas
+Conferir se um link do YouTube ou do Spotify toca no player embutido (precisa de internet e do Google Chrome ou Chromium; não faz parte dos testes):
 
-- Feito para uso local por uma pessoa: não há login nem proteção CSRF. Não publique o servidor na internet sem adicionar isso e definir a variável de ambiente `SECRET_KEY`.
-- A anti-repetição vale para o histórico inteiro, independentemente dos filtros usados no sorteio.
-- **Player embutido na apresentação:** com o seed, "Evidências", "Tempo Perdido", "Sonífera Ilha" e "Trem das Onze" mostram os dois players (YouTube e Spotify); as outras músicas têm só o Spotify. Para outros vídeos, edite a música e cole um link de vídeo (`youtube.com/watch?v=…`, `youtu.be/…`, `youtube.com/shorts/…`, `music.youtube.com/watch?v=…`) no campo YouTube ou de faixa (`open.spotify.com/track/…`, `open.spotify.com/intl-pt/track/…`) no campo Spotify.
-- O player só carrega depois do clique e precisa de internet nesse momento; a tela de resultado em si abre sem internet. Vários vídeos oficiais de música bloqueiam a incorporação e o Spotify toca só uma prévia de 30 s para quem não está logado no navegador: nesses casos, use "Abrir no YouTube" ou "Abrir no Spotify". O status de incorporação muda com o tempo; confira com `python tools/verificar_links.py` antes de apresentar.
-- Modo "Esquecidas", setlist, modo festa, CSV e desafio ficaram para trabalhos futuros (ver o `proposal.md` das mudanças em `openspec/changes/`).
+```bash
+python tools/verificar_links.py "https://youtu.be/jNQXAC9IVRw"
+```
+
+Para cada link, a ferramenta abre o player como o app abre. Ela mostra `OK` ou `FALHA` com o texto que aparece no player (título e canal ou artista), para você conferir se é a música certa. Para vários links, use `--arquivo links.txt`, com um link por linha.
+
+## Problemas comuns
+
+| Erro | Comando |
+|---|---|
+| `ModuleNotFoundError: No module named 'flask'` | Ative o ambiente virtual e instale as dependências: `source .venv/bin/activate` e depois `pip install -r requirements.txt` |
+| `Error: Could not locate a Flask application` | Rode da pasta do projeto, com o `--app`: `cd shuffle` e depois `flask --app shuffle_meu run` |
+| Porta 5000 ocupada (`Address already in use`; no macOS, o AirPlay usa a 5000) | Use outra porta e abra http://127.0.0.1:5001: `flask --app shuffle_meu run --port 5001` |
+| YouTube "This video is unavailable" no player | O dono do vídeo bloqueou a incorporação. Confira com `python tools/verificar_links.py "<link>"`. Se der `FALHA`, use "Abrir no YouTube" ou edite a música com outro vídeo. |
+
+## OpenSpec
+
+Cada mudança passa por quatro passos:
+1. **explore:** conversar sobre a ideia e os riscos, sem escrever nada.
+2. **propose:** escrever `proposal.md`, deltas das specs, `design.md` e `tasks.md`, e commitá-los **antes** do código.
+3. **apply e archive:** implementar as tarefas uma a uma; ao terminar, arquivar a mudança e incorporar as deltas às specs.
+
+Onde ficam:
+- **Specs atuais**, com os requisitos, as regras RN01 a RN08 e os cenários: [`openspec/specs/`](openspec/specs/)
+  - `artistas`, `musicas`, `playlists`, `sorteio`, `historico`, `estatisticas` e `interface`.
+- **Mudanças arquivadas:** [`openspec/changes/archive/`](openspec/changes/archive/)
+  - `add-mvp`: banco, CRUD, sorteio e histórico;
+  - `add-estatisticas-e-visual`: estatísticas e atalhos;
+  - `refaz-identidade-visual`: nome "Shuffle" e design system "Lambe-lambe";
+  - `add-player-embutido`: player do YouTube e do Spotify no resultado;
+  - `add-links-por-servico`: um campo de link por serviço e o seed com links verificados.
+- **Mudança em andamento:** `openspec/changes/revisao-final/`, a revisão antes da apresentação. O relatório está em [`docs/revisao-final.md`](docs/revisao-final.md).
+- **Plano do projeto:** [`docs/plan.md`](docs/plan.md).
+
+Comandos usados no Claude Code: `/openspec-explore`, `/openspec-propose <nome>`, `/openspec-apply-change <nome>` e `/openspec-archive-change <nome>`.
+
+## Stack e pastas
+
+| Camada | Tecnologia |
+|---|---|
+| Back-end | Python 3 + Flask 3.1.3 |
+| Banco | SQLite, pelo módulo `sqlite3` da biblioteca padrão (sem ORM), 5 tabelas |
+| Front-end | Templates Jinja, HTML, CSS e JavaScript puros (sem framework nem bundler) |
+| Testes | `unittest` da biblioteca padrão |
+| Especificação | OpenSpec |
+
+```
+shuffle/
+├── shuffle_meu/          o app Flask
+│   ├── __init__.py       create_app(): configuração, banco e blueprints
+│   ├── schema.sql        as 5 tabelas e as regras de negócio no banco
+│   ├── db.py             conexão SQLite
+│   ├── artistas.py       CRUD de artistas
+│   ├── musicas.py        CRUD de músicas e validações
+│   ├── playlists.py      playlists e suas músicas
+│   ├── sorteio.py        algoritmo do sorteio e tela de resultado
+│   ├── links.py          validação dos links e montagem do player
+│   ├── historico.py      Toquei, notas e tela de histórico
+│   ├── estatisticas.py   consultas das estatísticas
+│   ├── templates/        telas (Jinja)
+│   └── static/           CSS do design system, JS e fontes
+├── tests/                testes automáticos
+├── tools/                verificar_links.py
+├── seed.py               dados de exemplo
+├── docs/                 plano, links verificados, revisão final e screenshots
+└── openspec/             specs e mudanças (ativas e arquivadas)
+```
+
+## Telas e limitações conhecidas
+
+No celular (390 px):
+
+| Início | Resultado do sorteio | Histórico e estatísticas |
+|---|---|---|
+| <img src="docs/screenshots/inicio-celular.webp" width="260" alt="Início no celular"> | <img src="docs/screenshots/resultado-celular.webp" width="260" alt="Resultado do sorteio no celular"> | <img src="docs/screenshots/historico-celular.webp" width="260" alt="Histórico e estatísticas no celular"> |
+
+No desktop (1440 px):
+
+| Início | Resultado do sorteio |
+|---|---|
+| <img src="docs/screenshots/inicio-desktop.webp" width="420" alt="Início no desktop"> | <img src="docs/screenshots/resultado-desktop.webp" width="420" alt="Resultado do sorteio no desktop"> |
+
+Limitações conhecidas:
+- **Uso local:** o app foi feito para uma pessoa no próprio computador e não tem login nem proteção CSRF. A `SECRET_KEY` cai em `"dev"` se a variável de ambiente não existir. Antes de publicar na internet, é preciso acrescentar essas proteções e definir `SECRET_KEY`.
+- **Anti-repetição:** vale para o histórico inteiro, independentemente dos filtros do sorteio.
+- **Player embutido:**
+  - Carrega só depois do clique e precisa de internet nesse momento; a tela de resultado abre sem internet.
+  - Vários vídeos oficiais bloqueiam a incorporação.
+  - O Spotify toca só uma prévia de 30 s para quem não está logado no navegador.
+  - Nesses casos, use "Abrir no YouTube" ou "Abrir no Spotify". Confira os links com `python tools/verificar_links.py` antes de apresentar.
+- **Trabalho futuro:**
+  - tocar arquivo de áudio local;
+  - gravar a própria versão pelo microfone;
+  - players de SoundCloud e Deezer;
+  - proteção CSRF;
+  - modos "Esquecidas", setlist e festa;
+  - exportação CSV.
 
 ## Créditos
 

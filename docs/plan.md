@@ -245,13 +245,13 @@ O sistema DEVE impedir que uma música sorteada nas últimas N rodadas seja sort
 ---
 
 ## 12. Critérios de pronto (MVP)
-- [ ] Banco com as tabelas `artista`, `musica`, `playlist`, `playlist_musica` e `sorteio` (mínimo exigido: 2)
-- [ ] CRUD completo de músicas e artistas funcionando
-- [ ] Sorteio funcionando com pelo menos 1 filtro
-- [ ] Histórico de sorteios salvo
-- [ ] OpenSpec iniciado (`openspec/config.yaml`) e specs em Markdown no repositório (`openspec/specs/`)
-- [ ] Mudança `add-mvp` passou pelos 4 passos e está em `openspec/changes/archive/`
-- [ ] Histórico de commits mostra as specs escritas **antes** do código
-- [ ] README com o nome dos integrantes do trio e as instruções de instalação e execução
-- [ ] Código e artefatos no GitHub, com o repositório acessível ao professor
+- [x] Banco com as tabelas `artista`, `musica`, `playlist`, `playlist_musica` e `sorteio` (mínimo exigido: 2)
+- [x] CRUD completo de músicas e artistas funcionando
+- [x] Sorteio funcionando com pelo menos 1 filtro
+- [x] Histórico de sorteios salvo
+- [x] OpenSpec iniciado (`openspec/config.yaml`) e specs em Markdown no repositório (`openspec/specs/`)
+- [x] Mudança `add-mvp` passou pelos 4 passos e está em `openspec/changes/archive/`
+- [x] Histórico de commits mostra as specs escritas **antes** do código
+- [x] README com o nome dos integrantes do trio e as instruções de instalação e execução
+- [x] Código e artefatos no GitHub, com o repositório acessível ao professor
 - [ ] Apresentação ensaiada para **24/11**

@@ -138,7 +138,7 @@ h1, h2, .display {
   text-wrap: balance;
   overflow-wrap: anywhere;
 }
-h1 { font-size: var(--t-44); font-weight: 900; line-height: 0.95; letter-spacing: -0.01em; margin-bottom: var(--espaco-5); }
+h1 { font-size: var(--t-44); font-weight: 900; line-height: 1.05; letter-spacing: -0.01em; margin-bottom: var(--espaco-5); }
 h2 { font-size: var(--t-28); font-weight: 800; line-height: 1; }
 @media (min-width: 720px) { h1 { font-size: var(--t-72); } }
 
@@ -452,7 +452,7 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .com-unidade input { width: 6rem; flex: none; font-family: var(--fonte-mono); font-variant-numeric: tabular-nums; }
 .unidade { color: var(--tinta-2); }
 /* Início: composição de cartaz, alinhada à esquerda */
-.hero { font-size: var(--t-72); line-height: 0.9; text-wrap: initial; }
+.hero { font-size: var(--t-72); line-height: 1.05; text-wrap: initial; }
 @media (min-width: 720px) { .hero { font-size: var(--t-120); } }
 .inicio-principal .sortear { margin-bottom: var(--espaco-6); }
 .inicio-lado { margin-top: var(--espaco-7); }
@@ -509,7 +509,7 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .resultado .revelavel { display: grid; justify-items: start; gap: var(--espaco-4); }
 .resultado-topo { display: flex; align-items: end; gap: var(--espaco-4); }
 .resultado-titulo { display: flex; flex-wrap: wrap; align-items: center; gap: var(--espaco-3) var(--espaco-5); }
-.titulo-sorteado { margin: 0; font-size: var(--t-72); line-height: 0.9; }
+.titulo-sorteado { margin: 0; font-size: var(--t-72); line-height: 1.05; } /* abaixo de ~1 o acento da linha de baixo encosta na de cima (Ê sob C virava Ç) */
 .titulo-longo { font-size: var(--t-44); }
 @media (min-width: 720px) {
   .titulo-sorteado { font-size: var(--t-120); }

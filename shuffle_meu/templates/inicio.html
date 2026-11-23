@@ -4,7 +4,7 @@
 {% block titulo %}Início{% endblock %}
 {% block conteudo %}
 {% if not tem_musicas %}
-<h1 class="hero">Bora<br> tocar o<br> quê?</h1>
+<h1 class="hero">Qual<br> vai ser?</h1>
 <section class="cartao">
   {{ vazio("Cadastre sua primeira música", "Sem música no caderno, não tem sorteio.",
            url_for("musicas.nova"), "Nova música") }}
@@ -12,7 +12,7 @@
 {% else %}
 <div class="inicio">
   <form class="inicio-principal" method="post" action="{{ url_for('sorteio.sortear') }}">
-    <h1 class="hero">Bora<br> tocar o<br> quê?</h1>
+    <h1 class="hero">Qual<br> vai ser?</h1>
     <button class="primario sortear">Sortear</button>
     <div class="cartao campos filtros">
       {{ chips("humor", "Humor", HUMORES.items(), f.humor, "Todos") }}

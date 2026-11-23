@@ -70,7 +70,7 @@ O vermelho `#E4371E` dá 3,85:1 com papel nos dois sentidos, e o sucesso `#1E7F4
 
 ### D5. Caixa alta só por CSS
 
-Títulos de tela, o hero, a música sorteada, a marca e o carimbo ficam em caixa normal no HTML ("Bora tocar o quê?", "Tempo Perdido", "Shuffle") e viram caixa alta com `text-transform: uppercase`. Leitores de tela leem a palavra normalmente, e os testes que conferem textos (`<h1 class="titulo-sorteado">Tempo Perdido</h1>`) continuam válidos.
+Títulos de tela, o hero, a música sorteada, a marca e o carimbo ficam em caixa normal no HTML ("Qual vai ser?", "Tempo Perdido", "Shuffle") e viram caixa alta com `text-transform: uppercase`. Leitores de tela leem a palavra normalmente, e os testes que conferem textos (`<h1 class="titulo-sorteado">Tempo Perdido</h1>`) continuam válidos.
 
 ### D6. Escala tipográfica em degraus, sem `clamp()`
 
@@ -116,7 +116,7 @@ Os textos citados nas specs ficam **iguais** (são o contrato que os testes conf
 |---|---|---|
 | Mensagem da RN05 (spec) | Nenhuma música encontrada com esses filtros. Tente afrouxar os filtros. | Nada com esse filtro. Tira algum? |
 | Atalho de ativa (rótulo) | Ativa | Ativa / Fora do sorteio |
-| Título da tela inicial | O que tocar agora? | Bora tocar o quê? |
+| Título da tela inicial | O que tocar agora? | Qual vai ser? (antes "Bora tocar o quê?", trocado em 23/11 por soar com duplo sentido) |
 | Início sem músicas (frase) | O sorteio começa quando o repertório tem pelo menos uma música. | Sem música no caderno, não tem sorteio. |
 | Bloco de espera (frase) | Depois do primeiro sorteio, ela fica guardada neste cartão. | Sorteia a primeira e ela fica anotada. |
 | Repertório vazio, sem filtro (frase) | Tente outra busca ou limpe os filtros. | O caderno ainda está em branco. Anota a primeira que você sabe tocar. (+ botão "Nova música") |
@@ -172,9 +172,9 @@ Escala única: **14 / 16 / 20 / 28 / 44 / 72 / 120 px**. Quando há dois valores
 
 | Papel | Fonte | Tamanho | Detalhes |
 |---|---|---|---|
-| Hero da tela inicial | Big Shoulders Display 900 | 72 / 120 | caixa alta, altura de linha 0,9, tracking −0,01em, quebra em 2–3 linhas |
-| Música sorteada | Big Shoulders Display 900 | 72 / 120 (longa: 44 / 72) | caixa alta, altura de linha 0,9, tracking −0,01em |
-| Título de tela (h1) | Big Shoulders Display 900 | 44 / 72 | caixa alta, altura de linha 0,95 |
+| Hero da tela inicial | Big Shoulders Display 900 | 72 / 120 | caixa alta, altura de linha 1,05, tracking −0,01em, quebra em 2 linhas (`Qual<br> vai ser?`) |
+| Música sorteada | Big Shoulders Display 900 | 72 / 120 (longa: 44 / 72) | caixa alta, altura de linha 1,05, tracking −0,01em |
+| Título de tela (h1) | Big Shoulders Display 900 | 44 / 72 | caixa alta, altura de linha 1,05 |
 | Título de seção (h2) | Big Shoulders Display 800 | 28 | caixa alta |
 | Marca "SHUFFLE" | Big Shoulders Display 900 | 28 | amarelo sobre a faixa de tinta |
 | Botão "Sortear" | Big Shoulders Display 900 | 44 / 72 | caixa alta, papel sobre vermelho |
@@ -190,7 +190,7 @@ Escala única: **14 / 16 / 20 / 28 / 44 / 72 / 120 px**. Quando há dois valores
 | Métricas | IBM Plex Mono 500, `tabular-nums` | 44 / 72 | |
 | Números em listas, dificuldade, contadores, datas | IBM Plex Mono 400, `tabular-nums` | 14–16 | |
 
-Caixa alta só por `text-transform` (D5). Caixa alta só no display (≥ 28 px) e nas etiquetas de 14 px; rótulos, botões comuns e navegação ficam em caixa normal.
+Altura de linha mínima de 1,05 nos títulos em Big Shoulders: abaixo de ~1, o acento de uma maiúscula da linha de baixo encosta na letra de cima (o circunflexo de "QUÊ" sob o "C" de "TOCAR" parecia um "Ç"). Caixa alta só por `text-transform` (D5). Caixa alta só no display (≥ 28 px) e nas etiquetas de 14 px; rótulos, botões comuns e navegação ficam em caixa normal.
 
 ### Layout
 
@@ -206,9 +206,9 @@ Início, a partir de 960 px
 │ SHUFFLE   Início   Repertório   Artistas   Playlists   Histórico     │ faixa de tinta
 │           ▀▀▀▀▀▀ régua vermelha na aba atual                         │
 └──────────────────────────────────────────────────────────────────────┘
-  BORA                                         ▱┌────────────────────┐▱  fita
-  TOCAR O                                       │ Última sorteada:   │
-  QUÊ?                    (120 px, à esquerda)  │ [TP] Tempo Perdido │
+  QUAL                                         ▱┌────────────────────┐▱  fita
+  VAI SER?                                      │ Última sorteada:   │
+                          (120 px, à esquerda)  │ [TP] Tempo Perdido │
   ┌───────────────────────────────┐             │ — Legião Urbana    │
   │  SORTEAR                      │▌ impressão  │ 22/11 21:04        │
   └───────────────────────────────┘             └────────────────────┘
@@ -222,9 +222,9 @@ Início, 360 px                      Resultado, 360 px
 ┌──────────────────────┐            ┌──────────────────────┐
 │ SHUFFLE              │ faixa      │ SHUFFLE              │
 ├──────────────────────┤            ├──────────────────────┤
-│ BORA                 │ 72 px      │▱┌──────────────────┐▱│
-│ TOCAR O              │            │ │[TP] 22/11 21:04  │ │
-│ QUÊ?                 │            │ │ TEMPO   ╱TOCA   ╱│ │
+│ QUAL                 │ 72 px      │▱┌──────────────────┐▱│
+│ VAI SER?             │            │ │[TP] 22/11 21:04  │ │
+│                      │            │ │ TEMPO   ╱TOCA   ╱│ │
 │ ┌──────────────────┐ │            │ │ PERDIDO╱ ESSA! ╱ │ │
 │ │ SORTEAR          │▌│ largura    │ │ Legião Urbana    │ │
 │ └──────────────────┘ │ total      │ │ [Abrir link]     │ │

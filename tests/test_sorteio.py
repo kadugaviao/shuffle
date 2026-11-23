@@ -287,6 +287,8 @@ class TestSorteio(BaseTest):
         html = self.texto(self.client.get("/"))
         self.assertIn("Sua última música aparece aqui", html)
         self.assertNotIn("Última sorteada:", html)
+        self.assertIn('<h1 class="hero">Qual<br> vai ser?</h1>', html)
+        self.assertNotIn("tocar o", html.lower())
         self.sorteio(1)
         html = self.texto(self.client.get("/"))
         self.assertIn("Última sorteada: Tempo Perdido — Legião Urbana", html)

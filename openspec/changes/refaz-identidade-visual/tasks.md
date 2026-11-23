@@ -50,9 +50,9 @@ Referências: comportamento em `specs/*/spec.md`, decisões em `design.md` (D1�
 
 ## 7. Formulários
 
-- [ ] 7.1 `musicas/form.html`: inputs com borda 2 px de tinta, rótulos em Archivo condensado, humor em chips, dificuldade em seletor segmentado de 5 quadrados com números em Plex Mono, erro em `--vermelho-texto` junto ao campo com borda vermelha; verificar com os testes de erro por campo de `test_musicas.py` (cenário "Título vazio") e pelo teclado
-- [ ] 7.2 `artistas/form.html` e botões dos formulários (primário vermelho em Archivo 700 20 px, secundário, excluir em `--vermelho-texto`); verificar com os testes de `test_artistas.py` e medindo no DevTools que o texto do botão primário tem 20 px e peso 700 (cenário "Botão vermelho")
-- [ ] 7.3 Suíte verde; conferir os formulários a 360 px; commitar o grupo
+- [x] 7.1 `musicas/form.html`: inputs com borda 2 px de tinta, rótulos em Archivo condensado, humor em chips, dificuldade em seletor segmentado de 5 quadrados com números em Plex Mono, erro em `--vermelho-texto` junto ao campo com borda vermelha; verificar com os testes de erro por campo de `test_musicas.py` (cenário "Título vazio") e pelo teclado
+- [x] 7.2 `artistas/form.html` e botões dos formulários (primário vermelho em Archivo 700 20 px, secundário, excluir em `--vermelho-texto`); verificar com os testes de `test_artistas.py` e medindo no DevTools que o texto do botão primário tem 20 px e peso 700 (cenário "Botão vermelho")
+- [x] 7.3 Suíte verde; conferir os formulários a 360 px; commitar o grupo
 
 ## 8. Artistas e playlists
 

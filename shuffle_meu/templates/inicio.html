@@ -4,6 +4,7 @@
 {% block titulo %}Início{% endblock %}
 {% block conteudo %}
 {% if not tem_musicas %}
+<h1 class="hero">Bora<br> tocar o<br> quê?</h1>
 <section class="cartao">
   {{ vazio("Cadastre sua primeira música", "Sem música no caderno, não tem sorteio.",
            url_for("musicas.nova"), "Nova música") }}
@@ -51,7 +52,7 @@
     {% else %}
     <section class="folha ultima ultima-vazia">
       <p class="ultima-titulo">Sua última música aparece aqui</p>
-      <p class="meta">Sorteia a primeira e ela fica anotada aqui.</p>
+      <p class="meta">Sorteia a primeira e ela fica anotada.</p>
     </section>
     {% endif %}
   </aside>

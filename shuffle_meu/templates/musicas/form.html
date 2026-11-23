@@ -32,7 +32,7 @@
            musica.dificuldade or 3, erros=erros, classe="chips segmentado") }}
 
   {% call campo("link", "Link (opcional: YouTube, Spotify, cifra)", erros) %}
-  <input name="link" type="url" value="{{ musica.link or '' }}" placeholder="https://…" {{ aria("link", erros) }}>
+  <input name="link" type="url" value="{{ musica.link or '' }}" placeholder="https://…" autocomplete="off" {{ aria("link", erros) }}>
   {% endcall %}
 
   {% if id %}

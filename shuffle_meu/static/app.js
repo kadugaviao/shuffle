@@ -48,6 +48,7 @@ function iniciarRoleta() {
   const itens = Array.from({ length: 20 }, (_, i) => (outros.length ? outros[i % outros.length] : sorteada));
   itens.push(sorteada);
   const faixa = folha.querySelector(".rolo-faixa");
+  faixa.parentElement.classList.toggle("rolo-longo", folha.querySelector(".titulo-longo") !== null); // mesmo degrau do título
   faixa.replaceChildren(...itens.map((t) => Object.assign(document.createElement("li"), { textContent: t })));
   folha.classList.add("rodando");
   requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -84,10 +85,14 @@ document.addEventListener("submit", async (evento) => {
   }
 });
 
-// Filtros do Repertório: chips e "Só favoritas" aplicam na hora (o botão Filtrar fica para quem não tem JS).
+// Filtros do Repertório: chips e "Só favoritas" aplicam na hora quando clicados. Pelo teclado não: as setas
+// mudam o radio a cada passo e recarregar ali tiraria o foco (WCAG 3.2.2); quem usa teclado aplica com "Filtrar".
+let ultimoPeloPonteiro = false;
+document.addEventListener("pointerdown", () => { ultimoPeloPonteiro = true; });
+document.addEventListener("keydown", () => { ultimoPeloPonteiro = false; });
 document.addEventListener("change", (evento) => {
   const form = evento.target.closest("form[data-auto-enviar]");
-  if (form && evento.target.matches("input[type=radio], input[type=checkbox]")) form.requestSubmit();
+  if (form && ultimoPeloPonteiro && evento.target.matches("input[type=radio], input[type=checkbox]")) form.requestSubmit();
 });
 
 iniciarToasts();

@@ -69,10 +69,10 @@ Referências: comportamento em `specs/*/spec.md`, decisões em `design.md` (D1�
 
 ## 10. Revisão anti-slop com a ui-craft
 
-- [ ] 10.1 Rodar as ferramentas `check_anti_slop` e `tokens_lint` do ui-craft sobre `style.css` e os templates; corrigir o que violar a seção "Anti-slop" ou os tokens; verificar rodando de novo sem achados críticos e anotando no commit os achados aceitos e o porquê
-- [ ] 10.2 Rodar em paralelo os agentes `ui-craft:design-reviewer` e `ui-craft:a11y-auditor` sobre o diff da mudança; corrigir os achados críticos e de alto impacto; verificar repetindo os testes afetados e listando no commit o que ficou para depois
-- [ ] 10.3 Conferência de integração, a 360 px e a 1440 px: nenhuma tela com rolagem horizontal (cenário "Telas a 360 px"), foco visível percorrendo cada tela com Tab, movimento reduzido emulado, rede desligada com a aparência igual (cenário "Apresentação offline"), nenhum "Shuffle Meu" visível; verificar marcando cada item numa lista no corpo do commit
-- [ ] 10.4 Suíte verde; commitar o grupo
+- [x] 10.1 Rodar as ferramentas `check_anti_slop` e `tokens_lint` do ui-craft sobre `style.css` e os templates; corrigir o que violar a seção "Anti-slop" ou os tokens; verificar rodando de novo sem achados críticos e anotando no commit os achados aceitos e o porquê
+- [x] 10.2 Rodar em paralelo os agentes `ui-craft:design-reviewer` e `ui-craft:a11y-auditor` sobre o diff da mudança; corrigir os achados críticos e de alto impacto; verificar repetindo os testes afetados e listando no commit o que ficou para depois
+- [x] 10.3 Conferência de integração, a 360 px e a 1440 px: nenhuma tela com rolagem horizontal (cenário "Telas a 360 px"), foco visível percorrendo cada tela com Tab, movimento reduzido emulado, rede desligada com a aparência igual (cenário "Apresentação offline"), nenhum "Shuffle Meu" visível; verificar marcando cada item numa lista no corpo do commit
+- [x] 10.4 Suíte verde; commitar o grupo
 
 ## 11. Screenshots e documentação final
 

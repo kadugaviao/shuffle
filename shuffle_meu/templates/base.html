@@ -21,6 +21,7 @@
   <script src="{{ url_for('static', filename='app.js') }}" defer></script>
 </head>
 <body>
+  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
   <header class="topo">
     <a class="marca" href="{{ url_for('sorteio.inicio') }}"><span>Shuffle</span></a>
     <nav class="navegacao" aria-label="Principal">
@@ -45,7 +46,7 @@
   {% endif %}
   {% endwith %}
 
-  <main>
+  <main id="conteudo" tabindex="-1">
     {% block conteudo %}{% endblock %}
   </main>
 </body>

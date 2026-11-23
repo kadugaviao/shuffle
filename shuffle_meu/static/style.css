@@ -115,7 +115,10 @@
 /* ---------- Base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scroll-padding: 72px 0 calc(80px + env(safe-area-inset-bottom)); } /* foco não some atrás das barras */
+@media (min-width: 720px) { html { scroll-padding: 72px 0 16px; } }
+
+[hidden] { display: none !important; }
 
 body {
   margin: 0;
@@ -145,6 +148,20 @@ a:hover { text-decoration-thickness: 2px; }
 :focus-visible { outline: 3px solid var(--tinta); outline-offset: 2px; }
 
 .numero { font-family: var(--fonte-mono); font-variant-numeric: tabular-nums; }
+
+.pular-conteudo {
+  position: absolute;
+  top: var(--espaco-2);
+  left: var(--espaco-2);
+  z-index: 30;
+  padding: var(--espaco-2) var(--espaco-4);
+  font-weight: 700;
+  color: var(--tinta);
+  background: var(--amarelo);
+  transform: translateY(-200%);
+}
+.pular-conteudo:focus { transform: none; }
+main:focus { outline: none; }
 
 .visualmente-oculto {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
@@ -273,6 +290,8 @@ label.chip { position: relative; display: inline-flex; cursor: pointer; }
 .chip span {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  min-width: 40px; /* 44 de altura; 40 de largura cabe Qualquer + 1–5 numa linha a 360 px */
   min-height: 44px;
   padding: 0 14px;
   font-size: var(--t-16);
@@ -283,6 +302,7 @@ label.chip { position: relative; display: inline-flex; cursor: pointer; }
 }
 .chip:hover span { background: var(--papel-2); }
 .chip input:checked + span { font-weight: 700; background: var(--amarelo); }
+.chip input:checked + span::before { content: ""; position: absolute; top: 5px; left: 5px; width: 6px; height: 6px; background: var(--tinta); } /* estado sem depender de cor, sem mudar a largura */
 .chip input:focus-visible + span { outline: 3px solid var(--tinta); outline-offset: 2px; }
 
 /* Seletor segmentado (dificuldade 1–5 no formulário): quadrados colados */
@@ -357,7 +377,7 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .capa-grande { width: 96px; font-size: var(--t-44); }
 
 /* Dificuldade: 5 quadradinhos, preenchidos até o nível */
-.dificuldade { display: inline-flex; align-items: center; gap: 3px; }
+.dificuldade { display: inline-flex; align-items: center; gap: var(--espaco-1); }
 .dificuldade span { width: 10px; height: 10px; border: 1.5px solid var(--tinta); }
 .dificuldade span.cheia { background: var(--tinta); }
 
@@ -458,6 +478,7 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .editar-playlist[open] summary { margin-bottom: var(--espaco-4); }
 .voltar { display: flex; flex-wrap: wrap; gap: var(--espaco-5); margin-top: var(--espaco-5); }
 .voltar-esquerda { justify-content: flex-start; }
+.voltar a { display: inline-flex; align-items: center; min-height: 44px; }
 
 /* Repertório: setlist numerada. Celular: número + capa + título; etiquetas; atalhos. Desktop: uma linha só. */
 .musica-cartao {
@@ -532,7 +553,11 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 }
 .rolo-faixa { margin: 0; padding: 0; list-style: none; transition: transform var(--rolar); }
 .rolo-faixa li { height: var(--linha); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-@media (min-width: 720px) { .rolo-lista { --linha: var(--t-120); font-size: var(--t-120); } }
+.rolo-lista.rolo-longo { --linha: var(--t-44); font-size: var(--t-44); }
+@media (min-width: 720px) {
+  .rolo-lista { --linha: var(--t-120); font-size: var(--t-120); }
+  .rolo-lista.rolo-longo { --linha: var(--t-72); font-size: var(--t-72); }
+}
 .js [data-roleta].revelado .revelavel { visibility: visible; animation: none; }
 @keyframes aparecer { to { visibility: visible; } }
 
@@ -597,7 +622,7 @@ ol.barras li:first-child .barra span { background: var(--vermelho); }
   display: grid;
   justify-items: center;
   align-content: center;
-  gap: 2px;
+  gap: var(--espaco-1);
   min-height: 64px;
   padding: var(--espaco-2) 2px;
   font-size: var(--t-14);
@@ -655,7 +680,7 @@ ol.barras li:first-child .barra span { background: var(--vermelho); }
 .toast-erro > .icone { color: var(--vermelho); }
 .toast-aviso > .icone { color: var(--amarelo); }
 .toast p { flex: 1; padding-top: 1px; }
-.toast-fechar { min-height: 32px; min-width: 32px; color: var(--papel); background: transparent; border-color: transparent; }
+.toast-fechar { min-height: 44px; min-width: 44px; color: var(--papel); background: transparent; border-color: transparent; }
 .toast-fechar:hover { background: transparent; }
 .toast-fechar .icone { width: 16px; height: 16px; }
 .toast.saindo { opacity: 0; transform: translateY(8px); }

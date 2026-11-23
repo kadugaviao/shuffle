@@ -74,7 +74,7 @@ Títulos de tela, o hero, a música sorteada, a marca e o carimbo ficam em caixa
 
 ### D6. Escala tipográfica em degraus, sem `clamp()`
 
-Os tamanhos são só os da escala (14, 16, 20, 28, 44, 72, 120 px), trocados por degrau no ponto de quebra de 720 px. `clamp()` com `vw` gera tamanhos intermediários arbitrários, que é o que a escala quer evitar. Títulos de música longos descem um degrau com uma classe dada pelo template (`titulo-longo` quando o título passa de 24 caracteres), mais `overflow-wrap: anywhere` e `text-wrap: balance` para palavras longas a 360 px.
+Os tamanhos são só os da escala (14, 16, 20, 28, 44, 72, 120 px), trocados por degrau no ponto de quebra de 720 px. `clamp()` com `vw` gera tamanhos intermediários arbitrários, que é o que a escala quer evitar. Títulos de música longos descem um degrau com uma classe dada pelo template (`titulo-longo` quando o título passa de 24 caracteres ou tem palavra de mais de 8 letras, que não cabe a 72 px em 360 px; a roleta usa o mesmo degrau), mais `overflow-wrap: anywhere` e `text-wrap: balance` para palavras longas a 360 px.
 
 ### D7. Revelação: roleta vertical e carimbo
 
@@ -118,7 +118,8 @@ Os textos citados nas specs ficam **iguais** (são o contrato que os testes conf
 | Atalho de ativa (rótulo) | Ativa | Ativa / Fora do sorteio |
 | Título da tela inicial | O que tocar agora? | Bora tocar o quê? |
 | Início sem músicas (frase) | O sorteio começa quando o repertório tem pelo menos uma música. | Sem música no caderno, não tem sorteio. |
-| Bloco de espera (frase) | Depois do primeiro sorteio, ela fica guardada neste cartão. | Sorteia a primeira e ela fica anotada aqui. |
+| Bloco de espera (frase) | Depois do primeiro sorteio, ela fica guardada neste cartão. | Sorteia a primeira e ela fica anotada. |
+| Repertório vazio, sem filtro (frase) | Tente outra busca ou limpe os filtros. | O caderno ainda está em branco. Anota a primeira que você sabe tocar. (+ botão "Nova música") |
 | Rótulo das estrelas | Que nota você dá? / Sua nota | Quanto valeu? / Sua nota: N |
 | Link abaixo do resultado | Voltar aos filtros | Mudar os filtros |
 | Repertório sem resultado (frase) | Tente outra busca ou limpe os filtros. | Tira um filtro ou busca outro nome. |
@@ -154,7 +155,7 @@ Cartaz lambe-lambe de show colado no muro e a folha de setlist presa com fita no
 | `--vermelho` | `#E4371E` | ação primária, carimbo, perigo; texto sobre ele só grande (3,85:1) |
 | `--vermelho-texto`* | `#B82E17` | texto vermelho pequeno: erro de campo, link de excluir (5,45:1) |
 | `--sucesso` | `#1E7F4F` | carimbo "Tocada" e ícone de sucesso (só grande ou ícone, 4,46:1) |
-| `--foco` | `3px solid var(--tinta)`, `outline-offset: 2px` | foco de teclado; sobre tinta (faixa, toasts), `--amarelo` |
+| — (regra `:focus-visible`) | `outline: 3px solid var(--tinta)`, `outline-offset: 2px` | foco de teclado; sobre tinta (faixa, toasts), `outline-color: var(--amarelo)` |
 | `--raio-controle` | `4px` | inputs, selects e botões |
 | — | `0` | blocos, réguas, chips, capas, barras, toasts |
 | `--regua` / `--regua-fina` | `2px solid var(--tinta)` / `1px solid var(--tinta)` | seções / linhas de lista |
@@ -196,7 +197,8 @@ Caixa alta só por `text-transform` (D5). Caixa alta só no display (≥ 28 px) 
 - Contêiner com largura máxima de 72rem, alinhado à esquerda, margem lateral de 16 px no celular e 32 px a partir de 720 px.
 - Pontos de quebra: **720 px** (navegação de baixo para cima, degrau da escala) e **960 px** (duas colunas no início).
 - Camadas (`z-index`): conteúdo 0, navegação 10, toasts 20. Não há mais camada de fundo.
-- `main` com `padding-bottom: calc(72px + env(safe-area-inset-bottom))` abaixo de 720 px para a barra inferior não cobrir o fim.
+- `main` com `padding-bottom: calc(88px + env(safe-area-inset-bottom))` abaixo de 720 px para a barra inferior (64 px) não cobrir o fim; `html` com `scroll-padding` para o foco de teclado não ficar atrás das barras.
+- Formulários (40rem) e detalhe de playlist (48rem) ficam mais estreitos de propósito, pela medida de leitura dos campos: é a exceção à regra de não deixar um lado sobrando.
 
 ```
 Início, a partir de 960 px
@@ -261,7 +263,7 @@ Abaixo de 960 px o bloco "última sorteada" não aparece (como hoje). No celular
 | Botão de perigo | ícone ou texto em `--vermelho-texto`, borda 2 px na mesma cor; confirmação nativa como hoje |
 | Botão de ícone | quadrado de 44 px, ícone de traço tinta; pressionado/ligado conforme D9 |
 | Interruptor (ativa) | trilho retangular 40×24, borda 2 px tinta, raio 0; ligado = trilho amarelo e quadrado de tinta à direita; rótulo "Ativa" / "Fora do sorteio" ao lado (D9); área de toque de 44 px |
-| Chip | retângulo (raio 0), borda 2 px tinta, Archivo 600 condensado 16 px, altura mínima 44 px; selecionado = fundo amarelo e texto 700; radio/checkbox nativo escondido com foco no rótulo |
+| Chip | retângulo (raio 0), borda 2 px tinta, Archivo 600 condensado 16 px, altura mínima 44 px (largura mínima 40 px); selecionado = fundo amarelo, texto 700 e uma marca quadrada de tinta no canto (estado sem depender de cor); radio/checkbox nativo escondido com foco no rótulo |
 | Seletor de dificuldade (formulário) | 5 quadrados colados com borda 2 px, números em Plex Mono; selecionado = amarelo |
 | Input / select | fundo papel, borda 2 px tinta, raio 4 px, altura 48 px, rótulo acima em Archivo 600 condensado |
 | Erro de campo | borda do campo em `--vermelho`, mensagem em `--vermelho-texto` 14 px 700 com ícone de alerta logo abaixo |
@@ -269,7 +271,7 @@ Abaixo de 960 px o bloco "última sorteada" não aparece (como hoje). No celular
 | Capa | quadrado chapado (D8) com iniciais em Big Shoulders 900; 48 px na lista, 96 px no resultado |
 | Lista setlist | `<ol>` com régua de 2 px no topo, linhas com régua de 1 px e fundo alternando papel/papel-2; número em Plex Mono `--tinta-2`; título Archivo 700 20 px; artista `--tinta-2`; etiquetas de texto; dificuldade; atalhos |
 | Dificuldade (lista) | 5 quadradinhos de 10 px com borda 1,5 px tinta; preenchidos em tinta até o nível; `aria-label="Dificuldade N de 5"` |
-| Etiqueta | texto 14 px caixa alta, borda 1 px tinta, sem fundo; "Inativa" e linha inativa com título em `--tinta-2` |
+| Etiqueta | texto 14 px caixa alta, borda 1 px tinta, sem fundo; "Inativa" e linha inativa com título em `--tinta-2`; exceção: "Tocada" no histórico é invertida (fundo tinta, texto papel), porque texto verde pequeno reprova no contraste (D4) |
 | Folha (resultado e "última sorteada") | bloco papel com borda 2 px tinta, raio 0, dois pedaços de fita (retângulos papel-2 com borda 1 px `--tinta-2`, girados ±4°) nos cantos de cima |
 | Resultado | folha alinhada à esquerda: capa, data em Plex Mono, título gigante, carimbo sobreposto à direita do título, artista, link, "Toquei" (fundo tinta, texto papel, ícone de check) e "Pular" (secundário, ícone de avanço), estrelas depois de tocar |
 | Carimbo | D7; vermelho ("Toca essa!") ou sucesso ("Tocada"), borda 4 px, girado −6°, sem fundo |

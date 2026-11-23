@@ -130,6 +130,13 @@ class TestMusicas(BaseTest):
         self.musica("Tempo Perdido", self.legiao)
         self.assertIn("Nenhuma música encontrada.", self.texto(self.client.get("/musicas?q=xyz")))
 
+    def test_repertorio_zerado_convida_a_cadastrar(self):
+        html = self.texto(self.client.get("/musicas"))
+        self.assertIn("Nenhuma música encontrada.", html)
+        self.assertIn("O caderno ainda está em branco.", html)
+        self.assertIn('href="/musicas/nova"', html)
+        self.assertNotIn("O caderno ainda está em branco.", self.texto(self.client.get("/musicas?q=xyz")))
+
     def test_marcar_favorita_e_desativar(self):
         m = self.musica("Tempo Perdido", self.legiao)
         self.client.post(f"/musicas/{m}/editar", data=form(artista_id=str(self.legiao), favorita="1"))

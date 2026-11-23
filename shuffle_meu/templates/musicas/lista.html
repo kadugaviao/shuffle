@@ -55,6 +55,10 @@
   {% endfor %}
 </ol>
 {% else %}
+{% if q or f.values()|select|list %}
 <section class="cartao">{{ vazio("Nenhuma música encontrada.", "Tira um filtro ou busca outro nome.") }}</section>
+{% else %}
+<section class="cartao">{{ vazio("Nenhuma música encontrada.", "O caderno ainda está em branco. Anota a primeira que você sabe tocar.", url_for("musicas.nova"), "Nova música") }}</section>
+{% endif %}
 {% endif %}
 {% endblock %}

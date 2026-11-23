@@ -5,8 +5,8 @@ Referências: comportamento na delta `specs/sorteio/spec.md`, decisões em `desi
 ## 1. Extração do ID no servidor
 
 - [x] 1.1 Commitar os artefatos desta mudança antes de qualquer código (`docs: specs add-player-embutido`); verificar com `git log -1 --stat` que só arquivos de `openspec/changes/add-player-embutido/` entraram
-- [ ] 1.2 Escrever primeiro os testes unitários de `player()` em `tests/test_sorteio.py` com os casos aceitos e recusados de D5; verificar que falham por `player` não existir
-- [ ] 1.3 Implementar `player(link)` em `sorteio.py` conforme D1 (esquema, host por igualdade numa lista fechada, caminho, `re.fullmatch` do ID, `src` montado só com constantes + ID); verificar que os testes de 1.2 passam e que a suíte inteira continua verde; commitar o grupo
+- [x] 1.2 Escrever primeiro os testes unitários de `player()` em `tests/test_sorteio.py` com os casos aceitos e recusados de D5; verificar que falham por `player` não existir
+- [x] 1.3 Implementar `player(link)` em `sorteio.py` conforme D1 (esquema, host por igualdade numa lista fechada, caminho, `re.fullmatch` do ID, `src` montado só com constantes + ID); verificar que os testes de 1.2 passam e que a suíte inteira continua verde; commitar o grupo
 
 ## 2. Player na tela de resultado
 

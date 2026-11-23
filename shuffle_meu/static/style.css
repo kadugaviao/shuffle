@@ -373,20 +373,19 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .inativa .etiqueta-inativa { display: inline; }
 .etiqueta-tocada { color: var(--papel); background: var(--tinta); }
 
-/* Interruptor (ativa): trilho retangular chapado, quadrado de tinta desliza para a direita quando ligado */
+/* Interruptor (ativa, D9): botão de 44 px com trilho retangular chapado e rótulo visível do estado */
 .interruptor {
-  position: relative;
-  flex: none;
-  width: 40px;
-  min-width: 40px;
-  height: 24px;
-  min-height: 24px;
-  padding: 0;
-  background: var(--papel);
-  border: 2px solid var(--tinta);
-  border-radius: 0;
+  gap: var(--espaco-2);
+  padding: 0 var(--espaco-2);
+  font-size: var(--t-14);
+  font-weight: 600;
+  font-stretch: condensed;
+  background: transparent;
+  border-color: transparent;
 }
-.interruptor::after {
+.interruptor:hover { background: var(--papel-2); }
+.interruptor-trilho { position: relative; flex: none; width: 40px; height: 24px; background: var(--papel); border: 2px solid var(--tinta); }
+.interruptor-trilho::after {
   content: "";
   position: absolute;
   top: 3px;
@@ -396,9 +395,9 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
   background: var(--tinta);
   transition: transform var(--rapido) ease-out;
 }
-.interruptor:hover { background: var(--papel-2); }
-.interruptor[aria-checked="true"] { background: var(--amarelo); }
-.interruptor[aria-checked="true"]::after { transform: translateX(16px); }
+[aria-checked="true"] > .interruptor-trilho { background: var(--amarelo); }
+[aria-checked="true"] > .interruptor-trilho::after { transform: translateX(16px); }
+.interruptor-rotulo { min-width: 6.5em; text-align: left; }
 
 /* Coração (favorita): traço quando desligado, preenchido em vermelho quando ligado */
 .coracao { min-width: 44px; padding: 0; background: transparent; border-color: transparent; }
@@ -456,22 +455,29 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .voltar { display: flex; flex-wrap: wrap; gap: var(--espaco-5); margin-top: var(--espaco-5); }
 .voltar-esquerda { justify-content: flex-start; }
 
-/* Repertório */
+/* Repertório: setlist numerada. Celular: número + capa + título; etiquetas; atalhos. Desktop: uma linha só. */
 .musica-cartao {
   display: grid;
-  grid-template-columns: 48px minmax(0, 1fr);
-  gap: var(--espaco-3) var(--espaco-4);
+  grid-template-columns: 2.5ch 48px minmax(0, 1fr);
+  align-items: center;
+  gap: var(--espaco-2) var(--espaco-3);
   padding: var(--espaco-3) var(--espaco-2);
   border-bottom: var(--regua-fina);
   scroll-margin-top: 96px;
 }
-.musica-titulo { display: block; font-size: var(--t-20); font-weight: 700; text-decoration: none; overflow-wrap: anywhere; }
+.setlist-n { font-size: var(--t-14); color: var(--tinta-2); }
+.musica-titulo { display: block; font-size: var(--t-20); font-weight: 700; line-height: 1.25; text-decoration: none; overflow-wrap: anywhere; }
 .musica-titulo:hover { text-decoration: underline; }
 .inativa .musica-titulo { color: var(--tinta-2); }
-.musica-info .etiquetas { margin-top: var(--espaco-2); }
-.musica-acoes { grid-column: 1 / -1; display: flex; align-items: center; gap: var(--espaco-1); }
+.musica-cartao > .etiquetas { grid-column: 3; }
+.musica-acoes { grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: var(--espaco-1); }
 .musica-acoes form { margin: 0; }
-.atalho-ativa { display: inline-flex; align-items: center; gap: var(--espaco-2); padding: 0 var(--espaco-2); }
+@media (min-width: 960px) {
+  .musica-cartao { grid-template-columns: 2.5ch 48px minmax(0, 1fr) minmax(0, 18rem) auto; }
+  .musica-cartao > .etiquetas, .musica-acoes { grid-column: auto; }
+  .musica-acoes { flex-wrap: nowrap; }
+}
+
 
 /* Resultado do sorteio: a folha de setlist, alinhada à esquerda */
 .resultado { max-width: 52rem; margin-top: var(--espaco-3); margin-bottom: var(--espaco-5); }

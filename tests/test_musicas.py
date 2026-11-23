@@ -204,3 +204,7 @@ class TestAtalhos(BaseTest):
         self.assertIn('aria-pressed="false" aria-label="Favorita: Tempo Perdido"', html)
         self.assertIn('role="switch" aria-checked="true" aria-label="Ativa: Tempo Perdido"', html)
         self.assertIn(f'action="/musicas/{self.tempo}/favorita?genero=rock"', html)
+        self.assertIn('<span class="interruptor-rotulo" aria-hidden="true">Ativa</span>', html)
+        self.client.post(f"/musicas/{self.tempo}/ativa", data={"valor": "0"})
+        self.assertIn('<span class="interruptor-rotulo" aria-hidden="true">Fora do sorteio</span>',
+                      self.texto(self.client.get("/musicas")))

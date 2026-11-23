@@ -78,7 +78,10 @@ document.addEventListener("submit", async (evento) => {
   const interruptor = botao.getAttribute("role") === "switch";
   botao.setAttribute(interruptor ? "aria-checked" : "aria-pressed", String(ligado));
   valor.value = ligado ? "0" : "1";
-  if (interruptor) form.closest(".musica-cartao")?.classList.toggle("inativa", !ligado);
+  if (interruptor) {
+    form.closest(".musica-cartao")?.classList.toggle("inativa", !ligado);
+    botao.querySelector(".interruptor-rotulo").textContent = ligado ? "Ativa" : "Fora do sorteio";
+  }
 });
 
 // Filtros do Repertório: chips e "Só favoritas" aplicam na hora (o botão Filtrar fica para quem não tem JS).

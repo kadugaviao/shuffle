@@ -43,10 +43,10 @@ Referências: comportamento em `specs/*/spec.md`, decisões em `design.md` (D1�
 
 ## 6. Repertório
 
-- [ ] 6.1 Reescrever `musicas/lista.html` como setlist: `<ol>` com régua de 2 px no topo, cada `<li class="musica-cartao">` com número em Plex Mono, capa de 48 px, título em Archivo 700, artista em `--tinta-2`, etiquetas de gênero e humor em caixa alta de 14 px, dificuldade em 5 quadradinhos, linhas alternando papel/papel-2; abaixo de 720 px a linha quebra em três; verificar com os testes de `test_musicas.py` (inclusive `musica-cartao inativa`) e a 360 px sem rolagem horizontal
-- [ ] 6.2 Atalhos de D9: interruptor retangular chapado (trilho 40×24, raio 0, ligado amarelo com quadrado de tinta à direita) com rótulo visível "Ativa" / "Fora do sorteio" trocado pelo JS junto com o `aria-checked`; coração preenchido em vermelho quando favorita; verificar com `test_cartao_tem_atalhos_acessiveis` (acrescentando o rótulo conforme o estado), os cenários de "Atalhos de favorita e ativa no repertório" com e sem JS e o foco visível em cada atalho
-- [ ] 6.3 Filtros do repertório no estilo novo e frase do estado vazio "Nada com esse filtro. Tira algum?" (o título "Nenhuma música encontrada." fica); verificar com o teste "Nada encontrado" e a 360 px
-- [ ] 6.4 Suíte verde; commitar o grupo
+- [x] 6.1 Reescrever `musicas/lista.html` como setlist: `<ol>` com régua de 2 px no topo, cada `<li class="musica-cartao">` com número em Plex Mono, capa de 48 px, título em Archivo 700, artista em `--tinta-2`, etiquetas de gênero e humor em caixa alta de 14 px, dificuldade em 5 quadradinhos, linhas alternando papel/papel-2; abaixo de 720 px a linha quebra em três; verificar com os testes de `test_musicas.py` (inclusive `musica-cartao inativa`) e a 360 px sem rolagem horizontal
+- [x] 6.2 Atalhos de D9: interruptor retangular chapado (trilho 40×24, raio 0, ligado amarelo com quadrado de tinta à direita) com rótulo visível "Ativa" / "Fora do sorteio" trocado pelo JS junto com o `aria-checked`; coração preenchido em vermelho quando favorita; verificar com `test_cartao_tem_atalhos_acessiveis` (acrescentando o rótulo conforme o estado), os cenários de "Atalhos de favorita e ativa no repertório" com e sem JS e o foco visível em cada atalho
+- [x] 6.3 Filtros do repertório no estilo novo e frase do estado vazio "Nada com esse filtro. Tira algum?" (o título "Nenhuma música encontrada." fica); verificar com o teste "Nada encontrado" e a 360 px
+- [x] 6.4 Suíte verde; commitar o grupo
 
 ## 7. Formulários
 

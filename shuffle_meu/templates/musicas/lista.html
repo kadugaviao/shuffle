@@ -3,7 +3,10 @@
 {% from "_macros.html" import campo, aria, chips, capa, dificuldade, vazio %}
 {% block titulo %}Repertório{% endblock %}
 {% block conteudo %}
-<h1>Repertório</h1>
+<div class="cabecalho">
+  <h1>Repertório</h1>
+  <a class="botao primario" href="{{ url_for('musicas.nova') }}">{{ icone("mais") }}Nova música</a>
+</div>
 <form class="cartao campos filtros" method="get" data-auto-enviar>
   {% call campo("q", "Buscar por título ou artista", none) %}
   <input name="q" type="search" value="{{ q }}" placeholder="Título ou nome do artista" {{ aria("q", none) }}>
@@ -13,37 +16,36 @@
   <div class="botoes">
     <label class="chip"><input type="checkbox" name="favorita" value="1" {% if f.favorita %}checked{% endif %}><span>Só favoritas</span></label>
     <button>{{ icone("busca") }}Filtrar</button>
-    <a class="botao primario empurra" href="{{ url_for('musicas.nova') }}">{{ icone("mais") }}Nova música</a>
   </div>
 </form>
 
 {% if musicas %}
 <p class="meta contagem"><span class="numero">{{ musicas|length }}</span> música(s)</p>
-<ul class="grade-musicas">
+<ol class="setlist">
   {% for m in musicas %}
   <li class="musica-cartao{% if not m.ativa %} inativa{% endif %}" id="musica-{{ m.id }}">
+    <span class="setlist-n numero" aria-hidden="true">{{ "%02d"|format(loop.index) }}</span>
     {{ capa(m.artista) }}
     <div class="musica-info">
       <a class="musica-titulo" href="{{ url_for('musicas.editar', id=m.id) }}">{{ m.titulo }}</a>
       <p class="meta">{{ m.artista }}</p>
-      <div class="etiquetas">
-        {% if m.genero %}<span class="etiqueta">{{ m.genero|genero }}</span>{% endif %}
-        {% if m.humor %}<span class="etiqueta">{{ HUMORES[m.humor] }}</span>{% endif %}
-        <span class="etiqueta etiqueta-inativa">Inativa</span>
-        {{ dificuldade(m.dificuldade) }}
-      </div>
+    </div>
+    <div class="etiquetas">
+      {% if m.genero %}<span class="etiqueta">{{ m.genero|genero }}</span>{% endif %}
+      {% if m.humor %}<span class="etiqueta">{{ HUMORES[m.humor] }}</span>{% endif %}
+      <span class="etiqueta etiqueta-inativa">Inativa</span>
+      {{ dificuldade(m.dificuldade) }}
     </div>
     <div class="musica-acoes">
       <form method="post" action="{{ url_for('musicas.favorita', id=m.id, **qs) }}" data-atalho>
         <input type="hidden" name="valor" value="{{ 0 if m.favorita else 1 }}">
         <button class="coracao" aria-pressed="{{ 'true' if m.favorita else 'false' }}" aria-label="Favorita: {{ m.titulo }}">{{ icone("coracao") }}</button>
       </form>
-      <form class="atalho-ativa" method="post" action="{{ url_for('musicas.ativa', id=m.id, **qs) }}" data-atalho>
+      <form method="post" action="{{ url_for('musicas.ativa', id=m.id, **qs) }}" data-atalho>
         <input type="hidden" name="valor" value="{{ 0 if m.ativa else 1 }}">
-        <button class="interruptor" role="switch" aria-checked="{{ 'true' if m.ativa else 'false' }}" aria-label="Ativa: {{ m.titulo }}"></button>
-        <span class="meta" aria-hidden="true">Ativa</span>
+        <button class="interruptor" role="switch" aria-checked="{{ 'true' if m.ativa else 'false' }}" aria-label="Ativa: {{ m.titulo }}"><span class="interruptor-trilho" aria-hidden="true"></span><span class="interruptor-rotulo" aria-hidden="true">{{ "Ativa" if m.ativa else "Fora do sorteio" }}</span></button>
       </form>
-      <a class="botao botao-icone empurra" href="{{ url_for('musicas.editar', id=m.id) }}" aria-label="Editar {{ m.titulo }}">{{ icone("lapis") }}</a>
+      <a class="botao botao-icone" href="{{ url_for('musicas.editar', id=m.id) }}" aria-label="Editar {{ m.titulo }}">{{ icone("lapis") }}</a>
       <form method="post" action="{{ url_for('musicas.excluir', id=m.id) }}"
             data-confirmar="Excluir {{ m.titulo }}? O histórico dela e os vínculos com playlists também serão apagados.">
         <button class="perigo botao-icone" aria-label="Excluir {{ m.titulo }}">{{ icone("lixeira") }}</button>
@@ -51,8 +53,8 @@
     </div>
   </li>
   {% endfor %}
-</ul>
+</ol>
 {% else %}
-<section class="cartao">{{ vazio("Nenhuma música encontrada.", "Tente outra busca ou limpe os filtros.") }}</section>
+<section class="cartao">{{ vazio("Nenhuma música encontrada.", "Tira um filtro ou busca outro nome.") }}</section>
 {% endif %}
 {% endblock %}

@@ -34,9 +34,9 @@ Referências: comportamento nas deltas `specs/musicas/spec.md` e `specs/sorteio/
 
 ## 6. Documentação e integração
 
-- [ ] 6.1 Atualizar o README: três campos de link; botões por link e escolha de player no resultado; o seed já traz links verificados (com link para `docs/links-verificados.md`); remover das limitações a orientação de colar link real para demonstrar, deixando a observação sobre vídeos que bloqueiam incorporação
-- [ ] 6.2 Regenerar os 10 screenshots (a lista de músicas do seed mudou), com o resultado de uma música do seed que tenha os dois links; verificar abrindo os arquivos
-- [ ] 6.3 Rodar a suíte, `openspec validate add-links-por-servico --strict` e `openspec validate --all --strict`; verificar que tudo passa e que nenhum servidor ficou rodando; commitar o grupo
+- [x] 6.1 Atualizar o README: três campos de link; botões por link e escolha de player no resultado; o seed já traz links verificados (com link para `docs/links-verificados.md`); remover das limitações a orientação de colar link real para demonstrar, deixando a observação sobre vídeos que bloqueiam incorporação
+- [x] 6.2 Regenerar os 10 screenshots (a lista de músicas do seed mudou), com o resultado de uma música do seed que tenha os dois links; verificar abrindo os arquivos
+- [x] 6.3 Rodar a suíte, `openspec validate add-links-por-servico --strict` e `openspec validate --all --strict`; verificar que tudo passa e que nenhum servidor ficou rodando; commitar o grupo
 
 ## Workflow follow-up
 

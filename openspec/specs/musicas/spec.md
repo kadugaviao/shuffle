@@ -7,7 +7,7 @@ Manter o repertório pessoal de músicas conhecidas (CRUD completo), com os dado
 ## Requirements
 
 ### Requirement: Cadastrar música (RN01)
-O sistema DEVE (MUST) permitir cadastrar uma música com título e artista obrigatórios (RN01) e gênero, humor, dificuldade e link. Toda música nova DEVE (MUST) começar com favorita = falso e ativa = verdadeiro. Espaços no início e no fim do título DEVEM (MUST) ser descartados.
+O sistema DEVE (MUST) permitir cadastrar uma música com título e artista obrigatórios (RN01) e gênero, humor, dificuldade, link do YouTube, link do Spotify e outro link. Toda música nova DEVE (MUST) começar com favorita = falso e ativa = verdadeiro. Espaços no início e no fim do título DEVEM (MUST) ser descartados.
 
 #### Scenario: Cadastro válido
 - **GIVEN** existe o artista "Legião Urbana"
@@ -65,16 +65,16 @@ O humor DEVE (MUST) ser opcional e, quando informado, ser um destes: animada, ca
 - **AND** exibe "Escolha um humor da lista."
 
 ### Requirement: Link seguro
-O link DEVE (MUST) ser opcional e, quando informado, começar com "http://" ou "https://". O sistema NÃO DEVE (MUST NOT) aceitar outros esquemas de link.
+O outro link (cifra, letra, busca) DEVE (MUST) ser opcional e, quando informado, começar com "http://" ou "https://". O sistema NÃO DEVE (MUST NOT) aceitar outros esquemas de link.
 
 #### Scenario: Link válido
 - **GIVEN** o formulário de música
-- **WHEN** o usuário informa "https://www.youtube.com/watch?v=abc"
-- **THEN** a música é gravada e o link aparece clicável, abrindo em nova aba
+- **WHEN** o usuário informa no outro link "https://www.cifraclub.com.br/legiao-urbana/tempo-perdido/"
+- **THEN** a música é gravada e o link aparece clicável no resultado, abrindo em nova aba
 
 #### Scenario: Esquema proibido
 - **GIVEN** o formulário de música
-- **WHEN** o usuário informa "javascript:alert(1)"
+- **WHEN** o usuário informa no outro link "javascript:alert(1)"
 - **THEN** o sistema NÃO DEVE (MUST NOT) gravar a música
 - **AND** exibe "O link deve começar com http:// ou https://."
 
@@ -155,3 +155,34 @@ Cada música do Repertório DEVE (MUST) ter atalhos para marcar ou desmarcar fav
 - **GIVEN** não existe música com o id informado
 - **WHEN** chega uma requisição de atalho para esse id
 - **THEN** o sistema responde "não encontrado" sem alterar nada
+
+### Requirement: Links do YouTube e do Spotify
+Os campos YouTube e Spotify DEVEM (MUST) ser opcionais. Quando informado, o campo YouTube só DEVE (MUST) aceitar link de vídeo (youtube.com/watch?v=, music.youtube.com/watch?v=, youtu.be/, youtube.com/shorts/) e o campo Spotify só link de faixa (open.spotify.com/track/ ou open.spotify.com/intl-xx/track/), com as mesmas regras estritas de domínio e de ID do player. O erro DEVE (MUST) aparecer junto ao campo, preservando os dados digitados.
+
+#### Scenario: Os três links
+- **GIVEN** o formulário de música
+- **WHEN** o usuário informa o YouTube "https://youtu.be/jNQXAC9IVRw", o Spotify "https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC" e o outro link "https://www.cifraclub.com.br/legiao-urbana/tempo-perdido/"
+- **THEN** a música é gravada com os três links
+
+#### Scenario: Busca no campo YouTube
+- **GIVEN** o formulário de música
+- **WHEN** o usuário informa no campo YouTube "https://www.youtube.com/results?search_query=tempo+perdido"
+- **THEN** o sistema NÃO DEVE (MUST NOT) gravar a música
+- **AND** exibe junto ao campo YouTube "Cole o link de um vídeo do YouTube (youtube.com/watch?v=… ou youtu.be/…)."
+- **AND** os demais campos continuam com o que foi digitado
+
+#### Scenario: Álbum no campo Spotify
+- **GIVEN** o formulário de música
+- **WHEN** o usuário informa no campo Spotify "https://open.spotify.com/album/4uLU6hMCjMI75M1A2tKUQC"
+- **THEN** o sistema NÃO DEVE (MUST NOT) gravar a música
+- **AND** exibe junto ao campo Spotify "Cole o link de uma faixa do Spotify (open.spotify.com/track/…)."
+
+#### Scenario: Link do serviço trocado
+- **GIVEN** o formulário de música
+- **WHEN** o usuário cola um link de faixa do Spotify no campo YouTube
+- **THEN** o sistema NÃO DEVE (MUST NOT) gravar a música e exibe o erro junto ao campo YouTube
+
+#### Scenario: Banco criado antes dos campos novos
+- **GIVEN** um banco criado por uma versão anterior, sem as colunas de YouTube e Spotify, com músicas cadastradas
+- **WHEN** o sistema é iniciado
+- **THEN** as colunas passam a existir vazias e nenhuma música é perdida

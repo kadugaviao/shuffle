@@ -125,8 +125,8 @@ Onde ficam:
   - `add-estatisticas-e-visual`: estatísticas e atalhos;
   - `refaz-identidade-visual`: nome "Shuffle" e design system "Lambe-lambe";
   - `add-player-embutido`: player do YouTube e do Spotify no resultado;
-  - `add-links-por-servico`: um campo de link por serviço e o seed com links verificados.
-- **Mudança em andamento:** `openspec/changes/revisao-final/`, a revisão antes da apresentação. O relatório está em [`docs/revisao-final.md`](docs/revisao-final.md).
+  - `add-links-por-servico`: um campo de link por serviço e o seed com links verificados;
+  - `revisao-final`: revisão antes da apresentação, com o relatório em [`docs/revisao-final.md`](docs/revisao-final.md).
 - **Plano do projeto:** [`docs/plan.md`](docs/plan.md).
 
 Comandos usados no Claude Code: `/openspec-explore`, `/openspec-propose <nome>`, `/openspec-apply-change <nome>` e `/openspec-archive-change <nome>`.

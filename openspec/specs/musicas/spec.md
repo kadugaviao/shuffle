@@ -96,6 +96,12 @@ O sistema DEVE (MUST) listar as músicas em ordem alfabética de título, mostra
 - **WHEN** o usuário busca "xyz"
 - **THEN** o sistema exibe "Nenhuma música encontrada." em vez de uma lista vazia
 
+#### Scenario: Repertório vazio
+- **GIVEN** não há nenhuma música cadastrada
+- **WHEN** o usuário abre o Repertório sem busca nem filtros
+- **THEN** o sistema exibe "Caderno em branco" e o botão "Nova música"
+- **AND** não mostra a busca nem os filtros
+
 ### Requirement: Editar música
 O sistema DEVE (MUST) permitir editar todos os dados de uma música, inclusive marcar ou desmarcar favorita e ativar ou desativar, aplicando as validações RN01, RN02 e RN03.
 

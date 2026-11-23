@@ -328,6 +328,7 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 }
 .lista-cartoes > li:nth-child(even), .grade-musicas > li:nth-child(even), .setlist > li:nth-child(even) { background: var(--papel-2); }
 .linha-info { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.linha-info p + p { margin-top: 0; }
 .linha-info strong, .linha-titulo { font-size: var(--t-20); font-weight: 700; }
 .linha-lado { display: grid; justify-items: end; gap: var(--espaco-1); text-align: right; }
 .linha-lado .etiquetas { justify-content: flex-end; }

@@ -17,9 +17,10 @@
 
   {% if musicas %}
   <p class="meta contagem"><span class="numero">{{ musicas|length }}</span> música(s)</p>
-  <ul class="lista-cartoes">
+  <ol class="lista-cartoes">
     {% for m in musicas %}
     <li class="linha-cartao">
+      <span class="setlist-n numero" aria-hidden="true">{{ "%02d"|format(loop.index) }}</span>
       {{ capa(m.artista) }}
       <div class="linha-info"><strong>{{ m.titulo }}</strong> <p class="meta">{{ m.artista }}</p></div>
       <form class="inline" method="post" action="{{ url_for('playlists.remover', id=playlist.id, musica_id=m.id) }}">
@@ -27,7 +28,7 @@
       </form>
     </li>
     {% endfor %}
-  </ul>
+  </ol>
   {% else %}
   <section class="cartao">{{ vazio("Nenhuma música nesta playlist.", "Escolha uma música acima para adicionar.") }}</section>
   {% endif %}

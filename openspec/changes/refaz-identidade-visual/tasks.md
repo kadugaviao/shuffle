@@ -56,9 +56,9 @@ Referências: comportamento em `specs/*/spec.md`, decisões em `design.md` (D1�
 
 ## 8. Artistas e playlists
 
-- [ ] 8.1 `artistas/lista.html` como lista de linhas com régua de 1 px, nome em Archivo 700, país em `--tinta-2` e a contagem de músicas em Plex Mono; verificar com `test_artistas.py` (`<span class="numero">`) e a 360 px
-- [ ] 8.2 `playlists/lista.html` e `playlists/detalhe.html` no mesmo padrão (mantendo `lista-cartoes` e `editar-playlist`), músicas da playlist como setlist numerada; verificar com `test_playlists.py` e a 360 px
-- [ ] 8.3 Suíte verde; commitar o grupo
+- [x] 8.1 `artistas/lista.html` como lista de linhas com régua de 1 px, nome em Archivo 700, país em `--tinta-2` e a contagem de músicas em Plex Mono; verificar com `test_artistas.py` (`<span class="numero">`) e a 360 px
+- [x] 8.2 `playlists/lista.html` e `playlists/detalhe.html` no mesmo padrão (mantendo `lista-cartoes` e `editar-playlist`), músicas da playlist como setlist numerada; verificar com `test_playlists.py` e a 360 px
+- [x] 8.3 Suíte verde; commitar o grupo
 
 ## 9. Histórico e estatísticas
 

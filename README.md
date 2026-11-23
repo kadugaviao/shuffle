@@ -74,11 +74,10 @@ Rodar os testes:
 python -m unittest
 ```
 
-Recriar o banco do zero com os dados de exemplo (pare o servidor antes):
+Recriar o banco do zero com os dados de exemplo (pare o servidor antes; apaga tudo o que você cadastrou):
 
 ```bash
-rm -f instance/shuffle.db
-python seed.py
+rm -rf instance && python seed.py
 ```
 
 O banco fica em `instance/shuffle.db` e é criado sozinho na primeira execução. O seed cria 18 artistas, 20 músicas e as playlists "Roda de violão" e "Churrasco":
@@ -93,13 +92,21 @@ npm install -g @fission-ai/openspec
 openspec validate --all --strict
 ```
 
-Conferir se um link do YouTube ou do Spotify toca no player embutido (precisa de internet e do Google Chrome ou Chromium; não faz parte dos testes):
+Verificar os links do seed no player embutido (precisa de internet e do Google Chrome ou Chromium; não faz parte dos testes). Vale rodar antes de apresentar, porque um vídeo pode deixar de aceitar incorporação:
+
+```bash
+mkdir -p instance
+python -c "import seed; print('\n'.join(l for par in seed.LINKS.values() for l in par if l))" > instance/links-seed.txt
+python tools/verificar_links.py --arquivo instance/links-seed.txt
+```
+
+Para um link só:
 
 ```bash
 python tools/verificar_links.py "https://youtu.be/jNQXAC9IVRw"
 ```
 
-Para cada link, a ferramenta abre o player como o app abre. Ela mostra `OK` ou `FALHA` com o texto que aparece no player (título e canal ou artista), para você conferir se é a música certa. Para vários links, use `--arquivo links.txt`, com um link por linha.
+Para cada link, a ferramenta abre o player como o app abre. Ela mostra `OK` ou `FALHA` com o texto que aparece no player (título e canal ou artista), para você conferir se é a música certa.
 
 ## Problemas comuns
 

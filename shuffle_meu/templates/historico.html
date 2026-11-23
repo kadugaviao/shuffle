@@ -90,7 +90,9 @@
       <div class="linha-info">
         <a class="linha-titulo" href="{{ url_for('sorteio.resultado', id=s.id) }}">{{ s.titulo }}</a>
         <p class="meta">{{ s.artista }}</p>
-        <p class="meta">{{ s.sorteado_em|data_local }}</p>
+      </div>
+      <div class="linha-lado">
+        <p class="meta numero">{{ s.sorteado_em|data_local }}</p>
         <div class="etiquetas">{% if s.tocada %}<span class="etiqueta etiqueta-tocada">Tocada</span>{% else %}<span class="etiqueta">Não tocada</span>{% endif %}{% if s.nota %}<span class="etiqueta">nota <span class="numero">{{ s.nota }}</span></span>{% endif %}</div>
       </div>
     </li>

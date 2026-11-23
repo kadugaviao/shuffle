@@ -62,10 +62,10 @@ Referências: comportamento em `specs/*/spec.md`, decisões em `design.md` (D1�
 
 ## 9. Histórico e estatísticas
 
-- [ ] 9.1 Resumo em 4 números de Plex Mono 44/72 px sobre régua de 2 px, 2×2 no celular e 4 colunas separadas por régua de 1 px a partir de 720 px; verificar com `test_estatisticas.py` (`numero metrica-valor`) e o cenário "Números alinhados"
-- [ ] 9.2 Top 5 com barras chapadas de tinta (a primeira em vermelho), por gênero em barras de 8 px, nunca sorteadas e médias como listas de linhas com o "Ver todas (N)" de hoje; verificar com os testes de `test_estatisticas.py` e a 360 px sem rolagem horizontal
-- [ ] 9.3 Lista de sorteios como linhas com data em Plex Mono e etiquetas "Tocada"/nota; estado vazio "Nenhum sorteio ainda." com o botão "Que tal sortear agora?"; verificar com os testes de `test_historico.py` (lista e estado vazio)
-- [ ] 9.4 Suíte verde; commitar o grupo
+- [x] 9.1 Resumo em 4 números de Plex Mono 44/72 px sobre régua de 2 px, 2×2 no celular e 4 colunas separadas por régua de 1 px a partir de 720 px; verificar com `test_estatisticas.py` (`numero metrica-valor`) e o cenário "Números alinhados"
+- [x] 9.2 Top 5 com barras chapadas de tinta (a primeira em vermelho), por gênero em barras de 8 px, nunca sorteadas e médias como listas de linhas com o "Ver todas (N)" de hoje; verificar com os testes de `test_estatisticas.py` e a 360 px sem rolagem horizontal
+- [x] 9.3 Lista de sorteios como linhas com data em Plex Mono e etiquetas "Tocada"/nota; estado vazio "Nenhum sorteio ainda." com o botão "Que tal sortear agora?"; verificar com os testes de `test_historico.py` (lista e estado vazio)
+- [x] 9.4 Suíte verde; commitar o grupo
 
 ## 10. Revisão anti-slop com a ui-craft
 

@@ -329,6 +329,9 @@ form.inline { display: inline-flex; gap: var(--espaco-2); margin: 0; }
 .lista-cartoes > li:nth-child(even), .grade-musicas > li:nth-child(even), .setlist > li:nth-child(even) { background: var(--papel-2); }
 .linha-info { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .linha-info strong, .linha-titulo { font-size: var(--t-20); font-weight: 700; }
+.linha-lado { display: grid; justify-items: end; gap: var(--espaco-1); text-align: right; }
+.linha-lado .etiquetas { justify-content: flex-end; }
+@media (max-width: 719px) { .linha-cartao:has(.linha-lado) { flex-wrap: wrap; row-gap: var(--espaco-1); } .linha-lado { flex-basis: 100%; justify-items: start; padding-left: 64px; text-align: left; } .linha-lado .etiquetas { justify-content: flex-start; } }
 .linha-titulo { text-decoration: none; }
 .linha-titulo:hover { text-decoration: underline; }
 .icone-playlist { display: grid; place-items: center; flex: none; width: 48px; aspect-ratio: 1; color: var(--papel); background: var(--tinta); }
@@ -555,7 +558,7 @@ ol.barras li:first-child .barra span { background: var(--vermelho); }
 .linha-simples { display: flex; justify-content: space-between; gap: var(--espaco-3); padding: var(--espaco-2) 0; border-bottom: var(--regua-fina); overflow-wrap: anywhere; }
 .linha-valor { flex: none; text-align: right; }
 .ver-todas { margin-top: var(--espaco-3); }
-.ver-todas summary { min-height: 44px; display: flex; align-items: center; font-weight: 600; cursor: pointer; }
+.ver-todas summary { min-height: 44px; display: flex; align-items: center; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .ultimos { margin-top: var(--espaco-3); }
 
 /* ---------- Navegação: faixa de tinta no topo; barra inferior de tinta no celular ---------- */

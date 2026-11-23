@@ -7,7 +7,7 @@
 <form class="cartao campos" method="post" novalidate>
   <div class="grade">
     {% call campo("nome", "Nome da nova playlist", erros) %}
-    <input name="nome" value="{{ form.nome or '' }}" maxlength="120" placeholder="ex.: Roda de violão" {{ aria("nome", erros) }}>
+    <input name="nome" value="{{ form.nome or '' }}" maxlength="120" placeholder="ex.: Roda de violão" {{ aria("nome", erros, obrigatorio=true) }}>
     {% endcall %}
     {% call campo("descricao", "Descrição (opcional)", erros) %}
     <input name="descricao" value="{{ form.descricao or '' }}" maxlength="200" {{ aria("descricao", erros) }}>
@@ -16,7 +16,7 @@
   <div class="botoes"><button class="primario">{{ icone("mais") }}Criar playlist</button></div>
 </form>
 {% if playlists %}
-<ul class="lista-cartoes">
+<ul class="lista-cartoes" role="list">
   {% for p in playlists %}
   <li class="linha-cartao">
     <span class="icone-playlist" aria-hidden="true">{{ icone("lista") }}</span>

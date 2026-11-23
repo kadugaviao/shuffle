@@ -29,6 +29,18 @@ class TestArtistas(BaseTest):
         self.assertIn('id="campo-nome" aria-invalid="true" aria-describedby="erro-nome"', self.texto(r))
         self.assertEqual(self.um("SELECT COUNT(*) FROM artista"), 0)
 
+    def test_nome_longo_demais(self):
+        # cenário "Nome de artista longo demais"
+        r = self.client.post("/artistas/novo", data={"nome": "x" * 121, "pais": "Brasil"})
+        self.assertIn('id="erro-nome"', self.texto(r))
+        self.assertIn("O nome pode ter no máximo 120 caracteres.", self.texto(r))
+        r = self.client.post("/artistas/novo", data={"nome": "Djavan", "pais": "p" * 81})
+        self.assertIn("O país pode ter no máximo 80 caracteres.", self.texto(r))
+        self.assertEqual(self.um("SELECT COUNT(*) FROM artista"), 0)
+
+    def test_nome_obrigatorio_marcado(self):
+        self.assertRegex(self.texto(self.client.get("/artistas/novo")), r'id="campo-nome"[^>]*aria-required="true"')
+
     def test_nome_repetido_sem_diferenciar_maiusculas_e_acentos(self):
         self.artista("Legião Urbana")
         r = self.client.post("/artistas/novo", data={"nome": "LEGIÃO URBANA"})

@@ -10,11 +10,11 @@
 {%- endmacro %}
 
 {% macro ver_todas(linhas, extra=none) -%}
-<ul class="lista-simples">{{ lista_musicas(linhas[:10], extra) }}</ul>
+<ul class="lista-simples" role="list">{{ lista_musicas(linhas[:10], extra) }}</ul>
 {% if linhas|length > 10 %}
 <details class="ver-todas">
   <summary>Ver todas ({{ linhas|length }})</summary>
-  <ul class="lista-simples">{{ lista_musicas(linhas[10:], extra) }}</ul>
+  <ul class="lista-simples" role="list">{{ lista_musicas(linhas[10:], extra) }}</ul>
 </details>
 {% endif %}
 {%- endmacro %}
@@ -39,7 +39,7 @@
     <h2>Mais tocadas</h2>
     {% if est.top5 %}
     {% set maior = est.top5[0].vezes %}
-    <ol class="barras">
+    <ol class="barras" role="list">
       {% for m in est.top5 %}
       <li>
         <div class="barra-texto"><span>{{ m.titulo }} <span class="meta">{{ m.artista }}</span></span>
@@ -55,7 +55,7 @@
     <h2>Músicas por gênero</h2>
     {% if est.generos %}
     {% set maior = est.generos[0][1] %}
-    <ul class="barras">
+    <ul class="barras" role="list">
       {% for rotulo, quantidade in est.generos %}
       <li>
         <div class="barra-texto"><span>{{ rotulo|genero }}</span><span class="numero">{{ quantidade }}</span></div>
@@ -83,7 +83,7 @@
 <section class="ultimos">
   <h2>Últimos sorteios</h2>
   {% if sorteios %}
-  <ul class="lista-cartoes">
+  <ul class="lista-cartoes" role="list">
     {% for s in sorteios %}
     <li class="linha-cartao">
       {{ capa(s.artista) }}

@@ -22,6 +22,10 @@ def _validar(form, artista_id=None):
     pais = (form.get("pais") or "").strip() or None
     if not nome:
         return None, {"nome": "Informe o nome do artista."}
+    if len(nome) > 120:  # os mesmos maxlength do formulário, valendo para qualquer POST
+        return None, {"nome": "O nome pode ter no máximo 120 caracteres."}
+    if pais and len(pais) > 80:
+        return None, {"pais": "O país pode ter no máximo 80 caracteres."}
     # shortcut: compara em Python porque o NOCASE do SQLite só trata ASCII; ok até alguns milhares de artistas.
     for outro in get_db().execute("SELECT id, nome FROM artista"):
         if outro["id"] != artista_id and outro["nome"].casefold() == nome.casefold():

@@ -9,7 +9,12 @@ document.addEventListener("submit", (evento) => {
 
 // Toasts: sucesso some em 5 s (pausa com hover/foco); erro e aviso ficam até fechar.
 function iniciarToasts() {
-  for (const toast of document.querySelectorAll(".toast")) {
+  const toasts = document.querySelectorAll(".toast");
+  const regiao = document.querySelector("[data-anunciar]");
+  if (toasts.length && regiao) {
+    setTimeout(() => { regiao.textContent = [...toasts].map((t) => t.querySelector("p").textContent).join(" "); }, 100);
+  }
+  for (const toast of toasts) {
     const sair = () => {
       toast.classList.add("saindo");
       setTimeout(() => toast.remove(), movimentoReduzido() ? 0 : 120); // = --rapido
@@ -84,7 +89,9 @@ document.addEventListener("submit", async (evento) => {
   valor.value = ligado ? "0" : "1";
   if (interruptor) {
     form.closest(".musica-cartao")?.classList.toggle("inativa", !ligado);
-    botao.querySelector(".interruptor-rotulo").textContent = ligado ? "Ativa" : "Fora do sorteio";
+    const rotulo = ligado ? "Ativa" : "Fora do sorteio";
+    botao.querySelector(".interruptor-rotulo").textContent = rotulo;
+    botao.setAttribute("aria-label", botao.getAttribute("aria-label").replace(/^[^:]*/, rotulo)); // nome = rótulo visível
   }
 });
 
@@ -133,6 +140,9 @@ function iniciarPlayer() {
     botoes[0].focus();
   });
 }
+
+// Formulário que voltou com erro: foco no primeiro campo inválido, que é o próximo passo de quem preenche.
+document.querySelector('[aria-invalid="true"]')?.focus();
 
 iniciarToasts();
 iniciarRoleta();

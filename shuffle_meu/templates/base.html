@@ -45,6 +45,9 @@
   </section>
   {% endif %}
   {% endwith %}
+  {# Sempre presente e vazia ao carregar: o JS copia os avisos para cá, e a mudança é anunciada (avisos que já vêm
+     no HTML costumam ser ignorados pelos leitores de tela). #}
+  <p class="visualmente-oculto" aria-live="assertive" data-anunciar></p>
 
   <main id="conteudo" tabindex="-1">
     {% block conteudo %}{% endblock %}

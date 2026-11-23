@@ -8,7 +8,7 @@
   <a class="botao primario" href="{{ url_for('artistas.novo') }}">{{ icone("mais") }}Novo artista</a>
 </div>
 {% if artistas %}
-<ul class="lista-cartoes">
+<ul class="lista-cartoes" role="list">
   {% for a in artistas %}
   <li class="linha-cartao">
     {{ capa(a.nome) }}

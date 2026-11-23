@@ -1,9 +1,12 @@
 {# Componentes do design system "Lambe-lambe". Importar com: {% from "_macros.html" import campo, aria, ... %} #}
 {% from "_icones.html" import icone %}
 
-{# Atributos do controle de um campo: id para o <label for>, e aria-invalid/aria-describedby se houver erro. #}
-{% macro aria(nome, erros) -%}
-id="campo-{{ nome }}"{% if erros and erros.get(nome) %} aria-invalid="true" aria-describedby="erro-{{ nome }}"{% endif %}
+{# Atributos do controle de um campo: id para o <label for>, aria-invalid se houver erro, aria-describedby com a
+   dica e o erro, e aria-required nos obrigatórios. `dica` deve acompanhar o mesmo parâmetro de campo(). #}
+{% macro aria(nome, erros, obrigatorio=false, dica=false) -%}
+{% set com_erro = erros and erros.get(nome) %}
+{%- set descricoes = (["dica-" ~ nome] if dica else []) + (["erro-" ~ nome] if com_erro else []) -%}
+id="campo-{{ nome }}"{% if com_erro %} aria-invalid="true"{% endif %}{% if descricoes %} aria-describedby="{{ descricoes|join(' ') }}"{% endif %}{% if obrigatorio %} aria-required="true"{% endif %}
 {%- endmacro %}
 
 {% macro erro(nome, erros) -%}
@@ -11,10 +14,11 @@ id="campo-{{ nome }}"{% if erros and erros.get(nome) %} aria-invalid="true" aria
 {%- endmacro %}
 
 {# Campo com rótulo e erro logo abaixo; o controle vem no corpo do {% call %} e usa aria(nome, erros). #}
-{% macro campo(nome, rotulo, erros) -%}
+{% macro campo(nome, rotulo, erros, dica=none) -%}
 <div class="campo">
   <label for="campo-{{ nome }}">{{ rotulo }}</label>
   {{ caller() }}
+  {% if dica %}<p class="dica meta" id="dica-{{ nome }}">{{ dica }}</p>{% endif %}
   {{ erro(nome, erros) }}
 </div>
 {%- endmacro %}

@@ -24,7 +24,7 @@
 
 {% if musicas %}
 <p class="meta contagem"><span class="numero">{{ musicas|length }}</span> {{ (musicas|length)|plural("música", "músicas") }}</p>
-<ol class="setlist">
+<ol class="setlist" role="list">
   {% for m in musicas %}
   <li class="musica-cartao{% if not m.ativa %} inativa{% endif %}" id="musica-{{ m.id }}">
     <span class="setlist-n numero" aria-hidden="true">{{ "%02d"|format(loop.index) }}</span>
@@ -45,7 +45,7 @@
       </form>
       <form method="post" action="{{ url_for('musicas.ativa', id=m.id, **qs) }}" data-atalho>
         <input type="hidden" name="valor" value="{{ 0 if m.ativa else 1 }}">
-        <button class="interruptor" role="switch" aria-checked="{{ 'true' if m.ativa else 'false' }}" aria-label="Ativa: {{ m.titulo }}"><span class="interruptor-trilho" aria-hidden="true"></span><span class="interruptor-rotulo" aria-hidden="true">{{ "Ativa" if m.ativa else "Fora do sorteio" }}</span></button>
+        <button class="interruptor" role="switch" aria-checked="{{ 'true' if m.ativa else 'false' }}" aria-label="{{ 'Ativa' if m.ativa else 'Fora do sorteio' }}: {{ m.titulo }}"><span class="interruptor-trilho" aria-hidden="true"></span><span class="interruptor-rotulo" aria-hidden="true">{{ "Ativa" if m.ativa else "Fora do sorteio" }}</span></button>
       </form>
       <a class="botao botao-icone" href="{{ url_for('musicas.editar', id=m.id) }}" aria-label="Editar {{ m.titulo }}">{{ icone("lapis") }}</a>
       <form method="post" action="{{ url_for('musicas.excluir', id=m.id) }}"

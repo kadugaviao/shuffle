@@ -21,6 +21,10 @@ def _filtros_lista(args):
     return {k: args[k] for k in FILTROS_LISTA if args.get(k)}
 
 
+LIMITES = {"titulo": (200, "O título"), "genero": (60, "O gênero"), "link": (500, "O link"),
+           "youtube": (500, "O link do YouTube"), "spotify": (500, "O link do Spotify")}
+
+
 def validar_musica(form):
     """Valida o formulário de música (RN01, RN03, humor, links). Retorna (dados, erros {campo: mensagem})."""
 
@@ -60,6 +64,9 @@ def validar_musica(form):
         erros["youtube"] = MSG_YOUTUBE
     if dados["spotify"] and not spotify_id(dados["spotify"]):
         erros["spotify"] = MSG_SPOTIFY
+    for nome, (maximo, rotulo) in LIMITES.items():  # os mesmos maxlength do formulário, valendo para qualquer POST
+        if dados[nome] and len(dados[nome]) > maximo:
+            erros[nome] = f"{rotulo} pode ter no máximo {maximo} caracteres."
     return dados, erros
 
 

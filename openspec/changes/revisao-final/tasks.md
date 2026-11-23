@@ -20,9 +20,9 @@ Referências: achados em `docs/revisao-final.md` (IDs entre parênteses), compor
 
 ## 3. Formulários e acessibilidade (A1–A3, A5, A6, SEG1)
 
-- [ ] 3.1 Testes dos limites de tamanho (SEG1) para música, artista e playlist, conferidos falhando; implementar os dicionários de limites e os `maxlength` (D6); verificar que passam, inclusive os cenários "Título longo demais" e "Nome de artista longo demais"
-- [ ] 3.2 Testes de `aria-required`, dica ligada por `aria-describedby` e `aria-label` do interruptor inativo, conferidos falhando; implementar `aria()`/`campo()` com `obrigatorio` e `dica`, as três dicas dos links e o rótulo acessível do interruptor (D7); verificar que passam
-- [ ] 3.3 `app.js`: foco no primeiro campo inválido, rótulo acessível do interruptor atualizado no atalho e região live dos avisos (D8); `role="list"` nas listas, ajustando os testes de HTML exato; verificar pelo DevTools Protocol o cenário "Foco no primeiro erro", a região live preenchida depois do carregamento e o `aria-label` após o atalho; suíte verde; commitar o grupo
+- [x] 3.1 Testes dos limites de tamanho (SEG1) para música, artista e playlist, conferidos falhando; implementar os dicionários de limites e os `maxlength` (D6); verificar que passam, inclusive os cenários "Título longo demais" e "Nome de artista longo demais"
+- [x] 3.2 Testes de `aria-required`, dica ligada por `aria-describedby` e `aria-label` do interruptor inativo, conferidos falhando; implementar `aria()`/`campo()` com `obrigatorio` e `dica`, as três dicas dos links e o rótulo acessível do interruptor (D7); verificar que passam
+- [x] 3.3 `app.js`: foco no primeiro campo inválido, rótulo acessível do interruptor atualizado no atalho e região live dos avisos (D8); `role="list"` nas listas, ajustando os testes de HTML exato; verificar pelo DevTools Protocol o cenário "Foco no primeiro erro", a região live preenchida depois do carregamento e o `aria-label` após o atalho; suíte verde; commitar o grupo
 
 ## 4. Documentação e entrega (DOC1–DOC4, SEG2)
 

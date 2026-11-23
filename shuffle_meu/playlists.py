@@ -22,18 +22,30 @@ def _dados(form):
 MSG_NOME = "Informe o nome da playlist."
 
 
+def _erros(nome, descricao):
+    """Erros por campo; os limites são os mesmos maxlength do formulário, valendo para qualquer POST."""
+    if not nome:
+        return {"nome": MSG_NOME}
+    if len(nome) > 120:
+        return {"nome": "O nome pode ter no máximo 120 caracteres."}
+    if descricao and len(descricao) > 200:
+        return {"descricao": "A descrição pode ter no máximo 200 caracteres."}
+    return {}
+
+
 @bp.route("", methods=["GET", "POST"])
 def lista():
     db = get_db()
     erros, form = {}, {}
     if request.method == "POST":
         nome, descricao = _dados(request.form)
-        if nome:
+        erros = _erros(nome, descricao)
+        if not erros:
             db.execute("INSERT INTO playlist (nome, descricao) VALUES (?, ?)", (nome, descricao))
             db.commit()
             flash("Playlist criada.")
             return redirect(url_for(".lista"))
-        erros, form = {"nome": MSG_NOME}, request.form  # erro junto ao campo, na própria tela (D5)
+        form = request.form  # erro junto ao campo, na própria tela (D5)
     playlists = db.execute(
         "SELECT p.*, COUNT(pm.musica_id) AS total FROM playlist p"
         " LEFT JOIN playlist_musica pm ON pm.playlist_id = p.id GROUP BY p.id ORDER BY p.nome COLLATE PT"
@@ -61,8 +73,9 @@ def detalhe(id):
 def editar(id):
     _buscar(id)
     nome, descricao = _dados(request.form)
-    if not nome:
-        return _detalhe(id, {"nome": MSG_NOME}, request.form)
+    erros = _erros(nome, descricao)
+    if erros:
+        return _detalhe(id, erros, request.form)
     db = get_db()
     db.execute("UPDATE playlist SET nome = ?, descricao = ? WHERE id = ?", (nome, descricao, id))
     db.commit()

@@ -17,7 +17,7 @@
 
   {% if musicas %}
   <p class="meta contagem"><span class="numero">{{ musicas|length }}</span> {{ (musicas|length)|plural("música", "músicas") }}</p>
-  <ol class="lista-cartoes">
+  <ol class="lista-cartoes" role="list">
     {% for m in musicas %}
     <li class="linha-cartao">
       <span class="setlist-n numero" aria-hidden="true">{{ "%02d"|format(loop.index) }}</span>
@@ -37,7 +37,7 @@
     <summary>{{ icone("lapis") }}Editar nome e descrição</summary>
     <form class="campos" method="post" action="{{ url_for('playlists.editar', id=playlist.id) }}" novalidate>
       {% call campo("nome", "Nome", erros) %}
-      <input name="nome" value="{{ form.nome or '' }}" maxlength="120" {{ aria("nome", erros) }}>
+      <input name="nome" value="{{ form.nome or '' }}" maxlength="120" {{ aria("nome", erros, obrigatorio=true) }}>
       {% endcall %}
       {% call campo("descricao", "Descrição", erros) %}
       <input name="descricao" value="{{ form.descricao or '' }}" maxlength="200" {{ aria("descricao", erros) }}>

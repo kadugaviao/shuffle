@@ -23,6 +23,19 @@ class TestPlaylists(BaseTest):
         self.assertIn('value="Fáceis"', html)  # mantém o que foi digitado
         self.assertEqual(self.um("SELECT COUNT(*) FROM playlist"), 0)
 
+    def test_textos_longos_demais(self):
+        html = self.texto(self.client.post("/playlists", data={"nome": "x" * 121}))
+        self.assertIn("O nome pode ter no máximo 120 caracteres.", html)
+        html = self.texto(self.client.post("/playlists", data={"nome": "Churrasco", "descricao": "d" * 201}))
+        self.assertIn("A descrição pode ter no máximo 200 caracteres.", html)
+        self.assertIn('id="erro-descricao"', html)
+        p = self.playlist("Roda de violão")
+        html = self.texto(self.client.post(f"/playlists/{p}/editar", data={"nome": "x" * 121}))
+        self.assertIn("O nome pode ter no máximo 120 caracteres.", html)
+        self.assertEqual(self.um("SELECT COUNT(*) FROM playlist WHERE nome = 'Roda de violão'"), 1)
+        self.assertEqual(self.um("SELECT COUNT(*) FROM playlist"), 1)
+        self.assertRegex(self.texto(self.client.get("/playlists")), r'id="campo-nome"[^>]*aria-required="true"')
+
     def test_editar_com_nome_vazio(self):
         p = self.playlist("Churrasco")
         r = self.client.post(f"/playlists/{p}/editar", data={"nome": ""})
@@ -37,7 +50,7 @@ class TestPlaylists(BaseTest):
         self.playlist("Roda de violão", *musicas[:2])
         self.playlist("Churrasco", *musicas)
         html = self.texto(self.client.get("/playlists"))
-        html = html[html.index('<ul class="lista-cartoes">'):]  # o placeholder do formulário também cita "Roda de violão"
+        html = html[html.index('<ul class="lista-cartoes" role="list">'):]  # o placeholder do formulário também cita "Roda de violão"
         self.assertLess(html.index("Churrasco"), html.index("Roda de violão"))
         self.assertIn('<span class="numero">4</span> músicas', html)
         self.assertIn('<span class="numero">2</span> músicas', html)

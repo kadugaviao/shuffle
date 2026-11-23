@@ -102,6 +102,42 @@ class TestMusicas(BaseTest):
         self.assertIn('name="dificuldade" value="3" checked', html)
         self.assertNotIn('class="toasts"', html)  # erro de campo não vira toast
 
+    def test_titulo_longo_demais(self):
+        # cenário "Título longo demais": o limite vale também para pedidos que não vêm do formulário
+        html = self.texto(self.client.post("/musicas/nova", data=form(titulo="x" * 201, artista_id=str(self.legiao))))
+        self.assertIn('id="erro-titulo"', html)
+        self.assertIn("O título pode ter no máximo 200 caracteres.", html)
+        self.assertEqual(self.um("SELECT COUNT(*) FROM musica"), 0)
+        r = self.client.post("/musicas/nova", data=form(titulo="x" * 200, artista_id=str(self.legiao)))
+        self.assertEqual(r.status_code, 302)  # no limite exato passa
+
+    def test_outros_campos_longos_demais(self):
+        longo = "https://www.cifraclub.com.br/" + "a" * 480
+        html = self.texto(self.client.post("/musicas/nova", data=form(artista_id=str(self.legiao), genero="g" * 61, link=longo)))
+        self.assertIn("O gênero pode ter no máximo 60 caracteres.", html)
+        self.assertIn("O link pode ter no máximo 500 caracteres.", html)
+        self.assertEqual(self.um("SELECT COUNT(*) FROM musica"), 0)
+
+    def test_obrigatorios_e_dicas_no_formulario(self):
+        html = self.texto(self.client.get("/musicas/nova"))
+        for nome in ("titulo", "artista_id"):
+            self.assertRegex(html, rf'id="campo-{nome}"[^>]*aria-required="true"')
+        self.assertNotRegex(html, r'id="campo-genero"[^>]*aria-required')
+        for nome in ("youtube", "spotify", "link"):
+            self.assertIn(f'<p class="dica meta" id="dica-{nome}">', html)
+            self.assertRegex(html, rf'id="campo-{nome}"[^>]*aria-describedby="dica-{nome}"')
+            self.assertRegex(html, rf'<input name="{nome}"[^>]*maxlength="500"')
+        erro = self.texto(self.client.post("/musicas/nova", data=form(artista_id=str(self.legiao),
+                                                                      spotify="https://open.spotify.com/album/" + "a" * 22)))
+        self.assertIn('aria-describedby="dica-spotify erro-spotify"', erro)  # dica e erro lidos juntos
+
+    def test_interruptor_com_nome_igual_ao_rotulo_visivel(self):
+        self.musica("Tempo Perdido", self.legiao)
+        self.musica("Índios", self.legiao, ativa=0)
+        html = self.texto(self.client.get("/musicas"))
+        self.assertIn('aria-label="Ativa: Tempo Perdido"', html)
+        self.assertIn('aria-label="Fora do sorteio: Índios"', html)
+
     def test_duplicata_vai_para_o_campo_titulo(self):
         self.musica("Tempo Perdido", self.legiao)
         html = self.texto(self.client.post("/musicas/nova", data=form(artista_id=str(self.legiao))))
@@ -224,7 +260,7 @@ class TestLinksNoFormulario(BaseTest):
         html = self.texto(self.postar(youtube="https://www.youtube.com/results?search_query=tempo+perdido", link=CIFRA,
                                       spotify=f"https://open.spotify.com/track/{SP}"))
         self.assertEqual(self.um("SELECT COUNT(*) FROM musica"), 0)
-        self.assertIn('id="campo-youtube" aria-invalid="true" aria-describedby="erro-youtube"', html)
+        self.assertIn('id="campo-youtube" aria-invalid="true" aria-describedby="dica-youtube erro-youtube"', html)
         self.assertIn(MSG_YOUTUBE, html)
         self.assertLess(html.index('id="campo-youtube"'), html.index(MSG_YOUTUBE))  # erro logo abaixo do campo
         self.assertLess(html.index(MSG_YOUTUBE), html.index('id="campo-spotify"'))
@@ -234,13 +270,13 @@ class TestLinksNoFormulario(BaseTest):
     def test_album_no_campo_spotify(self):
         html = self.texto(self.postar(spotify=f"https://open.spotify.com/album/{SP}"))
         self.assertEqual(self.um("SELECT COUNT(*) FROM musica"), 0)
-        self.assertIn('id="campo-spotify" aria-invalid="true" aria-describedby="erro-spotify"', html)
+        self.assertIn('id="campo-spotify" aria-invalid="true" aria-describedby="dica-spotify erro-spotify"', html)
         self.assertIn(MSG_SPOTIFY, html)
 
     def test_link_do_servico_trocado(self):
         html = self.texto(self.postar(youtube=f"https://open.spotify.com/track/{SP}"))
         self.assertEqual(self.um("SELECT COUNT(*) FROM musica"), 0)
-        self.assertIn('aria-describedby="erro-youtube"', html)
+        self.assertIn('aria-describedby="dica-youtube erro-youtube"', html)
 
     def test_editar_mostra_e_grava_os_links(self):
         m = self.musica("Tempo Perdido", self.legiao, youtube=f"https://youtu.be/{YT}", link=CIFRA)

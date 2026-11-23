@@ -7,7 +7,7 @@
 <h1>{{ "Editar artista" if id else "Novo artista" }}</h1>
 <form class="cartao campos" method="post" novalidate>
   {% call campo("nome", "Nome", erros) %}
-  <input name="nome" value="{{ artista.nome or '' }}" maxlength="120" autocomplete="off" {{ aria("nome", erros) }}>
+  <input name="nome" value="{{ artista.nome or '' }}" maxlength="120" autocomplete="off" {{ aria("nome", erros, obrigatorio=true) }}>
   {% endcall %}
   {% call campo("pais", "País (opcional)", erros) %}
   <input name="pais" value="{{ artista.pais or '' }}" maxlength="80" {{ aria("pais", erros) }}>

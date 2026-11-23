@@ -10,11 +10,11 @@
 {% endif %}
 <form class="cartao campos" method="post" novalidate>
   {% call campo("titulo", "Título", erros) %}
-  <input name="titulo" value="{{ musica.titulo or '' }}" maxlength="200" autocomplete="off" {{ aria("titulo", erros) }}>
+  <input name="titulo" value="{{ musica.titulo or '' }}" maxlength="200" autocomplete="off" {{ aria("titulo", erros, obrigatorio=true) }}>
   {% endcall %}
 
   {% call campo("artista_id", "Artista", erros) %}
-  <select name="artista_id" {{ aria("artista_id", erros) }}>
+  <select name="artista_id" {{ aria("artista_id", erros, obrigatorio=true) }}>
     <option value="">Escolha…</option>
     {% for a in artistas %}
     <option value="{{ a.id }}" {% if musica.artista_id|string == a.id|string %}selected{% endif %}>{{ a.nome }}</option>
@@ -31,16 +31,16 @@
   {{ chips("dificuldade", "Dificuldade: 1 é fácil, 5 é difícil", [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)],
            musica.dificuldade or 3, erros=erros, classe="chips segmentado") }}
 
-  {% call campo("youtube", "YouTube (opcional: link do vídeo)", erros) %}
-  <input name="youtube" type="url" value="{{ musica.youtube or '' }}" placeholder="https://youtu.be/…" autocomplete="off" {{ aria("youtube", erros) }}>
+  {% call campo("youtube", "YouTube (opcional: link do vídeo)", erros, "Link de um vídeo: youtube.com/watch?v=… ou youtu.be/…") %}
+  <input name="youtube" type="url" value="{{ musica.youtube or '' }}" maxlength="500" placeholder="https://youtu.be/…" autocomplete="off" {{ aria("youtube", erros, dica=true) }}>
   {% endcall %}
 
-  {% call campo("spotify", "Spotify (opcional: link da faixa)", erros) %}
-  <input name="spotify" type="url" value="{{ musica.spotify or '' }}" placeholder="https://open.spotify.com/track/…" autocomplete="off" {{ aria("spotify", erros) }}>
+  {% call campo("spotify", "Spotify (opcional: link da faixa)", erros, "Link de uma faixa: open.spotify.com/track/…") %}
+  <input name="spotify" type="url" value="{{ musica.spotify or '' }}" maxlength="500" placeholder="https://open.spotify.com/track/…" autocomplete="off" {{ aria("spotify", erros, dica=true) }}>
   {% endcall %}
 
-  {% call campo("link", "Outro link (opcional: cifra, letra…)", erros) %}
-  <input name="link" type="url" value="{{ musica.link or '' }}" placeholder="https://…" autocomplete="off" {{ aria("link", erros) }}>
+  {% call campo("link", "Outro link (opcional: cifra, letra…)", erros, "Cifra, letra ou busca; começa com https://") %}
+  <input name="link" type="url" value="{{ musica.link or '' }}" maxlength="500" placeholder="https://…" autocomplete="off" {{ aria("link", erros, dica=true) }}>
   {% endcall %}
 
   {% if id %}

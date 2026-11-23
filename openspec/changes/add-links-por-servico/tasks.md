@@ -5,8 +5,8 @@ Referências: comportamento nas deltas `specs/musicas/spec.md` e `specs/sorteio/
 ## 1. Extração por serviço (`links.py`)
 
 - [x] 1.1 Commitar os artefatos desta mudança antes de qualquer código (`docs: specs add-links-por-servico`); verificar com `git log -1 --stat` que só arquivos de `openspec/changes/add-links-por-servico/` entraram
-- [ ] 1.2 Escrever os testes de `youtube_id`, `spotify_id` e `players()` (D7) em `tests/test_links.py`, levando para lá os casos de `TestPlayer`; verificar que falham por `shuffle_meu.links` não existir
-- [ ] 1.3 Criar `shuffle_meu/links.py` (D1) e fazer `sorteio.py` usá-lo no lugar de `player()`; verificar que os testes de 1.2 passam e que a suíte inteira continua verde (inclusive `test_atributos_do_iframe`); commitar o grupo
+- [x] 1.2 Escrever os testes de `youtube_id`, `spotify_id` e `players()` (D7) em `tests/test_links.py`, levando para lá os casos de `TestPlayer`; verificar que falham por `shuffle_meu.links` não existir
+- [x] 1.3 Criar `shuffle_meu/links.py` (D1) e fazer `sorteio.py` usá-lo no lugar de `player()`; verificar que os testes de 1.2 passam e que a suíte inteira continua verde (inclusive `test_atributos_do_iframe`); commitar o grupo
 
 ## 2. Banco
 

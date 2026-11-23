@@ -4,44 +4,11 @@ import re
 import time
 import unittest
 
-from shuffle_meu.sorteio import AVISO_TODAS_RECENTES, MSG_NENHUMA, escolher, ler_filtros, player
+from shuffle_meu.sorteio import AVISO_TODAS_RECENTES, MSG_NENHUMA, escolher, ler_filtros
 from tests.base import BaseTest
 
 YT = "dQw4w9WgXcQ"
 SP = "4uLU6hMCjMI75M1A2tKUQC"
-
-
-class TestPlayer(unittest.TestCase):
-    """Extração do ID do player (design D1): só formatos conhecidos, host por igualdade, ID estrito."""
-
-    def test_youtube_aceitos(self):
-        for link in (f"https://www.youtube.com/watch?v={YT}", f"https://youtube.com/watch?v={YT}",
-                     f"https://m.youtube.com/watch?v={YT}&t=42s", f"https://music.youtube.com/watch?v={YT}&si=x",
-                     f"http://www.youtube.com/watch?feature=share&v={YT}", f"https://youtu.be/{YT}?si=abc",
-                     f"https://youtu.be/{YT}/", f"https://www.youtube.com/shorts/{YT}", f"https://YouTube.com/watch?v={YT}"):
-            with self.subTest(link=link):
-                self.assertEqual(player(link), {"servico": "YouTube", "src": f"https://www.youtube-nocookie.com/embed/{YT}?autoplay=1"})
-
-    def test_spotify_aceitos(self):
-        for link in (f"https://open.spotify.com/track/{SP}", f"https://open.spotify.com/track/{SP}?si=abc",
-                     f"https://open.spotify.com/intl-pt/track/{SP}", f"https://open.spotify.com/intl-pt-br/track/{SP}/"):
-            with self.subTest(link=link):
-                self.assertEqual(player(link), {"servico": "Spotify", "src": f"https://open.spotify.com/embed/track/{SP}"})
-
-    def test_recusados(self):
-        for link in ("", None, "https://www.youtube.com/results?search_query=tempo+perdido",
-                     f"https://www.youtube.com/playlist?list={YT}", f"https://www.youtube.com/watch?v={YT}x",
-                     f"https://www.youtube.com/watch?v={YT[:10]}", "https://youtu.be/abc\"onload=x",
-                     f"https://youtube.com.exemplo.net/watch?v={YT}", f"https://exemplo.net/youtube.com/watch?v={YT}",
-                     f"https://youtube.com@exemplo.net/watch?v={YT}", f"https://notyoutube.com/watch?v={YT}",
-                     f"javascript:alert(1)//youtube.com/watch?v={YT}", f"ftp://youtu.be/{YT}",
-                     f"https://www.youtube.com/embed/{YT}", f"https://open.spotify.com/album/{SP}",
-                     f"https://open.spotify.com/playlist/{SP}", f"https://open.spotify.com/track/{SP[:21]}",
-                     f"https://open.spotify.com/track/{SP}<b>", f"https://open.spotify.com/intl-/track/{SP}",
-                     f"https://open.spotify.com/intl-portugues/track/{SP}", f"https://open.spotify.com/intl-p/track/{SP}",
-                     f"https://spotify.com/track/{SP}", "https://www.cifraclub.com.br/legiao-urbana/tempo-perdido/"):
-            with self.subTest(link=link):
-                self.assertIsNone(player(link))
 
 
 class TestPlayerNaTela(BaseTest):

@@ -1,10 +1,9 @@
 import random
-import re
-from urllib.parse import parse_qs, urlsplit
 
 from flask import Blueprint, abort, flash, redirect, render_template, request, session, url_for
 
 from .db import get_db
+from .links import players
 from .musicas import generos, rotulo_genero
 
 bp = Blueprint("sorteio", __name__)
@@ -12,40 +11,6 @@ bp = Blueprint("sorteio", __name__)
 N_PADRAO = 5
 AVISO_TODAS_RECENTES = "Você já tocou todas recentemente!"
 MSG_NENHUMA = "Nada com esse filtro. Tira algum?"
-
-# Player embutido (design D1 de add-player-embutido): host por igualdade, nunca "termina com".
-HOSTS_YOUTUBE = {"youtube.com", "www.youtube.com", "m.youtube.com", "music.youtube.com"}
-ID_YOUTUBE = re.compile(r"[A-Za-z0-9_-]{11}")
-CAMINHO_SPOTIFY = re.compile(r"/(?:intl-[a-z]{2}(?:-[a-z]{2})?/)?track/([A-Za-z0-9]{22})/?")
-
-def player(link):
-    """{"servico", "src"} do player oficial para vídeo do YouTube ou faixa do Spotify; None para qualquer outro link.
-    O src é montado só com constantes e o ID validado: o link digitado nunca vai para o iframe."""
-    if not link:
-        return None
-    try:
-        partes = urlsplit(link)
-        host = partes.hostname  # minúsculo, sem porta e sem "usuario@"
-    except ValueError:
-        return None
-    if partes.scheme not in ("http", "https") or not host:
-        return None
-    caminho = partes.path
-    id_video = None
-    if host in HOSTS_YOUTUBE and caminho.rstrip("/") == "/watch":
-        id_video = (parse_qs(partes.query).get("v") or [None])[0]
-    elif host in HOSTS_YOUTUBE - {"music.youtube.com"} and caminho.startswith("/shorts/"):
-        id_video = caminho[len("/shorts/"):].rstrip("/")
-    elif host == "youtu.be":
-        id_video = caminho[1:].rstrip("/")
-    if id_video is not None:
-        if ID_YOUTUBE.fullmatch(id_video):
-            return {"servico": "YouTube", "src": f"https://www.youtube-nocookie.com/embed/{id_video}?autoplay=1"}
-        return None
-    if host == "open.spotify.com" and (m := CAMINHO_SPOTIFY.fullmatch(caminho)):
-        return {"servico": "Spotify", "src": f"https://open.spotify.com/embed/track/{m.group(1)}"}
-    return None
-
 
 # filtro -> condição SQL (design.md D6, passo 1); os numéricos chegam como int
 CONDICOES = {
@@ -141,5 +106,5 @@ def resultado(id):
             "SELECT titulo FROM musica WHERE ativa = 1 AND id != ? ORDER BY RANDOM() LIMIT 12", (s["musica_id"],))]
         roleta.append(s["titulo"])  # o rolo para sempre na música sorteada
     return render_template("sorteio/resultado.html", s=s, f=filtros, n=n, qs=dict(filtros, n=n), roleta=roleta,
-                           player=player(s["link"]),
+                           player=next(iter(players(s["link"], s["link"])), None),  # até o grupo 4: um campo só
                            entrar_estrelas=session.pop("tocou", None) == id)

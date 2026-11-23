@@ -2,7 +2,7 @@
 
 Cadastre as músicas que você já sabe tocar e deixe o Shuffle sortear qual vai ser a próxima.
 
-Trabalho de G2 da disciplina de Engenharia de Software, desenvolvido com **OpenSpec** (especificar antes de programar).
+Trabalho de G2 da disciplina de Engenharia de Software, desenvolvido com **OpenSpec**.
 
 ## Equipe
 

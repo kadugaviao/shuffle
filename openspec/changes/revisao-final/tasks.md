@@ -30,7 +30,7 @@ Referências: achados em `docs/revisao-final.md` (IDs entre parênteses), compor
 - [x] 4.2 Refazer os screenshots (D9): celular 390 px a 2× (início, resultado, histórico) e desktop 1440 px (início, resultado), página inteira, mesma largura por grupo, WebP; apagar os que não forem usados; verificar abrindo cada imagem que nada fica atrás da barra fixa e que a aba atual aparece
 - [x] 4.3 Reescrever o `README.md` na estrutura de D9 (equipe, requisitos com versões, como rodar só com comandos, comandos úteis, problemas comuns, OpenSpec com as 5 mudanças arquivadas, stack, pastas, screenshots e limitações); verificar que não sobra "Shuffle Meu", "TODO" ou texto provisório
 - [x] 4.4 Cópia limpa: `git clone` num diretório temporário, executar cada comando do README na ordem (inclusive testes, recriar o banco, `openspec validate --strict` e `tools/verificar_links.py` com um link) e conferir o app respondendo em http://127.0.0.1:5000; anotar qualquer divergência e corrigir o README
-- [ ] 4.5 Rodar a suíte, `openspec validate revisao-final --strict` e `openspec validate --all --strict`; atualizar `docs/revisao-final.md` com o estado de cada item (corrigido ou trabalho futuro); verificar que nenhum servidor ficou rodando; commitar o grupo
+- [x] 4.5 Rodar a suíte, `openspec validate revisao-final --strict` e `openspec validate --all --strict`; atualizar `docs/revisao-final.md` com o estado de cada item (corrigido ou trabalho futuro); verificar que nenhum servidor ficou rodando; commitar o grupo
 
 ## Workflow follow-up
 

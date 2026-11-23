@@ -129,3 +129,17 @@ Os 5 itens mais importantes para a apresentação:
 3. **D4:** o player empurra as ações para fora da tela no celular.
 4. **DOC1 + DOC2:** README sem os passos de clonar, e screenshots inconsistentes.
 5. **S1:** filtro por gênero sem cenário nem teste.
+
+## Estado depois da mudança `revisao-final`
+
+Implementado em 23/11/2026, um commit por grupo: resultado, outras telas, README e screenshots, formulários e acessibilidade. Cada bug ganhou um teste que falhou antes da correção. A suíte passou de 167 para 179 testes.
+
+| Situação | Itens |
+|---|---|
+| Corrigido | B1, B2, S1, S2, S3, SEG1, D1–D13, D15, A1–A6, DOC1–DOC4 |
+| Documentado | SEG2 (`SECRET_KEY` nas limitações do README) |
+| Trabalho futuro | S4, SEG3, D14, D16, A7, A8 (motivos no `proposal.md` da mudança) |
+
+Ajustes feitos durante a implementação e registrados no `design.md`:
+- **D8:** a dificuldade foi para a linha do artista, não para a linha das ações. A 360 px as ações já ocupam 303 de 312 px.
+- **D3:** abaixo de 720 px o carimbo usa 28 px. A 44 px ele não cabe ao lado da capa.
